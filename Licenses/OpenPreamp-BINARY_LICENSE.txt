@@ -1,0 +1,42 @@
+OpenPreamp Binary Freeware License
+Copyright (c) 2026 Marcos Deida
+
+Scope
+This license applies to the official compiled OpenPreamp plug-ins, standalone
+application, and installers distributed by Marcos Deida / OpenGrid.
+OpenPreamp source code is separately available under the MIT License.
+
+Permission to use
+You may download, install, and use the official binaries free of charge,
+for personal or commercial purposes, including professional audio production.
+The official binaries are distributed as proprietary freeware, not under an
+open-source license. Freeware describes their price and permission to use;
+it does not place the complete binaries in the public domain or grant the
+MIT source license over third-party code incorporated into them.
+
+Third-party components
+The official binaries are built using the publisher's JUCE commercial
+license. End users do not need a JUCE developer license to install or use
+these binaries. The publisher's JUCE license is not transferred to anyone
+building or distributing their own versions from source.
+OpenPreamp's MIT-licensed source and the MIT-licensed GoodLookinUI components
+retain their respective MIT permissions. See THIRD_PARTY_NOTICES.txt, the
+included MIT license texts and the third-party license texts in the
+Licenses/third-party folder (installed with the binaries). These freeware terms do not restrict rights
+granted by those component licenses. External components retain their own
+licenses; no license to JUCE or the Avid AAX SDK is granted by this document.
+
+Warranty
+THE BINARIES ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. TO THE EXTENT PERMITTED BY APPLICABLE LAW,
+THE COPYRIGHT HOLDER IS NOT LIABLE FOR CLAIMS, DAMAGES OR OTHER LIABILITY
+ARISING FROM THE BINARIES OR THEIR USE.
+
+Trademarks
+Neve, 1073, Focusrite, Solid State Logic (SSL), API and 512 are trademarks of
+their respective owners. OpenPreamp is an independent project: those companies
+are not affiliated with, and have not endorsed or sponsored, Marcos Deida, the
+OpenGrid Project or this plug-in. The names appear only to describe the
+classic designs that inspired each model; every model here is an independent
+circuit simulation, and no code or text from those companies is included.

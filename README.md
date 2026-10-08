@@ -1,92 +1,107 @@
 # OpenPreamp
 
-Version **0.3.1** (pre-release). Preamp and metering extracted from HybridEQ,
-without an EQ, spectrum display or separate harmonics engine.
+**Circuit colour. Independent meters. Stereo and Mid/Side control.**
 
-- **CIRCUIT on:** the selected Brit, N-Type, FSF or A-Type component network
-  runs at 2x the session rate. **HQ MODE** raises it to 4x.
-- **CIRCUIT off:** the lighter preamp model runs at the session rate with
-  first-order antiderivative antialiasing (ADAA). HQ does not change this path.
-- **Off / bypass:** no circuit oversampling. Output trim and meters remain active.
-- **1000 × 740 resizable editor:** independent channel VUs with input/output selection,
-  click **Peak / RMS** to switch the needles and numeric readouts together
-  (Peak initially); both this key and Input/Output toggle directly on click. Peak ladders, peak hold and clip lamps keep detecting peaks
-  in either mode. Model changes
-  load OpenPreamp's saved plate, knob style and color mappings.
-- **Both channels always visible:** paired input/output controls below the dual
-  meters, with shared input cuts and preamp controls in the bottom row.
-  Independent input and output trims process Left/Right. **LINK** makes both
-  right gains follow the left controls and greys out the right knobs. Unlinking
-  restores the saved independent right settings. Link starts off.
-- **MS MODE:** encodes before cuts and preamps; decodes after downsampling and
-  channel output trims. The strips and VUs become Mid/Side. Normal L/R is the default with MS MODE off. Link stays
-  visible but greyed out and disabled while M/S is on; gain linking is ignored. Mono ignores M/S.
-- **HIGH PASS / LOW PASS:** shared 12 dB/octave Butterworth cuts, initially
-  20 Hz / 20 kHz. CUTS toggles both. Their independent channel state, input/output
-  trims, PAD and M/S matrix run at the session rate outside oversampling.
-- **MONO MAKER:** optional one-pole 6 dB/octave Side-only high-pass before
-  cuts and preamps, at the session rate. Starts off at 20 Hz; adjustable
-  20–500 Hz. Mid stays unchanged. Works in both L/R and M/S; mono hosts ignore it.
-- Input gain now drives a fixed-unity-gain circuit externally; it no longer
-  changes the internal circuit gain network. Double-click gain/trim for 0 dB.
+![OpenPreamp 1.0.0](Docs/OpenPreamp-1.0.0-preview.png)
 
-## Oversampling filters and timing
+OpenPreamp is a preamp and metering tool from **OpenGrid / Marcos Deida**,
+extracted from HybridEQ. Four preamp models, two independent processing streams,
+and a compact resizable interface - without a parametric EQ or separate
+harmonics engine.
 
-2x uses JUCE's maximum-quality polyphase half-band IIR, with nonlinear phase
-and short filter delay. HQ 4x uses two stages of maximum-quality linear-phase
-half-band equiripple FIR. First-stage stopband targets are -90 dB up / -75 dB
-down; the second FIR stage targets -80 dB up / -65 dB down.
+[Download 1.0.0](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.0.0) ·
+[Illustrated PDF manual](output/pdf/OpenPreamp-User-Manual.pdf) ·
+[Online manual](Docs/UserManual.md) · [Version history](CHANGELOG.md)
 
-The shorter paths are padded to the rounded-up HQ filter delay, and that fixed
-latency is reported during preparation. Switching CIRCUIT/HQ does not change
-reported latency while audio is running. Filter histories reset on mode changes;
-a transition crossfade is not implemented. ADAA adds its own fractional phase
-and high-frequency rolloff as part of the nonlinear processing.
+## Shape the drive, choose the model
 
-## Build and verify
+- **Brit, N-Type, FSF and A-Type**, plus a clean Off path. Model changes switch
+  the saved plates, knob styles and colours.
+- **Circuit on:** solve the component network at **2x** session rate using
+  minimum-latency IIR resampling. **HQ:** the same circuit at **4x**, using
+  linear-phase FIR resampling.
+- **Circuit off:** lighter session-rate models with antiderivative antialiasing
+  (**ADAA**). HQ does not affect this path.
+- Independent **input and output trims**, shared **PAD**, and **Link** for L/R.
+- **MS MODE** encodes before the preamp and decodes after downsampling. Link
+  greys out while Mid and Side remain independently adjustable.
+- Shared **12 dB/octave high/low cuts** and a **6 dB/octave Side-only mono maker**.
+  All cuts, gain trims and M/S matrices run at session rate outside oversampling.
+- Two independent meters with **Input/Output** and **Peak/RMS** keys that toggle
+  directly on click, peak bars, peak hold and resettable clip lamps.
+- Proportional resizing from **400 x 296** to **1500 x 1110**; default 1000 x 740.
+
+![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.0.0-ms.png)
+
+## Install
+
+The Mac package contains universal **Apple Silicon and Intel** versions of
+**VST3, Audio Unit, CLAP and LV2**, for **macOS 11 or later**, plus the illustrated
+manual and complete license notices. Close your DAW, copy the entire bundle to
+its user folder, restart and rescan.
+
+| Format | User folder |
+|---|---|
+| VST3 | `~/Library/Audio/Plug-Ins/VST3/` |
+| AU | `~/Library/Audio/Plug-Ins/Components/` |
+| CLAP | `~/Library/Audio/Plug-Ins/CLAP/` |
+| LV2 | `~/Library/Audio/Plug-Ins/LV2/` |
+
+**AAX is excluded from public downloads.** Its optional SDK and private build
+are not distributed. Mono and stereo buses are supported; mono-to-stereo and
+surround layouts are not.
+
+## How the modeling works
+
+The full circuit path builds component networks, finds their operating points
+and repeatedly solves node voltages and branch currents. Capacitors, inductors,
+transistors and saturating cores carry state and shape the response. The INPUT
+knob drives a fixed-unity internal gain network externally.
+
+![Signal flow and sample-rate boundaries](Docs/OpenPreamp-SignalFlow.png)
+
+HQ changes the sample rate and resampling filters, not the circuit topology.
+Its linear phase describes the FIR resampling, not the entire plugin. The
+lighter ADAA path is a different approximation. Models use estimated parameters
+and simplified devices; they are not measured clones of specific hardware.
+
+See the [user manual](Docs/UserManual.md) and
+[circuit explanation](CIRCUIT_EXPLAINED.md) for diagrams, model topologies,
+calibration, latency, antialiasing and practical limits.
+
+## Build from source
+
+Project source is **MIT licensed**. Clone with submodules:
 
 ```sh
+git clone --recurse-submodules https://github.com/MistaMin/OpenPreamp.git
+cd OpenPreamp
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DOPENPREAMP_DEVELOPER_MODE=OFF
-cmake --build build --config Release --target OpenPreamp_VST3 OpenPreampSmoke OpenPreampADAA -j 6
+cmake --build build --config Release --target OpenPreamp_VST3 OpenPreampSmoke OpenPreampADAA -j8
 ./build/OpenPreampSmoke_artefacts/Release/OpenPreampSmoke
 ./build/OpenPreampADAA_artefacts/Release/OpenPreampADAA
 ```
 
-VST3 output: `build/OpenPreamp_artefacts/Release/VST3/OpenPreamp.vst3`.
-Standalone/AU/CLAP/LV2 remain available targets; rebuild the requested target
-before using artifacts left from older versions. Legacy HybridEQ targets and
-installer scripts remain in the checkout. Its installer does not package OpenPreamp.
+On macOS, also build `OpenPreamp_AU`, `OpenPreamp_LV2` and `OpenPreamp_CLAP`.
+On Linux, VST3/LV2/CLAP targets are available; the workflow builds downloadable
+CI artifacts. The published 1.0.0 package is for Mac. Optional `OpenPreamp_AAX`
+builds stay private. Legacy HybridEQ targets remain in the source tree; its
+installer and release scripts do not package OpenPreamp.
 
-See [CIRCUIT_EXPLAINED.md](CIRCUIT_EXPLAINED.md) for the circuit diagrams and
-[OPENPREAMP_HANDOFF.md](OPENPREAMP_HANDOFF.md) for implementation and verification.
-[HANDOFF.md](HANDOFF.md) is the historical HybridEQ handoff.
+Developer builds use `-DOPENPREAMP_DEVELOPER_MODE=ON`. **DEV** opens separate
+**Knobs / layout** and **Model looks** tabs. Changes apply immediately and
+autosave to `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.csv`.
+Production builds bake those files into the binary and have no DEV tools or
+filesystem autosave. See [release process](Docs/RELEASE_PROCESS.md).
 
-## License
+## Licensing
 
-Compiled binaries use [BINARY_LICENSE.txt](BINARY_LICENSE.txt). Source licensing
-is in [LICENSE](LICENSE); dependencies are documented in
-[THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt).
+[MIT project license](LICENSE) ·
+[Official binary-use terms](Licenses/OpenPreamp-BINARY_LICENSE.txt) ·
+[Third-party notices](Licenses/OpenPreamp-THIRD_PARTY_NOTICES.txt)
 
-## Developer mode
-
-The 0.3.1 editor opens at 1000 × 740 and resizes proportionally from 400 × 296
-through 1500 × 1110. Its VUMT-inspired arrangement keeps both meters across
-the top, paired channel input/output knobs below, and shared cuts/preamp
-settings in the bottom row. The saved model colours and knob styles are retained.
-
-Developer mode is enabled with `-DOPENPREAMP_DEVELOPER_MODE=ON` (the option defaults to ON for development). Click **DEV** in the header for a separate window with
-**Knobs / layout** and **Model looks** tabs. Knob edits change label, font,
-style, colour and geometry immediately. Click either knob to select it.
-The model-look tab controls each preamp's plate, faceplate, knob style and colour.
-Model looks override the saved knob style/colour when the model is applied.
-Both channel gain and output knobs are registered in the developer layout tab.
-
-Edits autosave into `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.csv`;
-these files are baked into the next build. Set developer mode OFF for a release
-without the DEV tools or filesystem autosave. Resizing preserves edited geometry.
-
-The current UI-test VST3 has developer mode ON. Click **DEV** in the header
-to edit the channel knobs or model looks; edits autosave to the two CSV files
-in `Designs/`. The previous production build is backed up in `build/`.
-The 0.2.0 comparison remains alongside it. Existing standalone artifacts must be rebuilt
-with developer mode ON before editing the 0.3.1 layout.
+GoodLookinUI is independently MIT licensed. JUCE and format SDKs retain their
+own licenses; the MIT source license does not relicense those dependencies.
+Complete third-party texts and trademark notices accompany the downloads and
+each plugin. Independent builders must comply with the licenses applicable to
+their build. Avid SDKs and AAX binaries are never included in the public package.

@@ -1,3 +1,36 @@
+# OpenPreamp 1.0.0 release handoff - 2026-10-08
+
+Production universal Mac build: arm64 + x86_64, macOS 11+, developer mode OFF.
+VST3, AU, LV2 and CLAP are the public formats. AAX built successfully but is
+private, outside public staging and Git history. Parameter IDs and plug-in
+identities are retained from development versions.
+
+Validation: 226 smoke/routing/UI checks passed on Apple Silicon and Intel via
+Rosetta; ADAA tests passed on both architectures. AU validation passed on both
+architectures after refreshing component discovery. Universal architecture,
+version and all bundled licenses were verified in every built format; CLAP
+factory and LV2 descriptor libraries loaded successfully; VST3 factory manifest
+version was verified. These checks are not a claim of a listening test in every DAW.
+
+Docs/UserManual.md and output/pdf/OpenPreamp-User-Manual.pdf cover every control,
+track layout, circuit topology, Circuit-off ADAA, 2x Circuit and 4x HQ, resampling,
+latency, installation and licensing. The 13-page PDF was rendered and visually
+reviewed. README uses the new production screenshots; CHANGELOG.md records the
+version history. Docs/RELEASE_PROCESS.md describes the complete release workflow.
+
+Public staging: dist/OpenPreamp-1.0.0-macOS, explicitly only four public formats,
+manual, release notes, installation instructions and complete license payloads.
+Developer ID signing and Apple notarization are performed on the staged public
+files. The release manifest records the frozen source commit and file hashes.
+No AAX binary, SDK or private Reference content is uploaded.
+
+The existing 0.2.0 comparison remains installed. Test plug-ins owned by this task
+are removed only when the user explicitly says testing is finished. Receipts in
+build/ record each installation and binary SHA-256; check them before replacement
+or removal. The 1.0 AU was installed for validation and has its own receipt.
+
+## Development history
+
 # OpenPreamp 0.3.1 stereo-tools update — 2026-10-08
 
 Adds the requested VUMT-style gain linking and mono maker to the approved dual

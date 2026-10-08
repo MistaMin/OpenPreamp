@@ -1,0 +1,63 @@
+OpenPreamp licensing and component notices
+
+OpenPreamp source code
+Copyright (c) 2026 Marcos Deida. MIT License; see LICENSE.
+The official complete binaries are proprietary freeware; see BINARY_LICENSE.txt.
+The MIT permissions for the corresponding source remain available.
+
+GoodLookinUI
+Copyright (c) 2026 Marcos Deida. MIT License.
+See third_party/GoodLookinUI/LICENSE in the source repository, or
+GoodLookinUI-LICENSE.txt alongside this notice in binary distributions.
+The core and JUCE adapter are independent toolkit code, not a JUCE fork.
+Include the GoodLookinUI copyright and MIT permission notice when distributing
+copies or substantial portions of the toolkit, including compiled copies.
+
+JUCE 9.0.3
+Copyright holders and licensing: https://github.com/juce-framework/JUCE/tree/9.0.3
+JUCE is fetched during source builds and is not included as source here.
+Official OpenPreamp binaries use the publisher's commercial JUCE license.
+JUCE is not covered by the MIT licenses above. Independent builders must
+comply with the JUCE license applicable to their build and distribution;
+the publisher's commercial license is not supplied with this repository.
+JUCE 9 commercial terms: https://juce.com/legal/juce-9-licence/
+JUCE's alternative open-source terms and component notices are in its source.
+
+Included third-party components
+The full license text of each component below is in the Licenses/third-party folder of the source
+repository, and is installed with the binaries (see "Where the licenses are" at the end).
+  Plug-in format SDKs
+    VST3 SDK (Steinberg Media Technologies GmbH), compiled in through JUCE, under the MIT license:
+      VST3-SDK-LICENSE-MIT.txt (usage guidelines: VST3-Usage-Guidelines.pdf).
+      VST is a trademark of Steinberg Media Technologies GmbH (VST-TRADEMARK-NOTICE.txt).
+    LV2 headers, lilv, serd, sord, sratom (ISC license), compiled in through JUCE: LV2-*-COPYING.txt
+    CLAP SDK and clap-helpers (MIT) and clap-juce-extensions (MIT): CLAP-*.txt, clap-juce-extensions-LICENSE.txt
+    Audio Unit SDK (Apple, Apache License 2.0): AudioUnitSDK-LICENSE-Apache-2.0.txt
+  Libraries bundled inside JUCE and compiled into the binaries
+    zlib, libpng, libjpeg (Independent JPEG Group), libwebp, FLAC, Ogg, Vorbis, Opus (libopus, opusfile,
+    libopusenc), HarfBuzz, SheenBidi, LunaSVG (with PlutoVG): the matching *-LICENSE.txt / *-COPYING.txt /
+    *-Licence.txt files in the same folder
+  JUCE itself: JUCE-NOTICE.txt
+
+Avid AAX SDK (optional)
+The AAX SDK is not included in this repository and is not MIT licensed.
+Building or distributing AAX requires compliance with Avid's SDK/developer
+terms and any applicable signing requirements. A JUCE commercial license
+does not grant rights to the AAX SDK. Public packaging excludes AAX by default.
+
+Trademarks
+Neve, 1073, Focusrite, Solid State Logic (SSL), API and 512 are trademarks of
+their respective owners. OpenPreamp is an independent project: those companies
+are not affiliated with, and have not endorsed or sponsored, Marcos Deida, the
+OpenGrid Project or this plug-in. The names appear only to describe the
+classic designs that inspired each model; every model here is an independent
+circuit simulation, and no code or text from those companies is included.
+
+Where the licenses are
+  Source download (git clone / zip): LICENSE, BINARY_LICENSE.txt, THIRD_PARTY_NOTICES.txt, Licenses/third-party/
+    and third_party/GoodLookinUI/LICENSE (after `git submodule update --init`).
+  Installer (.pkg): shown in the installer's license step, and installed to
+    /Library/Application Support/OpenGrid/OpenPreamp/Licenses (with a third-party subfolder).
+  Disk image (.dmg): LICENSE.txt and the Licenses folder next to the installer.
+  Each plug-in bundle (VST3, AU, CLAP, LV2) and the standalone app carries the same files in its own
+    Resources/Licenses (LV2: Licenses) folder.

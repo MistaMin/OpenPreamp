@@ -114,7 +114,7 @@ int main() {
                 if (auto* window = dynamic_cast<juce::DocumentWindow*>(desktop.getComponent(i)); window && window->getName() == "OpenPreamp developer tools") {
                     devOpened = window->isVisible();
                     const auto devImage = window->getContentComponent()->createComponentSnapshot(window->getContentComponent()->getLocalBounds());
-                    juce::FileOutputStream devFile(juce::File("/private/tmp/openpreamp-031-developer.png"));
+                    juce::FileOutputStream devFile(juce::File("/private/tmp/openpreamp-100-developer.png"));
                     devFile.setPosition(0); devFile.truncate(); juce::PNGImageFormat devPng; devPng.writeImageToStream(devImage, devFile);
                     window->closeButtonPressed();
                 }
@@ -147,7 +147,7 @@ int main() {
         visit(*variant);
         check(matches && knobs == 7 && contained(*variant), "both knob and plate styles follow the saved model mapping; VU source restores");
         const auto image = variant->createComponentSnapshot(variant->getLocalBounds());
-        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-031-model-" + juce::String(model) + ".png"));
+        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-100-model-" + juce::String(model) + ".png"));
         file.setPosition(0); file.truncate(); juce::PNGImageFormat png; png.writeImageToStream(image, file);
     }
     check(Theme::editorTop == themeBefore, "per-instance styles do not mutate the global theme");
@@ -164,7 +164,7 @@ int main() {
     check(!mono.isBusesLayoutSupported(layout), "rejects mismatched input/output buses");
     editor->setVisible(false); // Render the parameter position without waiting for UI animation.
     const auto image = editor->createComponentSnapshot(editor->getLocalBounds());
-    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-031-preview.png"));
+    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-100-preview.png"));
     output.setPosition(0); output.truncate();
     juce::PNGImageFormat png; check(png.writeImageToStream(image, output), "editor preview renders");
     int visibleMeters=0;

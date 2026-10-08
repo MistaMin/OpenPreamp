@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-# Single source of truth for the plugin version: ../VERSION (MAJOR.MINOR.PATCH).
+# Single source of truth for the plugin version: VERSION (MAJOR.MINOR.PATCH).
 # Bump that file (or answer the installer prompt) - nothing else hardcodes it.
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" HYBRIDEQ_VERSION_STR)
 string(STRIP "${HYBRIDEQ_VERSION_STR}" HYBRIDEQ_VERSION_STR)
@@ -93,6 +93,9 @@ endif()
 if(HYBRIDEQ_LV2)
     list(APPEND OPENPREAMP_FORMATS LV2)
 endif()
+if(EXISTS "${HYBRIDEQ_AAX_SDK}/Interfaces/AAX.h")
+    list(APPEND OPENPREAMP_FORMATS AAX) # Private builds only; public packaging excludes AAX.
+endif()
 
 juce_add_plugin(OpenPreamp
     COMPANY_NAME            "OpenGrid"
@@ -114,6 +117,7 @@ if(HYBRIDEQ_CLAP)
         CLAP_FEATURES audio-effect preamp distortion
         CLAP_MANUAL_URL "https://github.com/MistaMin/OpenPreamp"
         CLAP_SUPPORT_URL "https://github.com/MistaMin/OpenPreamp")
+    list(APPEND OPENPREAMP_FORMATS CLAP)
 endif()
 
 target_sources(OpenPreamp PRIVATE
@@ -155,10 +159,12 @@ foreach(format IN LISTS OPENPREAMP_FORMATS)
     add_custom_command(TARGET OpenPreamp_${format} PRE_LINK
         COMMAND ${CMAKE_COMMAND} -E make_directory "${notice_dir}"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_CURRENT_SOURCE_DIR}/BINARY_LICENSE.txt"
             "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
-            "${CMAKE_CURRENT_SOURCE_DIR}/THIRD_PARTY_NOTICES.txt"
             "${notice_dir}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/Licenses/OpenPreamp-BINARY_LICENSE.txt" "${notice_dir}/BINARY_LICENSE.txt"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/Licenses/OpenPreamp-THIRD_PARTY_NOTICES.txt" "${notice_dir}/THIRD_PARTY_NOTICES.txt"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CMAKE_CURRENT_SOURCE_DIR}/third_party/GoodLookinUI/LICENSE"
             "${notice_dir}/GoodLookinUI-LICENSE.txt"
