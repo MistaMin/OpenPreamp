@@ -10,7 +10,7 @@ without an EQ, spectrum display or separate harmonics engine.
 - **Off / bypass:** no circuit oversampling. Output trim and meters remain active.
 - **600 × 840 editor (5:7):** top VU with input/output selection, stereo input
   and output peak ladders, peak hold and resettable clip lamp. Model changes
-  load HybridEQ's exact saved plate, knob style and color mappings.
+  load OpenPreamp's saved plate, knob style and color mappings.
 - PAD and GAIN combine into a smoothed drive setting. Double-click a gain knob
   to return to 0 dB. Output trim follows the preamp.
 
@@ -30,7 +30,7 @@ and high-frequency rolloff as part of the nonlinear processing.
 ## Build and verify
 
 ```sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DOPENPREAMP_DEVELOPER_MODE=OFF
 cmake --build build --config Release --target OpenPreamp_VST3 OpenPreampSmoke OpenPreampADAA -j 6
 ./build/OpenPreampSmoke_artefacts/Release/OpenPreampSmoke
 ./build/OpenPreampADAA_artefacts/Release/OpenPreampADAA
@@ -57,8 +57,7 @@ The 0.2.3 editor opens at 600 × 840 and resizes proportionally from 450 × 630
 through 1000 × 1400. The VU and output knob are larger, the main gain knob is
 slightly smaller, and PAD/MODEL/CIRCUIT/HQ use narrower buttons.
 
-Developer mode is enabled with `-DOPENPREAMP_DEVELOPER_MODE=ON` (default for this
-working build). Click **DEV** in the header for a separate window with
+Developer mode is enabled with `-DOPENPREAMP_DEVELOPER_MODE=ON` (the option defaults to ON for development). Click **DEV** in the header for a separate window with
 **Knobs / layout** and **Model looks** tabs. Knob edits change label, font,
 style, colour and geometry immediately. Click either knob to select it.
 The model-look tab controls each preamp's plate, faceplate, knob style and colour.
@@ -68,5 +67,6 @@ Edits autosave into `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.c
 these files are baked into the next build. Set developer mode OFF for a release
 without the DEV tools or filesystem autosave. Resizing preserves edited geometry.
 
-The 0.2.3 standalone is available for layout editing. Installed comparison VST3s
-remain 0.2.0 and 0.2.2 until a new test installation is requested.
+The developer standalone is available for layout editing. The test VST3 uses
+the saved 0.2.3 design with developer mode OFF; 0.2.0 remains alongside it
+for comparison.
