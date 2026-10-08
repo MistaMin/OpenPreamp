@@ -6,7 +6,9 @@ knob. Buttons are narrower. The output knob label clears the panel divider.
 
 DEV opens separate GoodLookinUI knob/layout and model-look tools. Geometry and
 looks autosave to the OpenPreamp-specific Designs CSVs and are baked into builds.
-The standalone is the editing artifact; the installed VST3s remain 0.2.0 and 0.2.2.
+The standalone is the editing artifact. The saved-design 0.2.3 VST3 is built
+with developer mode OFF; it replaces the installed 0.2.2. The 0.2.0 comparison
+remains alongside it.
 The 0.2.0 comparison has a separate name and class IDs; its DSP/UI source came
 from c4eda25. Both temporary installed copies must be removed when the owner
 says testing is finished. The receipts are build/OpenPreamp-test-install.json
@@ -15,7 +17,14 @@ and build/OpenPreamp-0.2.0-comparison-install.json. Check hashes before removal.
 Validation: 157 smoke checks passed with zero failures, including proportional
 resizing at 450 × 630, 600 × 840 and 800 × 1120, model looks and the DEV window.
 GUI and developer-window previews are saved in Docs/. The standalone built
-successfully; no new VST3 was installed.
+successfully. The saved-design Release VST3 built successfully. With developer mode OFF,
+156 smoke checks passed, with zero failures, including all model looks and
+resizing. Both CSVs were verified against the baked design data. The test
+installation is 0.2.3; its removal remains deferred until the owner finishes testing.
+
+Saved design changes: output trim at (90, 50); Brit magenta/Brit knobs;
+N-Type Mic knobs with Midnight faceplate/Navy plates; FSF Navy faceplate;
+A-Type Granite faceplate. The DSP remains unchanged.
 
 The processing notes below describe the inherited 0.2.2 DSP and its validation.
 
