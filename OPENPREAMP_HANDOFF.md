@@ -1,3 +1,29 @@
+# OpenPreamp 0.3.1 layout handoff — 2026-10-08
+
+Based on 0.3.0 commit 29366fa. This is a UI/version change; processing and
+parameter IDs remain unchanged. The open VUMTdeluxe window was inspected as
+an arrangement reference. Saved preamp colours and styles remain OpenPreamp's.
+
+The editor is always dual-channel: 1000 × 740, resizable from 750 × 555 through
+1500 × 1110. Both VUs are permanently visible at the top. Left/Right (or Mid/Side)
+input/output trims share two aligned channel panels underneath. The bottom row
+has shared input cuts and a separate preamp panel for PAD, MODEL, CIRCUIT, HQ,
+M/S and bypass. The expansion arrow is removed; old expanded=false state is
+ignored by the UI. Input knob labels read INPUT, matching paired OUTPUT controls.
+
+Knob geometry in Designs/OpenPreampKnobs.csv is updated for the new channel
+panels. OpenPreampLooks.csv is unchanged. Developer tools continue editing four
+channel knobs in these panels; normal test VST3 builds keep developer mode OFF.
+
+Verification: Release VST3 built with developer mode OFF. All 196 smoke and
+routing checks passed, including both meters always visible, old folded-state
+restore, containment at minimum/default/maximum sizes, all model looks, channel
+isolation and M/S routing. Final preview is Docs/OpenPreamp-0.3.1-preview.png.
+No DSP source changed. The verified test VST3 replaces 0.3.0. The separate 0.2.0 comparison is retained. Temporary
+copies are removed only when the owner says testing is finished.
+
+The following notes are historical context for the unchanged 0.3.0 DSP.
+
 # OpenPreamp 0.3.0 handoff — 2026-10-08
 
 The baseline is saved-design 0.2.3, commit 834665b. `>` expands the same editor
