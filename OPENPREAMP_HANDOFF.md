@@ -1,7 +1,11 @@
 # OpenPreamp 0.3.1 stereo-tools update — 2026-10-08
 
 Adds the requested VUMT-style gain linking and mono maker to the approved dual
-layout. Version remains 0.3.1. VUMTdeluxe was tested interactively: Link disables
+layout. Version remains 0.3.1. Minimum editor size is now 400 × 296 (default
+1000 × 740, maximum 1500 × 1110). MODE and VU keys with two choices toggle
+directly on click; PAD and MODEL keep dropdowns. PAD/MODEL controls were widened
+and CIRCUIT/HQ narrowed. Filter DSP is unchanged: the reported low-end boost
+was a phase-response display mistaken for a magnitude plot. VUMTdeluxe was tested interactively: Link disables
 the right trim in L/R; M/S hides Link and enables independent Mid/Side trims;
 mono-maker power greys its controls. The reference settings were restored.
 VUMT also provides an Amount control; OpenPreamp implements the specifically
@@ -31,14 +35,15 @@ The header holds MS MODE (off = normal L/R) and Link; the bottom row holds cuts,
 and preamp settings. Input Cuts and Preamp both measure 356 × 164; Preamp
 was narrowed to match Input Cuts, with the mono maker centered between them. Saved colours, gain-knob geometry and resize limits are
 retained. Current UI-test Release VST3 built with developer mode ON and passed strict
-signature verification. All 220 smoke/routing checks passed, including opening
+signature verification. All 227 smoke/routing checks passed, including opening
 the DEV knob/layout and model-look window: linked gains, restoration
 on unlink, Link visible but disabled and dimmed in M/S, disabled right controls, Side-only 6 dB/octave
 response and Mid preservation at 44.1/48/96 kHz, every model against manually
 encoded/Side-filtered audio at native/2x/4x, state migration, Peak/RMS needle and numeric behavior, peak clips in RMS,
-shared meter-mode restore, and GUI layout.
+shared meter-mode restore, direct-click two-option meter controls, and GUI
+containment down to 400 × 296.
 The test VST3 replaces the prior 0.3.1 layout build; the 0.2.0 comparison remains
-untouched. The production Peak/RMS build is backed up in build/OpenPreamp-0.3.1-production-test-backup.vst3. Remove test installs only
+untouched. The previous developer build is backed up in build/OpenPreamp-0.3.1-before-compact-ui-test-backup.vst3. Remove test installs only
 when the owner explicitly says testing is finished.
 
 For UI refinement, click DEV in the header. The separate window contains

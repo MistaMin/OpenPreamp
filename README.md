@@ -10,7 +10,7 @@ without an EQ, spectrum display or separate harmonics engine.
 - **Off / bypass:** no circuit oversampling. Output trim and meters remain active.
 - **1000 × 740 resizable editor:** independent channel VUs with input/output selection,
   click **Peak / RMS** to switch the needles and numeric readouts together
-  (Peak initially). Peak ladders, peak hold and clip lamps keep detecting peaks
+  (Peak initially); both this key and Input/Output toggle directly on click. Peak ladders, peak hold and clip lamps keep detecting peaks
   in either mode. Model changes
   load OpenPreamp's saved plate, knob style and color mappings.
 - **Both channels always visible:** paired input/output controls below the dual
@@ -69,7 +69,7 @@ is in [LICENSE](LICENSE); dependencies are documented in
 
 ## Developer mode
 
-The 0.3.1 editor opens at 1000 × 740 and resizes proportionally from 750 × 555
+The 0.3.1 editor opens at 1000 × 740 and resizes proportionally from 400 × 296
 through 1500 × 1110. Its VUMT-inspired arrangement keeps both meters across
 the top, paired channel input/output knobs below, and shared cuts/preamp
 settings in the bottom row. The saved model colours and knob styles are retained.

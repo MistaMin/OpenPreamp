@@ -100,7 +100,7 @@ int main() {
         out.peak[0] = 0.42f; out.peak[1] = 0.38f;
         for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);
     }
-    for (const auto size : {juce::Point<int>(750,555), juce::Point<int>(1500,1110), juce::Point<int>(1000,740)}) {
+    for (const auto size : {juce::Point<int>(400,296), juce::Point<int>(500,370), juce::Point<int>(750,555), juce::Point<int>(1500,1110), juce::Point<int>(1000,740)}) {
         editor->setSize(size.x,size.y);
         check(contained(*editor), "scaled controls fit at small, large and default editor sizes");
     }

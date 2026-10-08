@@ -64,7 +64,7 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     rateLabel.setJustificationType(juce::Justification::centredRight);
     rateLabel.setInterceptsMouseClicks(false,false);
     setResizable(true,true);
-    setResizeLimits(750,555,1500,1110);
+    setResizeLimits(400,296,1500,1110);
     getConstrainer()->setFixedAspectRatio(1000.0/740.0);
     setSize(1000,740);
     loadKnobLayout(openPreampKnobDesign);
@@ -147,8 +147,8 @@ void OpenPreampEditor::resized()
     highPassDial.setBounds(24,54,108,102);lowPassDial.setBounds(150,54,108,102);
     cutsToggle.setBounds(270,80,70,30);
     monoMakerDial.setBounds(12,54,98,102);monoMakerToggle.setBounds(116,80,66,30);
-    preampPadBtn.setBounds(18,56,82,60);preampTypeBtn.setBounds(118,56,94,60);
-    preampCircuitToggle.setBounds(222,54,110,30);hqToggle.setBounds(222,96,110,30);
+    preampPadBtn.setBounds(14,56,100,60);preampTypeBtn.setBounds(120,56,112,60);
+    preampCircuitToggle.setBounds(244,56,96,26);hqToggle.setBounds(244,96,96,26);
     midSideToggle.setBounds(405,14,110,24);linkToggle.setBounds(525,14,80,24);
     rateLabel.setBounds(154,132,178,20);
 #if GOODLOOKINUI_ENABLE_EDITOR
