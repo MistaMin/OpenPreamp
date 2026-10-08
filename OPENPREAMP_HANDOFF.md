@@ -22,7 +22,8 @@ session rate, before the preamp upsampling. Preamp bypass skips it; model Off
 still permits filtering. Input meters remain before this filter.
 
 The header holds LR / M/S and Link; the bottom row holds cuts, mono maker,
-and preamp settings. Saved colours, gain-knob geometry and resize limits are
+and preamp settings. Input Cuts and Preamp both measure 356 × 164; Preamp
+was narrowed to match Input Cuts, with the mono maker centered between them. Saved colours, gain-knob geometry and resize limits are
 retained. Release VST3 built with developer mode OFF and passed strict signature
 verification. All 215 smoke/routing checks passed: linked gains, restoration
 on unlink, Link hidden in M/S, disabled right controls, Side-only 6 dB/octave
