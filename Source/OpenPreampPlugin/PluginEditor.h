@@ -32,6 +32,8 @@ private:
     std::unique_ptr<juce::DocumentWindow> developerWindow;
     void setupDeveloperTools();
 #endif
+    bool expanded = false;
+    void setExpanded(bool);
     bool layoutReady = false;
     void loadKnobLayout(const std::string&);
     juce::Component canvas;
@@ -39,6 +41,17 @@ private:
 
     SectionPanel preampPanel{"PREAMP"};
     SectionPanel outputPanel{"OUTPUT"};
+    SectionPanel rightPreampPanel{"RIGHT PREAMP"}, rightOutputPanel{"RIGHT OUTPUT"};
+    RotaryKnob rightGainDial{"GAIN", KnobValueType::Gain, Theme::preampCol};
+    RotaryKnob rightOutputDial{"OUTPUT", KnobValueType::Gain, Theme::outputCol};
+    RotaryKnob highPassDial{"HIGH PASS", KnobValueType::Frequency, Theme::preampCol};
+    RotaryKnob lowPassDial{"LOW PASS", KnobValueType::Frequency, Theme::preampCol};
+    MeterPanel rightMeter;
+    CycleButton rightMeterSourceBtn;
+    SmallToggle midSideToggle, cutsToggle;
+    juce::TextButton expandButton{">"};
+    juce::Label rightRateLabel;
+    std::unique_ptr<SliderAttachment> rightGainAtt, rightOutputAtt, highPassAtt, lowPassAtt;
 
     CycleButton preampTypeBtn;
     CycleButton preampPadBtn;

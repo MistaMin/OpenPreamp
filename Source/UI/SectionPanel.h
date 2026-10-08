@@ -41,6 +41,7 @@ public:
         return h;
     }
 
+    void setTitle(const juce::String& text) { if (title != text) { title = text; repaint(); } }
     void setAccent(juce::Colour colour, const juce::String& range) { accent=colour; subtitle=range; }
     void setAccentColour(juce::Colour colour) { accent=colour; repaint(); }
     juce::Colour getAccentColour() const { return accent; }

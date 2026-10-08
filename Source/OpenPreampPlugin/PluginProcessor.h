@@ -4,6 +4,7 @@
 #include "DSP/Preamp.h"
 #include "DSP/Resampler.h"
 #include "Toolkit.h"
+#include "SessionCuts.h"
 
 class OpenPreampProcessor;
 
@@ -20,6 +21,7 @@ public:
     bool isBusesLayoutSupported(const BusesLayout&) const override;
     int getEffectiveOversampleFactor() const { return effectiveFactorAtomic.load(std::memory_order_relaxed); }
     double getProcessingSampleRate() const { return sampleRateAtomic.load(std::memory_order_relaxed) * getEffectiveOversampleFactor(); }
+    double getSessionProcessorSampleRate() const { return cuts.getSampleRate(); }
     bool hasEditor() const override { return true; }
 
     const juce::String getName() const override { return JucePlugin_Name; }
@@ -45,7 +47,10 @@ public:
 private:
     void updateParameters();
 
-    dsp::PreampEngine preamp;
+    std::array<dsp::PreampEngine,2> preamps;
+    SessionCuts cuts;
+    std::array<juce::SmoothedValue<float>,2> inputGains, outputGains;
+    bool msActive = false, cutsActive = true, inputBypassed = false;
     dsp::MultirateEngine multirate;
     juce::dsp::DelayLine<float> latencyPadding;
     int fixedLatency = 0;

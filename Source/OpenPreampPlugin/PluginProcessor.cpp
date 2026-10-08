@@ -34,6 +34,23 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
         juce::ParameterID{"meterSource", 1}, "VU Source",
         juce::StringArray{"Input", "Output"}, 1));
 
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+        juce::ParameterID{"preampGainR", 1}, "Right / Side Input Gain",
+        juce::NormalisableRange<float>(-12.0f, 24.0f, 0.1f), 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+        juce::ParameterID{"outputGainR", 1}, "Right / Side Output Gain",
+        juce::NormalisableRange<float>(-24.0f, 24.0f, 0.1f), 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID{"midSide", 1}, "Mid / Side", false));
+    auto cutRange = juce::NormalisableRange<float>(20.0f, 20000.0f);
+    cutRange.setSkewForCentre(1000.0f);
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+        juce::ParameterID{"highPass", 1}, "High Pass", cutRange, 20.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+        juce::ParameterID{"lowPass", 1}, "Low Pass", cutRange, 20000.0f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID{"cutsEnabled", 1}, "Input Cuts", true));
+
     return {params.begin(), params.end()};
 }
 
@@ -61,12 +78,19 @@ void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     latencyPadding.setMaximumDelayInSamples(fixedLatency + 1);
     latencyPadding.prepare({sampleRate, juce::uint32(samplesPerBlock), juce::uint32(getTotalNumOutputChannels())});
     setLatencySamples(fixedLatency);
-    preamp.prepare(sampleRate);
-    preamp.setADAAEnabled(true);
-    // The circuit follows the selected 2x/4x rate directly; never decimate it back to 96 kHz.
-    preamp.setDecimationEnabled(false);
-    preamp.setSampleRate(sampleRate);
+    cuts.prepare(sampleRate);
+    for (auto& engine : preamps) {
+        engine.prepare(sampleRate);
+        engine.setADAAEnabled(true);
+        engine.setDecimationEnabled(false);
+        // Drive and PAD are now session-rate input trims outside oversampling.
+        engine.setDriveDB(0.0f);
+    }
+    for (auto& gain : inputGains) gain.reset(sampleRate, 0.01);
+    for (auto& gain : outputGains) gain.reset(sampleRate, 0.01);
     updateParameters();
+    for (auto& gain : inputGains) gain.setCurrentAndTargetValue(gain.getTargetValue());
+    for (auto& gain : outputGains) gain.setCurrentAndTargetValue(gain.getTargetValue());
 }
 
 void OpenPreampProcessor::updateParameters()
@@ -86,13 +110,24 @@ void OpenPreampProcessor::updateParameters()
     multirate.setMode(factor == 4 ? dsp::OversampleMode::FourX : factor == 2 ? dsp::OversampleMode::TwoX : dsp::OversampleMode::Native);
     effectiveFactorAtomic.store(factor, std::memory_order_relaxed);
     latencyPadding.setDelay(float(fixedLatency) - multirate.getLatencySamples());
-    preamp.setSampleRate(multirate.getEffectiveSampleRate());
-
+    for (auto& engine : preamps) {
+        engine.setSampleRate(multirate.getEffectiveSampleRate());
+        engine.setType(static_cast<dsp::PreampType>(getChoice("preampType")));
+        engine.setBypassed(getBool("preampBypass"));
+        engine.setCircuitEnabled(circuitActive);
+    }
+    inputBypassed = getBool("preampBypass");
+    msActive = getBool("midSide") && getTotalNumInputChannels() == 2;
+    const bool newCuts = getBool("cutsEnabled") && !inputBypassed;
+    if (newCuts != cutsActive) cuts.reset();
+    cutsActive = newCuts;
+    cuts.setFrequencies(getFloat("highPass"), getFloat("lowPass"));
     static constexpr float padGains[] = {-20.0f, 0.0f, 10.0f};
-    preamp.setType(static_cast<dsp::PreampType>(getChoice("preampType")));
-    preamp.setDriveDB(getFloat("preampGain") + padGains[std::clamp(getChoice("preampPad"), 0, 2)]);
-    preamp.setBypassed(getBool("preampBypass"));
-    preamp.setCircuitEnabled(getBool("preampCircuit"));
+    const float pad = padGains[std::clamp(getChoice("preampPad"),0,2)];
+    inputGains[0].setTargetValue(juce::Decibels::decibelsToGain(getFloat("preampGain")+pad));
+    inputGains[1].setTargetValue(juce::Decibels::decibelsToGain(getFloat("preampGainR")+pad));
+    outputGains[0].setTargetValue(juce::Decibels::decibelsToGain(getFloat("outputGain")));
+    outputGains[1].setTargetValue(juce::Decibels::decibelsToGain(getFloat("outputGainR")));
 }
 
 void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
@@ -104,24 +139,45 @@ void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
-    inLevel.push(buffer.getArrayOfReadPointers(), buffer.getNumChannels(), buffer.getNumSamples());
-
-    auto block = multirate.upsample(buffer);
-    const int numChannels = std::min(int(block.getNumChannels()), 2);
-    float* channels[2] = {block.getChannelPointer(0), nullptr};
-    if (numChannels > 1) channels[1] = block.getChannelPointer(1);
-    preamp.processBlock(channels, numChannels, int(block.getNumSamples()));
-    multirate.downsample(buffer);
-    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-        for (int i = 0; i < buffer.getNumSamples(); ++i) {
-            latencyPadding.pushSample(ch, buffer.getSample(ch, i));
-            buffer.setSample(ch, i, latencyPadding.popSample(ch));
+    const int numChannels = std::min(buffer.getNumChannels(),2);
+    constexpr float invRootTwo = 0.7071067811865475f;
+    // Orthonormal M/S: energy preserving, with an exact inverse after downsampling.
+    if (msActive) for (int i=0;i<buffer.getNumSamples();++i) {
+        const float l = buffer.getSample(0,i), r = buffer.getSample(1,i);
+        buffer.setSample(0,i,(l+r)*invRootTwo);
+        buffer.setSample(1,i,(l-r)*invRootTwo);
+    }
+    inLevel.push(buffer.getArrayOfReadPointers(),numChannels,buffer.getNumSamples());
+    for (int i=0;i<buffer.getNumSamples();++i) {
+        cuts.tick();
+        for (int ch=0;ch<numChannels;++ch) {
+            float x = buffer.getSample(ch,i);
+            const float gain = inputGains[size_t(ch)].getNextValue();
+            if (!inputBypassed) {
+                if (cutsActive) x = cuts.process(ch,x);
+                x *= gain;
+            }
+            buffer.setSample(ch,i,x);
         }
-
-    float outGainDB = apvts.getRawParameterValue("outputGain")->load();
-    float outGain = juce::Decibels::decibelsToGain(outGainDB);
-    buffer.applyGain(outGain);
-    outLevel.push(buffer.getArrayOfReadPointers(), buffer.getNumChannels(), buffer.getNumSamples());
+    }
+    auto block = multirate.upsample(buffer);
+    for (int ch=0;ch<numChannels;++ch) {
+        float* channel = block.getChannelPointer(size_t(ch));
+        preamps[size_t(ch)].processBlock(&channel,1,int(block.getNumSamples()));
+    }
+    multirate.downsample(buffer);
+    for (int ch=0;ch<numChannels;++ch)
+        for (int i=0;i<buffer.getNumSamples();++i) {
+            latencyPadding.pushSample(ch,buffer.getSample(ch,i));
+            buffer.setSample(ch,i,latencyPadding.popSample(ch)*outputGains[size_t(ch)].getNextValue());
+        }
+    // M/S meters observe their own encoded streams; the host always receives L/R.
+    outLevel.push(buffer.getArrayOfReadPointers(),numChannels,buffer.getNumSamples());
+    if (msActive) for (int i=0;i<buffer.getNumSamples();++i) {
+        const float m = buffer.getSample(0,i), side = buffer.getSample(1,i);
+        buffer.setSample(0,i,(m+side)*invRootTwo);
+        buffer.setSample(1,i,(m-side)*invRootTwo);
+    }
 }
 
 juce::AudioProcessorEditor* OpenPreampProcessor::createEditor()
@@ -139,8 +195,19 @@ void OpenPreampProcessor::getStateInformation(juce::MemoryBlock& destData)
 void OpenPreampProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     std::unique_ptr<juce::XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
-    if (xml && xml->hasTagName(apvts.state.getType()))
-        apvts.replaceState(juce::ValueTree::fromXml(*xml));
+    if (xml && xml->hasTagName(apvts.state.getType())) {
+        auto state = juce::ValueTree::fromXml(*xml);
+        // Old stereo gain settings affected both channels. Preserve those values on restore.
+        for (const auto pair : {std::pair<const char*,const char*>{"preampGain","preampGainR"}, {"outputGain","outputGainR"}})
+            if (!state.getChildWithProperty("id",pair.second).isValid()) {
+                auto old = state.getChildWithProperty("id",pair.first);
+                if (old.isValid()) { auto copy = old.createCopy(); copy.setProperty("id",pair.second,nullptr); state.appendChild(copy,nullptr); }
+            }
+        if (!state.getChildWithProperty("id","cutsEnabled").isValid()) {
+            juce::ValueTree cut("PARAM"); cut.setProperty("id","cutsEnabled",nullptr); cut.setProperty("value",0.0f,nullptr); state.appendChild(cut,nullptr);
+        }
+        apvts.replaceState(state);
+    }
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

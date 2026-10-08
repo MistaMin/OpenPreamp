@@ -16,17 +16,18 @@ static void set(OpenPreampProcessor& p, const char* id, float value) {
 }
 static bool contained(juce::Component& c) {
     for (auto* child : c.getChildren()) {
-        if (!c.getLocalBounds().contains(child->getBoundsInParent()) || !contained(*child)) return false;
+        if (child->isVisible() && (!c.getLocalBounds().contains(child->getBoundsInParent()) || !contained(*child))) return false;
     }
     return true;
 }
+#include "openpreamp_routing.h"
 int main() {
     juce::ScopedJuceInitialiser_GUI gui;
     OpenPreampProcessor p;
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);
     check(p.apvts.getParameter("oversampleMode") == nullptr, "oversampling parameter removed");
-    check(p.getParameters().size() == 8, "preamp-only parameter set; no EQ or harmonics controls");
+    check(p.getParameters().size() == 14, "preamp-only parameter set; no EQ or harmonics controls");
     set(p, "preampCircuit", 0);
     p.setPlayConfigDetails(2, 2, 48000, 128);
     p.prepareToPlay(48000, 128);
@@ -86,7 +87,7 @@ int main() {
     check(contained(*editor), "all GUI controls fit within their panels");
     for (auto* surface : editor->getChildren()) for (auto* child : surface->getChildren()) if (auto* meter = dynamic_cast<MeterPanel*>(child)) {
         LevelTracker::Reading in, out; in.peak[0] = 0.3f; in.peak[1] = 0.2f;
-        out.peak[0] = 1.1f; out.peak[1] = 0.8f; out.meanSquare[0] = out.meanSquare[1] = 0.015f;
+        out.peak[0] = 1.1f; out.peak[1] = 1.1f; out.meanSquare[0] = out.meanSquare[1] = 0.015f;
         for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);
         check(meter->clipped() && meter->holdDb() > 0 && meter->needle() > 0, "VU, peak hold, and clip indication respond");
         meter->resetClip(); check(!meter->clipped(), "clip lamp resets");
@@ -112,7 +113,7 @@ int main() {
                 if (auto* window = dynamic_cast<juce::DocumentWindow*>(desktop.getComponent(i)); window && window->getName() == "OpenPreamp developer tools") {
                     devOpened = window->isVisible();
                     const auto devImage = window->getContentComponent()->createComponentSnapshot(window->getContentComponent()->getLocalBounds());
-                    juce::FileOutputStream devFile(juce::File("/private/tmp/openpreamp-023-developer.png"));
+                    juce::FileOutputStream devFile(juce::File("/private/tmp/openpreamp-030-developer.png"));
                     devFile.setPosition(0); devFile.truncate(); juce::PNGImageFormat devPng; devPng.writeImageToStream(devImage, devFile);
                     window->closeButtonPressed();
                 }
@@ -143,9 +144,9 @@ int main() {
             for (auto* child : component.getChildren()) visit(*child);
         };
         visit(*variant);
-        check(matches && knobs == 2 && contained(*variant), "both knob and plate styles follow the saved model mapping; VU source restores");
+        check(matches && knobs == 6 && contained(*variant), "both knob and plate styles follow the saved model mapping; VU source restores");
         const auto image = variant->createComponentSnapshot(variant->getLocalBounds());
-        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-023-model-" + juce::String(model) + ".png"));
+        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-030-model-" + juce::String(model) + ".png"));
         file.setPosition(0); file.truncate(); juce::PNGImageFormat png; png.writeImageToStream(image, file);
     }
     check(Theme::editorTop == themeBefore, "per-instance styles do not mutate the global theme");
@@ -162,9 +163,25 @@ int main() {
     check(!mono.isBusesLayoutSupported(layout), "rejects mismatched input/output buses");
     editor->setVisible(false); // Render the parameter position without waiting for UI animation.
     const auto image = editor->createComponentSnapshot(editor->getLocalBounds());
-    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-023-preview.png"));
+    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-030-preview.png"));
     output.setPosition(0); output.truncate();
     juce::PNGImageFormat png; check(png.writeImageToStream(image, output), "editor preview renders");
+    bool expandedOk = false;
+    for (auto* surface : editor->getChildren()) for (auto* child : surface->getChildren())
+        for (auto* button : child->getChildren()) if (auto* expand = dynamic_cast<juce::TextButton*>(button); expand && expand->getButtonText() == ">") {
+            const int oldWidth = editor->getWidth(); expand->onClick();
+            expandedOk = editor->getWidth() == oldWidth*2 && contained(*editor);
+            const auto wideImage = editor->createComponentSnapshot(editor->getLocalBounds());
+            juce::FileOutputStream wideFile(juce::File("/private/tmp/openpreamp-030-expanded.png"));
+            wideFile.setPosition(0); wideFile.truncate(); juce::PNGImageFormat widePng; widePng.writeImageToStream(wideImage,wideFile);
+            juce::MemoryBlock expandedState; p.getStateInformation(expandedState);
+            OpenPreampProcessor wideRestored; wideRestored.setStateInformation(expandedState.getData(),int(expandedState.getSize()));
+            std::unique_ptr<juce::AudioProcessorEditor> restoredEditor(wideRestored.createEditor());
+            check(restoredEditor->getWidth()*7 == restoredEditor->getHeight()*10, "expanded layout restores from host state");
+            expand->onClick(); check(editor->getWidth() == oldWidth, "collapse restores original editor width");
+        }
+    check(expandedOk, "panel arrow doubles editor width and exposes a second channel strip");
+    runRoutingChecks();
     std::printf("%d checks, %d failures\n", checks, failures);
     return failures ? 1 : 0;
 }

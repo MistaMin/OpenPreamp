@@ -1,6 +1,6 @@
 # OpenPreamp
 
-Version **0.2.3** (pre-release). Preamp and metering extracted from HybridEQ,
+Version **0.3.0** (pre-release). Preamp and metering extracted from HybridEQ,
 without an EQ, spectrum display or separate harmonics engine.
 
 - **CIRCUIT on:** the selected Brit, N-Type, FSF or A-Type component network
@@ -8,11 +8,18 @@ without an EQ, spectrum display or separate harmonics engine.
 - **CIRCUIT off:** the lighter preamp model runs at the session rate with
   first-order antiderivative antialiasing (ADAA). HQ does not change this path.
 - **Off / bypass:** no circuit oversampling. Output trim and meters remain active.
-- **600 × 840 editor (5:7):** top VU with input/output selection, stereo input
-  and output peak ladders, peak hold and resettable clip lamp. Model changes
+- **600 × 840 editor (5:7), expandable to 1200 × 840:** independent channel VUs with input/output selection,
+  peak ladders, peak hold and resettable clip lamps. Model changes
   load OpenPreamp's saved plate, knob style and color mappings.
-- PAD and GAIN combine into a smoothed drive setting. Double-click a gain knob
-  to return to 0 dB. Output trim follows the preamp.
+- **`>` on the preamp panel:** opens the second channel strip in the same window;
+  `<` folds it away. Independent input and output trims process Left/Right.
+- **M / S:** encodes before cuts and preamps; decodes after downsampling and
+  channel output trims. The strips and VUs become Mid/Side. Mono ignores M/S.
+- **HIGH PASS / LOW PASS:** shared 12 dB/octave Butterworth cuts, initially
+  20 Hz / 20 kHz. CUTS toggles both. Their independent channel state, input/output
+  trims, PAD and M/S matrix run at the session rate outside oversampling.
+- Input gain now drives a fixed-unity-gain circuit externally; it no longer
+  changes the internal circuit gain network. Double-click gain/trim for 0 dB.
 
 ## Oversampling filters and timing
 
@@ -53,7 +60,7 @@ is in [LICENSE](LICENSE); dependencies are documented in
 
 ## Developer mode
 
-The 0.2.3 editor opens at 600 × 840 and resizes proportionally from 450 × 630
+The 0.3.0 editor opens at 600 × 840 and resizes proportionally from 450 × 630
 through 1000 × 1400. The VU and output knob are larger, the main gain knob is
 slightly smaller, and PAD/MODEL/CIRCUIT/HQ use narrower buttons.
 
@@ -62,11 +69,12 @@ Developer mode is enabled with `-DOPENPREAMP_DEVELOPER_MODE=ON` (the option defa
 style, colour and geometry immediately. Click either knob to select it.
 The model-look tab controls each preamp's plate, faceplate, knob style and colour.
 Model looks override the saved knob style/colour when the model is applied.
+Both channel gain and output knobs are registered in the developer layout tab.
 
 Edits autosave into `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.csv`;
 these files are baked into the next build. Set developer mode OFF for a release
 without the DEV tools or filesystem autosave. Resizing preserves edited geometry.
 
-The developer standalone is available for layout editing. The test VST3 uses
-the saved 0.2.3 design with developer mode OFF; 0.2.0 remains alongside it
-for comparison.
+The test VST3 uses the saved design with developer mode OFF. The 0.2.0
+comparison remains alongside it. Existing standalone artifacts must be rebuilt
+with developer mode ON before editing the 0.3.0 layout.
