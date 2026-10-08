@@ -85,7 +85,7 @@ public:
 
         juce::Colour backdrop;   // plate behind this knob: lets the toolkit draw dark marks on light plates and light marks on dark ones
         if (auto* panel = dynamic_cast<SectionPanel*>(getParentComponent())) backdrop = panel->getBackdrop();
-        goodlookinui::juce_adapter::drawKnob(g, knobBounds, motion.position, design, isActive, backdrop);
+        goodlookinui::juce_adapter::drawKnob(g, knobBounds, isShowing() ? motion.position : valueToProportionOfLength(getValue()), design, isActive, backdrop);
 
         if(getWidth()>=110) {
             g.setColour(hasPlateText?plateMid:Theme::textMid);g.setFont(juce::FontOptions(8.0f));

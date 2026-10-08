@@ -10,9 +10,10 @@
 #include "../UI/Theme.h"
 #include "../Toolkit.h"
 #include "../UI/ValueFormat.h"
+#include "../UI/MeterPanel.h"
 #include <memory>
 
-class OpenPreampEditor : public juce::AudioProcessorEditor {
+class OpenPreampEditor : public juce::AudioProcessorEditor, private juce::Timer {
 public:
     explicit OpenPreampEditor(OpenPreampProcessor&);
     ~OpenPreampEditor() override = default;
@@ -30,6 +31,10 @@ private:
 
     CycleButton preampTypeBtn;
     CycleButton preampPadBtn;
+    MeterPanel meterPanel;
+    juce::TooltipWindow tooltips{this, 700};
+    juce::String rateText;
+    void timerCallback() override;
     RotaryKnob preampGainDial{"GAIN", KnobValueType::Gain, Theme::preampCol};
     BypassButton preampBypassBtn;
     SmallToggle preampCircuitToggle;
