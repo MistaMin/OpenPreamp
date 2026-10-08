@@ -1,6 +1,6 @@
 # OpenPreamp
 
-Version **0.3.0** (pre-release). Preamp and metering extracted from HybridEQ,
+Version **0.3.1** (pre-release). Preamp and metering extracted from HybridEQ,
 without an EQ, spectrum display or separate harmonics engine.
 
 - **CIRCUIT on:** the selected Brit, N-Type, FSF or A-Type component network
@@ -8,11 +8,12 @@ without an EQ, spectrum display or separate harmonics engine.
 - **CIRCUIT off:** the lighter preamp model runs at the session rate with
   first-order antiderivative antialiasing (ADAA). HQ does not change this path.
 - **Off / bypass:** no circuit oversampling. Output trim and meters remain active.
-- **600 × 840 editor (5:7), expandable to 1200 × 840:** independent channel VUs with input/output selection,
+- **1000 × 740 resizable editor:** independent channel VUs with input/output selection,
   peak ladders, peak hold and resettable clip lamps. Model changes
   load OpenPreamp's saved plate, knob style and color mappings.
-- **`>` on the preamp panel:** opens the second channel strip in the same window;
-  `<` folds it away. Independent input and output trims process Left/Right.
+- **Both channels always visible:** paired input/output controls below the dual
+  meters, with shared input cuts and preamp controls in the bottom row.
+  Independent input and output trims process Left/Right.
 - **M / S:** encodes before cuts and preamps; decodes after downsampling and
   channel output trims. The strips and VUs become Mid/Side. Mono ignores M/S.
 - **HIGH PASS / LOW PASS:** shared 12 dB/octave Butterworth cuts, initially
@@ -60,9 +61,10 @@ is in [LICENSE](LICENSE); dependencies are documented in
 
 ## Developer mode
 
-The 0.3.0 editor opens at 600 × 840 and resizes proportionally from 450 × 630
-through 1000 × 1400. The VU and output knob are larger, the main gain knob is
-slightly smaller, and PAD/MODEL/CIRCUIT/HQ use narrower buttons.
+The 0.3.1 editor opens at 1000 × 740 and resizes proportionally from 750 × 555
+through 1500 × 1110. Its VUMT-inspired arrangement keeps both meters across
+the top, paired channel input/output knobs below, and shared cuts/preamp
+settings in the bottom row. The saved model colours and knob styles are retained.
 
 Developer mode is enabled with `-DOPENPREAMP_DEVELOPER_MODE=ON` (the option defaults to ON for development). Click **DEV** in the header for a separate window with
 **Knobs / layout** and **Model looks** tabs. Knob edits change label, font,
@@ -77,4 +79,4 @@ without the DEV tools or filesystem autosave. Resizing preserves edited geometry
 
 The test VST3 uses the saved design with developer mode OFF. The 0.2.0
 comparison remains alongside it. Existing standalone artifacts must be rebuilt
-with developer mode ON before editing the 0.3.0 layout.
+with developer mode ON before editing the 0.3.1 layout.

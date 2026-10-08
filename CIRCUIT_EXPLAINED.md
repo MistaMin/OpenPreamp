@@ -1,4 +1,4 @@
-# OpenPreamp circuit — version 0.3.0
+# OpenPreamp circuit — version 0.3.1
 
 OpenPreamp simulates a preamp; it does not control physical hardware.
 Only the selected preamp circuit is oversampled. Its surrounding processors

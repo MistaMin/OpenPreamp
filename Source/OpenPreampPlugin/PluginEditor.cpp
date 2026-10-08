@@ -17,71 +17,51 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
 {
     addAndMakeVisible(canvas);
     modelLooks.fromCsv(openPreampModelLooks);
-    rightPreampPanel.setAccent(Theme::preampCol, "INDEPENDENT INPUT GAIN");
-    rightOutputPanel.setAccent(Theme::outputCol, "INDEPENDENT OUTPUT TRIM");
+    preampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
+    rightPreampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
+    cutsPanel.setAccent(Theme::preampCol,"SHARED / 12 dB PER OCTAVE");
+    controlsPanel.setAccent(Theme::preampCol,"MODEL / DRIVE / QUALITY");
+    controlsPanel.setBypassButton(preampBypassBtn);
+    preampPanel.addAndMakeVisible(preampGainDial);
+    preampPanel.addAndMakeVisible(outputGainDial);
     rightPreampPanel.addAndMakeVisible(rightGainDial);
-    rightPreampPanel.addAndMakeVisible(midSideToggle);
-    rightOutputPanel.addAndMakeVisible(rightOutputDial);
-    rightOutputPanel.addAndMakeVisible(rightRateLabel);
-    canvas.addChildComponent(rightMeter);
-    canvas.addChildComponent(rightMeterSourceBtn);
-    canvas.addChildComponent(rightPreampPanel);
-    canvas.addChildComponent(rightOutputPanel);
-    for (auto* c : std::initializer_list<juce::Component*>{&highPassDial, &lowPassDial, &cutsToggle, &expandButton})
-        preampPanel.addAndMakeVisible(c);
+    rightPreampPanel.addAndMakeVisible(rightOutputDial);
+    for (auto* c : std::initializer_list<juce::Component*>{&highPassDial,&lowPassDial,&cutsToggle}) cutsPanel.addAndMakeVisible(c);
+    for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&hqToggle,&midSideToggle,&rateLabel}) controlsPanel.addAndMakeVisible(c);
+    for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn}) canvas.addAndMakeVisible(c);
     meterPanel.setChannel(0); rightMeter.setChannel(1);
     meterPanel.setExternallyDriven(); rightMeter.setExternallyDriven();
-    expandButton.onClick = [this] { setExpanded(!expanded); };
-    expandButton.setTooltip("Show or hide the second channel strip.");
-    midSideToggle.setTooltip("Encode L/R to Mid/Side before the cuts and preamp; decode after downsampling and output trims.");
-    cutsToggle.setTooltip("Shared 12 dB/octave high-pass and low-pass before the preamp, at the session rate.");
-    rightGainAtt = std::make_unique<SliderAttachment>(p.apvts,"preampGainR",rightGainDial);
-    rightOutputAtt = std::make_unique<SliderAttachment>(p.apvts,"outputGainR",rightOutputDial);
-    highPassAtt = std::make_unique<SliderAttachment>(p.apvts,"highPass",highPassDial);
-    lowPassAtt = std::make_unique<SliderAttachment>(p.apvts,"lowPass",lowPassDial);
-    rightGainDial.setDoubleClickReturnValue(true,0); rightOutputDial.setDoubleClickReturnValue(true,0);
+    auto attach = [&](const char* id,RotaryKnob& knob) { return std::make_unique<SliderAttachment>(p.apvts,id,knob); };
+    preampGainAtt=attach("preampGain",preampGainDial); outputGainAtt=attach("outputGain",outputGainDial);
+    rightGainAtt=attach("preampGainR",rightGainDial); rightOutputAtt=attach("outputGainR",rightOutputDial);
+    highPassAtt=attach("highPass",highPassDial); lowPassAtt=attach("lowPass",lowPassDial);
+    for(auto* knob : {&preampGainDial,&rightGainDial,&outputGainDial,&rightOutputDial}) knob->setDoubleClickReturnValue(true,0);
     highPassDial.setDoubleClickReturnValue(true,20); lowPassDial.setDoubleClickReturnValue(true,20000);
-    rightRateLabel.setFont(juce::FontOptions(10.0f));
-    rightRateLabel.setJustificationType(juce::Justification::centredRight);
-    preampPanel.setAccent(Theme::preampCol, "INPUT / ANALOG CHARACTER");
-    preampPanel.setBypassButton(preampBypassBtn);
-    for (auto* control : std::initializer_list<juce::Component*>{&preampPadBtn, &preampGainDial, &preampTypeCircuitPair})
-        preampPanel.addAndMakeVisible(control);
-    preampTypeCircuitPair.setChildren(preampTypeBtn, preampCircuitToggle);
-    canvas.addAndMakeVisible(preampPanel);
-    outputPanel.setAccent(Theme::outputCol, "LEVEL TRIM / QUALITY");
-    outputPanel.addAndMakeVisible(outputGainDial);
-    outputPanel.addAndMakeVisible(hqToggle);
-    outputPanel.addAndMakeVisible(rateLabel);
+    preampGainDial.setTooltip("Left / Mid input gain. Double-click for 0 dB.");
+    rightGainDial.setTooltip("Right / Side input gain. Double-click for 0 dB.");
+    outputGainDial.setTooltip("Left / Mid output trim. Double-click for 0 dB.");
+    rightOutputDial.setTooltip("Right / Side output trim. Double-click for 0 dB.");
+    preampBypassBtn.setTooltip("Bypass cuts and preamp; output trims and meters remain active.");
+    preampPadBtn.setButtonTooltip("Shared input offset: -20 dB, unity, or +10 dB.");
+    preampTypeBtn.setButtonTooltip("Shared preamp model for both channels.");
+    preampCircuitToggle.setTooltip("Circuit at 2x, or lighter native-rate preamp with ADAA when off.");
+    hqToggle.setTooltip("Use 4x oversampling when CIRCUIT is on.");
+    midSideToggle.setTooltip("Encode Mid/Side before the preamps; decode to stereo after downsampling and output trims.");
+    cutsToggle.setTooltip("Shared session-rate 12 dB/octave high-pass and low-pass.");
+    for (auto* button : {&meterSourceBtn,&rightMeterSourceBtn}) button->setButtonTooltip("Select input or output for both independent meters.");
     rateLabel.setFont(juce::FontOptions(10.0f));
     rateLabel.setJustificationType(juce::Justification::centredRight);
-    rateLabel.setInterceptsMouseClicks(false, false);
-    canvas.addAndMakeVisible(outputPanel);
-    canvas.addAndMakeVisible(meterPanel);
-    canvas.addAndMakeVisible(meterSourceBtn);
-    preampGainAtt = std::make_unique<SliderAttachment>(p.apvts, "preampGain", preampGainDial);
-    outputGainAtt = std::make_unique<SliderAttachment>(p.apvts, "outputGain", outputGainDial);
-    preampGainDial.setDoubleClickReturnValue(true, 0.0);
-    outputGainDial.setDoubleClickReturnValue(true, 0.0);
-    preampGainDial.setTooltip("Preamp drive. Double-click to return to 0 dB.");
-    outputGainDial.setTooltip("Output trim after the preamp. Double-click to return to 0 dB.");
-    preampBypassBtn.setTooltip("Bypass the preamp; output trim and meters remain active.");
-    preampPadBtn.setButtonTooltip("Input drive offset: -20 dB, unity, or +10 dB.");
-    preampTypeBtn.setButtonTooltip("Select preamp character. Off keeps clean drive without coloration.");
-    preampCircuitToggle.setTooltip("Circuit on: component simulation at 2x. Circuit off: preamp coloration with ADAA at the session rate.");
-    hqToggle.setTooltip("Use 4x oversampling with the circuit on. The circuit-off path stays at the session rate with ADAA.");
-    meterSourceBtn.setButtonTooltip("Select input or output for the VU needle, peak hold and clip lamp. Both stereo ladders stay visible.");
-    setResizable(true, true);
-    setResizeLimits(450, 630, 1000, 1400);
-    getConstrainer()->setFixedAspectRatio(5.0 / 7.0);
-    setSize(600, 840);
+    rateLabel.setInterceptsMouseClicks(false,false);
+    setResizable(true,true);
+    setResizeLimits(750,555,1500,1110);
+    getConstrainer()->setFixedAspectRatio(1000.0/740.0);
+    setSize(1000,740);
     loadKnobLayout(openPreampKnobDesign);
-    layoutReady = true;
+    layoutReady=true;
     timerCallback();
 #if GOODLOOKINUI_ENABLE_EDITOR
     setupDeveloperTools();
 #endif
-    if (bool(p.apvts.state.getProperty("expanded",false))) setExpanded(true);
     startTimerHz(30);
 }
 
@@ -99,7 +79,7 @@ void OpenPreampEditor::applyModelLook()
     const auto* plate = goodlookinui::findFaceplate(look->plate);
     if (!plate) plate = face;
     const auto colour = juce::Colour::fromString("ff" + juce::String(look->colour.substr(1)));
-    for (auto* panel : {&preampPanel, &outputPanel, &rightPreampPanel, &rightOutputPanel}) {
+    for (auto* panel : {&preampPanel, &rightPreampPanel, &cutsPanel, &controlsPanel}) {
         panel->setAccentColour(colour);
         if (plate) panel->setPlate(juce::Colour(plate->panelTop), juce::Colour(plate->panelBottom),
                                   juce::Colour(plate->text), juce::Colour(plate->textMid), plate->finish);
@@ -113,7 +93,6 @@ void OpenPreampEditor::applyModelLook()
         const juce::Colour text(plate->text), mid(plate->textMid);
         preampPadBtn.setPlateText(&text, &mid); preampTypeBtn.setPlateText(&text, &mid);
         rateLabel.setColour(juce::Label::textColourId, mid);
-        rightRateLabel.setColour(juce::Label::textColourId, mid);
     }
     preampBypassBtn.setAccent(colour);
     preampCircuitToggle.setAccent(colour); hqToggle.setAccent(colour);
@@ -123,58 +102,42 @@ void OpenPreampEditor::applyModelLook()
 
 void OpenPreampEditor::paint(juce::Graphics& g)
 {
-    g.addTransform(juce::AffineTransform::scale(float(getHeight()) / 840.0f));
-    g.setGradientFill(juce::ColourGradient(editorLook.bgTop, 0.0f, 0.0f,
-                                          editorLook.bgBottom, 0.0f, 840.0f, false));
+    g.addTransform(juce::AffineTransform::scale(float(getHeight())/740.0f));
+    g.setGradientFill(juce::ColourGradient(editorLook.bgTop,0,0,editorLook.bgBottom,0,740,false));
     g.fillAll();
-    g.setColour(editorLook.titleBar); g.fillRect(0, 0, expanded ? 1200 : 600, 60);
-    g.setColour(editorLook.accent); g.fillRect(22, 18, 3, 24);
-    g.setFont(juce::FontOptions(22.0f, juce::Font::bold));
-    g.setColour(editorLook.text); g.drawText("OpenPreamp", 36, 14, 240, 32, juce::Justification::centredLeft);
-    g.setFont(juce::FontOptions(9.5f)); g.setColour(editorLook.textMid);
-    g.drawText(juce::String(JucePlugin_VersionString) + "  /  OPENGRID", 400, 20, 176, 24, juce::Justification::centredRight);
-    g.setColour(editorLook.border); g.drawHorizontalLine(60, 16.0f, float((expanded ? 1200 : 600) - 16));
-    g.setFont(juce::FontOptions(9.5f)); g.setColour(editorLook.textMid);
-    g.drawText("0 VU = -18 dBFS", 24, 291, 220, 12, juce::Justification::centredLeft);
-    g.setColour(editorLook.textMid);
-    g.drawText("CUTS  >  GAIN  >  PREAMP  >  OUTPUT", 24, 816, 270, 18, juce::Justification::centredLeft);
-    g.drawText("Click CLIP to reset", 400, 816, 176, 18, juce::Justification::centredRight);
-    if (expanded) {
-        g.drawText("INDEPENDENT CHANNEL", 636, 20, 300, 24, juce::Justification::centredLeft);
-        g.drawText("M / S encodes before the preamp and decodes to L / R at output", 624, 816, 552, 18, juce::Justification::centredLeft);
-    }
+    g.setColour(editorLook.titleBar);g.fillRect(0,0,1000,52);
+    g.setColour(editorLook.accent);g.fillRect(22,14,3,24);
+    g.setColour(editorLook.text);g.setFont(juce::FontOptions(22.0f,juce::Font::bold));
+    g.drawText("OpenPreamp",36,10,240,32,juce::Justification::centredLeft);
+    g.setColour(editorLook.textMid);g.setFont(juce::FontOptions(9.5f));
+    g.drawText(juce::String(JucePlugin_VersionString)+"  /  OPENGRID",800,14,176,24,juce::Justification::centredRight);
+    g.setColour(editorLook.border);g.drawHorizontalLine(52,16,984);
+    g.setColour(editorLook.textMid);g.setFont(juce::FontOptions(9.0f));
+    g.drawText("0 VU = -18 dBFS",24,284,220,14,juce::Justification::centredLeft);
+    g.drawText("0 VU = -18 dBFS",516,284,220,14,juce::Justification::centredLeft);
+    g.drawText("INDEPENDENT CHANNELS  /  SHARED PREAMP & CUTS",24,716,520,18,juce::Justification::centredLeft);
+    g.drawText("Click CLIP to reset",800,716,176,18,juce::Justification::centredRight);
 }
 
 void OpenPreampEditor::resized()
 {
-    canvas.setBounds(0, 0, expanded ? 1200 : 600, 840);
-    canvas.setTransform(juce::AffineTransform::scale(float(getHeight()) / 840.0f));
-    meterPanel.setBounds(16, 76, 568, 214);
-    meterSourceBtn.setBounds(474, 83, 92, 27);
-    preampPanel.setBounds(16, 304, 568, 286);
-    preampPadBtn.setBounds(38, 86, 82, 60);
-    if (!layoutReady) preampGainDial.setBounds(196, 56, 176, 198);
-    preampTypeCircuitPair.setBounds(428, 70, 94, 98);
-    outputPanel.setBounds(16, 602, 568, 198);
-    if (!layoutReady) outputGainDial.setBounds(52, 52, 132, 144);
-    hqToggle.setBounds(392, 68, 96, 32);
-    rateLabel.setBounds(276, 114, 264, 26);
-    highPassDial.setBounds(54,174,110,108);
-    lowPassDial.setBounds(408,174,110,108);
-    cutsToggle.setBounds(240,258,88,24);
-    expandButton.setBounds(536,250,24,28);
-    rightMeter.setBounds(616,76,568,214);
-    rightMeterSourceBtn.setBounds(1074,83,92,27);
-    rightPreampPanel.setBounds(616,304,568,286);
-    rightOutputPanel.setBounds(616,602,568,198);
-    if (!layoutReady) {
-        rightGainDial.setBounds(preampGainDial.getBounds());
-        rightOutputDial.setBounds(outputGainDial.getBounds());
+    canvas.setBounds(0,0,1000,740);
+    canvas.setTransform(juce::AffineTransform::scale(float(getHeight())/740.0f));
+    meterPanel.setBounds(16,68,476,210);rightMeter.setBounds(508,68,476,210);
+    meterSourceBtn.setBounds(382,75,92,27);rightMeterSourceBtn.setBounds(874,75,92,27);
+    preampPanel.setBounds(16,306,476,218);rightPreampPanel.setBounds(508,306,476,218);
+    if(!layoutReady) {
+        preampGainDial.setBounds(60,54,148,154);outputGainDial.setBounds(286,54,132,154);
+        rightGainDial.setBounds(preampGainDial.getBounds());rightOutputDial.setBounds(outputGainDial.getBounds());
     }
-    midSideToggle.setBounds(428,100,94,30);
-    rightRateLabel.setBounds(276,114,264,26);
+    cutsPanel.setBounds(16,540,356,164);controlsPanel.setBounds(388,540,596,164);
+    highPassDial.setBounds(24,54,108,102);lowPassDial.setBounds(150,54,108,102);
+    cutsToggle.setBounds(270,80,70,30);
+    preampPadBtn.setBounds(24,56,82,60);preampTypeBtn.setBounds(140,56,94,60);
+    preampCircuitToggle.setBounds(266,72,94,30);hqToggle.setBounds(378,72,94,30);
+    midSideToggle.setBounds(490,72,82,30);rateLabel.setBounds(362,122,210,20);
 #if GOODLOOKINUI_ENABLE_EDITOR
-    developerButton.setBounds(316, 20, 60, 24);
+    developerButton.setBounds(316,14,60,24);
 #endif
 }
 
@@ -193,10 +156,8 @@ void OpenPreampEditor::timerCallback()
     const bool ms = proc.apvts.getRawParameterValue("midSide")->load() > 0.5f && proc.getTotalNumInputChannels() == 2;
     meterPanel.setCaption(ms ? "MID LEVEL" : "LEFT LEVEL");
     rightMeter.setCaption(ms ? "SIDE LEVEL" : "RIGHT LEVEL");
-    preampPanel.setTitle(ms ? "MID PREAMP" : "LEFT PREAMP");
-    rightPreampPanel.setTitle(ms ? "SIDE PREAMP" : "RIGHT PREAMP");
-    outputPanel.setTitle(ms ? "MID OUTPUT" : "LEFT OUTPUT");
-    rightOutputPanel.setTitle(ms ? "SIDE OUTPUT" : "RIGHT OUTPUT");
+    preampPanel.setTitle(ms ? "MID" : "LEFT");
+    rightPreampPanel.setTitle(ms ? "SIDE" : "RIGHT");
     midSideToggle.setActive(proc.getTotalNumInputChannels() == 2);
     if (isShowing()) {
         const auto input = proc.getInputLevel().read(), output = proc.getOutputLevel().read();
@@ -205,13 +166,12 @@ void OpenPreampEditor::timerCallback()
     }
     const int factor = proc.getEffectiveOversampleFactor();
     const auto text = juce::String(factor) + "x  /  " + juce::String(proc.getProcessingSampleRate() / 1000.0, 1) + " kHz";
-    if (rateText != text) { rateText = text; rateLabel.setText(text, juce::dontSendNotification); rightRateLabel.setText(text,juce::dontSendNotification); }
+    if (rateText != text) { rateText = text; rateLabel.setText(text, juce::dontSendNotification); }
 }
 
 OpenPreampEditor::~OpenPreampEditor()
 {
     stopTimer();
-    proc.apvts.state.setProperty("expanded",expanded,nullptr);
 #if GOODLOOKINUI_ENABLE_EDITOR
     developerWindow.reset();
     designAutosave.flush();
@@ -248,7 +208,7 @@ public:
 void OpenPreampEditor::setupDeveloperTools()
 {
     canvas.addAndMakeVisible(developerButton);
-    developerButton.setBounds(316, 20, 60, 24);
+    developerButton.setBounds(316, 14, 60, 24);
     developerButton.setTooltip("Open the knob and model-look editors. Edits autosave to Designs/.");
     designAutosave.setFolder(juce::File(OPENPREAMP_DESIGNS_DIR));
     const auto savedLooks = designAutosave.read("OpenPreampLooks.csv");
@@ -294,17 +254,3 @@ void OpenPreampEditor::setupDeveloperTools()
     };
 }
 #endif
-
-void OpenPreampEditor::setExpanded(bool show)
-{
-    if (expanded == show) return;
-    expanded = show;
-    const int h = getHeight();
-    getConstrainer()->setFixedAspectRatio(show ? 10.0/7.0 : 5.0/7.0);
-    setResizeLimits(show ? 900 : 450,630,show ? 2000 : 1000,1400);
-    expandButton.setButtonText(show ? "<" : ">");
-    for (auto* c : std::initializer_list<juce::Component*>{&rightMeter,&rightMeterSourceBtn,&rightPreampPanel,&rightOutputPanel}) c->setVisible(show);
-    setSize(h*(show ? 10 : 5)/7,h);
-    proc.apvts.state.setProperty("expanded",show,nullptr);
-    resized(); repaint();
-}

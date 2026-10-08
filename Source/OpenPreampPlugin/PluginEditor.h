@@ -32,16 +32,14 @@ private:
     std::unique_ptr<juce::DocumentWindow> developerWindow;
     void setupDeveloperTools();
 #endif
-    bool expanded = false;
-    void setExpanded(bool);
     bool layoutReady = false;
     void loadKnobLayout(const std::string&);
     juce::Component canvas;
     OpenPreampProcessor& proc;
 
     SectionPanel preampPanel{"PREAMP"};
-    SectionPanel outputPanel{"OUTPUT"};
-    SectionPanel rightPreampPanel{"RIGHT PREAMP"}, rightOutputPanel{"RIGHT OUTPUT"};
+    SectionPanel rightPreampPanel{"RIGHT"};
+    SectionPanel cutsPanel{"INPUT CUTS"}, controlsPanel{"PREAMP"};
     RotaryKnob rightGainDial{"GAIN", KnobValueType::Gain, Theme::preampCol};
     RotaryKnob rightOutputDial{"OUTPUT", KnobValueType::Gain, Theme::outputCol};
     RotaryKnob highPassDial{"HIGH PASS", KnobValueType::Frequency, Theme::preampCol};
@@ -49,8 +47,6 @@ private:
     MeterPanel rightMeter;
     CycleButton rightMeterSourceBtn;
     SmallToggle midSideToggle, cutsToggle;
-    juce::TextButton expandButton{">"};
-    juce::Label rightRateLabel;
     std::unique_ptr<SliderAttachment> rightGainAtt, rightOutputAtt, highPassAtt, lowPassAtt;
 
     CycleButton preampTypeBtn;
@@ -69,7 +65,6 @@ private:
     RotaryKnob preampGainDial{"GAIN", KnobValueType::Gain, Theme::preampCol};
     BypassButton preampBypassBtn;
     SmallToggle preampCircuitToggle;
-    VerticalPair preampTypeCircuitPair;
 
     RotaryKnob outputGainDial{"OUTPUT", KnobValueType::Gain, Theme::outputCol};
 
