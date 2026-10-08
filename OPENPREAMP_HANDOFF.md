@@ -1,3 +1,39 @@
+# OpenPreamp 0.3.1 stereo-tools update — 2026-10-08
+
+Adds the requested VUMT-style gain linking and mono maker to the approved dual
+layout. Version remains 0.3.1. VUMTdeluxe was tested interactively: Link disables
+the right trim in L/R; M/S hides Link and enables independent Mid/Side trims;
+mono-maker power greys its controls. The reference settings were restored.
+VUMT also provides an Amount control; OpenPreamp implements the specifically
+requested Side high-pass rather than adding an unrequested width amount.
+
+New parameters: channelLink (off), monoMakerEnabled (off), monoMakerFrequency
+(20 Hz, range 20–500 Hz). Existing parameter IDs are retained. Linked L/R input
+and output gains both use the left values without overwriting the stored right
+values. Both right knobs are disabled and dimmed. M/S hides Link and ignores
+its gain routing even if its stored parameter remains on. Mono hosts disable
+stereo-only controls. Old sessions restore new features off at 20 Hz.
+
+Mono maker is a one-pole bilinear-transform IIR high-pass on Side, -3 dB at
+cutoff and 6 dB/octave below it. Mid is unchanged. In L/R it temporarily
+encodes, filters Side, and decodes before cuts/input trims; in M/S it filters
+the already encoded Side. All operations and 10 ms cutoff smoothing run at
+session rate, before the preamp upsampling. Preamp bypass skips it; model Off
+still permits filtering. Input meters remain before this filter.
+
+The header holds LR / M/S and Link; the bottom row holds cuts, mono maker,
+and preamp settings. Saved colours, gain-knob geometry and resize limits are
+retained. Release VST3 built with developer mode OFF and passed strict signature
+verification. All 215 smoke/routing checks passed: linked gains, restoration
+on unlink, Link hidden in M/S, disabled right controls, Side-only 6 dB/octave
+response and Mid preservation at 44.1/48/96 kHz, every model against manually
+encoded/Side-filtered audio at native/2x/4x, state migration, and GUI layout.
+The test VST3 replaces the prior 0.3.1 layout build; the 0.2.0 comparison remains
+untouched. The prior build is backed up in build/OpenPreamp-0.3.1-layout-test-backup.vst3. Remove test installs only
+when the owner explicitly says testing is finished.
+
+## Earlier 0.3.1 layout handoff
+
 # OpenPreamp 0.3.1 layout handoff — 2026-10-08
 
 Based on 0.3.0 commit 29366fa. This is a UI/version change; processing and

@@ -39,14 +39,16 @@ private:
 
     SectionPanel preampPanel{"PREAMP"};
     SectionPanel rightPreampPanel{"RIGHT"};
-    SectionPanel cutsPanel{"INPUT CUTS"}, controlsPanel{"PREAMP"};
+    SectionPanel cutsPanel{"INPUT CUTS"}, controlsPanel{"PREAMP"}, monoMakerPanel{"MONO MAKER"};
     RotaryKnob rightGainDial{"GAIN", KnobValueType::Gain, Theme::preampCol};
     RotaryKnob rightOutputDial{"OUTPUT", KnobValueType::Gain, Theme::outputCol};
     RotaryKnob highPassDial{"HIGH PASS", KnobValueType::Frequency, Theme::preampCol};
     RotaryKnob lowPassDial{"LOW PASS", KnobValueType::Frequency, Theme::preampCol};
     MeterPanel rightMeter;
     CycleButton rightMeterSourceBtn;
-    SmallToggle midSideToggle, cutsToggle;
+    SmallToggle midSideToggle, cutsToggle, linkToggle, monoMakerToggle;
+    RotaryKnob monoMakerDial{"FREQUENCY", KnobValueType::Frequency, Theme::preampCol};
+    std::unique_ptr<SliderAttachment> monoMakerAtt;
     std::unique_ptr<SliderAttachment> rightGainAtt, rightOutputAtt, highPassAtt, lowPassAtt;
 
     CycleButton preampTypeBtn;

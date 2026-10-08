@@ -5,6 +5,7 @@
 #include "DSP/Resampler.h"
 #include "Toolkit.h"
 #include "SessionCuts.h"
+#include "SessionMonoMaker.h"
 
 class OpenPreampProcessor;
 
@@ -49,6 +50,8 @@ private:
 
     std::array<dsp::PreampEngine,2> preamps;
     SessionCuts cuts;
+    SessionMonoMaker monoMaker;
+    bool monoMakerActive = false;
     std::array<juce::SmoothedValue<float>,2> inputGains, outputGains;
     bool msActive = false, cutsActive = true, inputBypassed = false;
     dsp::MultirateEngine multirate;

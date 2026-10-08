@@ -4,7 +4,7 @@ Version **0.3.1** (pre-release). Preamp and metering extracted from HybridEQ,
 without an EQ, spectrum display or separate harmonics engine.
 
 - **CIRCUIT on:** the selected Brit, N-Type, FSF or A-Type component network
-  runs at 2x the session rate. **HQ MODE**, in OUTPUT, raises it to 4x.
+  runs at 2x the session rate. **HQ MODE** raises it to 4x.
 - **CIRCUIT off:** the lighter preamp model runs at the session rate with
   first-order antiderivative antialiasing (ADAA). HQ does not change this path.
 - **Off / bypass:** no circuit oversampling. Output trim and meters remain active.
@@ -13,12 +13,18 @@ without an EQ, spectrum display or separate harmonics engine.
   load OpenPreamp's saved plate, knob style and color mappings.
 - **Both channels always visible:** paired input/output controls below the dual
   meters, with shared input cuts and preamp controls in the bottom row.
-  Independent input and output trims process Left/Right.
-- **M / S:** encodes before cuts and preamps; decodes after downsampling and
-  channel output trims. The strips and VUs become Mid/Side. Mono ignores M/S.
+  Independent input and output trims process Left/Right. **LINK** makes both
+  right gains follow the left controls and greys out the right knobs. Unlinking
+  restores the saved independent right settings. Link starts off.
+- **LR / M/S:** encodes before cuts and preamps; decodes after downsampling and
+  channel output trims. The strips and VUs become Mid/Side. Link disappears
+  and its gain linking is ignored while M/S is on. Mono ignores M/S.
 - **HIGH PASS / LOW PASS:** shared 12 dB/octave Butterworth cuts, initially
   20 Hz / 20 kHz. CUTS toggles both. Their independent channel state, input/output
   trims, PAD and M/S matrix run at the session rate outside oversampling.
+- **MONO MAKER:** optional one-pole 6 dB/octave Side-only high-pass before
+  cuts and preamps, at the session rate. Starts off at 20 Hz; adjustable
+  20–500 Hz. Mid stays unchanged. Works in both L/R and M/S; mono hosts ignore it.
 - Input gain now drives a fixed-unity-gain circuit externally; it no longer
   changes the internal circuit gain network. Double-click gain/trim for 0 dB.
 
