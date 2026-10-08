@@ -21,13 +21,14 @@ static bool contained(juce::Component& c) {
     return true;
 }
 #include "openpreamp_routing.h"
+#include "openpreamp_stereo_tools.h"
 int main() {
     juce::ScopedJuceInitialiser_GUI gui;
     OpenPreampProcessor p;
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);
     check(p.apvts.getParameter("oversampleMode") == nullptr, "oversampling parameter removed");
-    check(p.getParameters().size() == 14, "preamp-only parameter set; no EQ or harmonics controls");
+    check(p.getParameters().size() == 17, "preamp-only parameter set; no EQ or harmonics controls");
     set(p, "preampCircuit", 0);
     p.setPlayConfigDetails(2, 2, 48000, 128);
     p.prepareToPlay(48000, 128);
@@ -144,7 +145,7 @@ int main() {
             for (auto* child : component.getChildren()) visit(*child);
         };
         visit(*variant);
-        check(matches && knobs == 6 && contained(*variant), "both knob and plate styles follow the saved model mapping; VU source restores");
+        check(matches && knobs == 7 && contained(*variant), "both knob and plate styles follow the saved model mapping; VU source restores");
         const auto image = variant->createComponentSnapshot(variant->getLocalBounds());
         juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-031-model-" + juce::String(model) + ".png"));
         file.setPosition(0); file.truncate(); juce::PNGImageFormat png; png.writeImageToStream(image, file);
@@ -176,6 +177,7 @@ int main() {
     std::unique_ptr<juce::AudioProcessorEditor> dualEditor(restoredDual.createEditor());
     check(dualEditor->getWidth()==1000 && dualEditor->getHeight()==740 && contained(*dualEditor), "old folded state restores to the standard dual-channel layout");
     runRoutingChecks();
+    runStereoToolsChecks();
     std::printf("%d checks, %d failures\n", checks, failures);
     return failures ? 1 : 0;
 }

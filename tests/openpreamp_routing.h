@@ -67,7 +67,8 @@ static void runRoutingChecks() {
             set(*p,"preampCircuit",float(mode>0));set(*p,"hqMode",float(mode==2));
             set(*p,"highPass",80);set(*p,"lowPass",12000);
         }
-        set(encoded,"midSide",1);prepare(encoded);prepare(reference);
+        set(encoded,"midSide",1);set(encoded,"monoMakerEnabled",1);set(encoded,"monoMakerFrequency",100);prepare(encoded);prepare(reference);
+        SessionMonoMaker manualSide;manualSide.prepare(48000,100);
         juce::AudioBuffer<float> a(2,256),b(2,256);
         for(int model : {0,1,2,4}) {
             set(encoded,"preampType",float(model));set(reference,"preampType",float(model));
@@ -76,7 +77,7 @@ static void runRoutingChecks() {
                 for(int i=0;i<256;++i) {
                     const float l=.1f*std::sin(float(i+block*256)*.07f),r=.08f*std::cos(float(i+block*256)*.11f);
                     a.setSample(0,i,l);a.setSample(1,i,r);
-                    b.setSample(0,i,(l+r)*.7071067811865475f);b.setSample(1,i,(l-r)*.7071067811865475f);
+                    b.setSample(0,i,(l+r)*.7071067811865475f);b.setSample(1,i,manualSide.process((l-r)*.7071067811865475f));
                 }
                 encoded.processBlock(a,midi);reference.processBlock(b,midi);
                 for(int i=0;i<256;++i) {
@@ -86,7 +87,7 @@ static void runRoutingChecks() {
                     error=std::max(error,std::abs(a.getSample(0,i)-l));error=std::max(error,std::abs(a.getSample(1,i)-r));
                 }
             }
-            check(finite && error<1e-5f,"all preamp models match manual M/S encode-before and decode-after processing at native/2x/4x");
+            check(finite && error<1e-5f,"all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x");
         }
     }
     // Real nonlinear right-channel processing must not contaminate the silent left channel.

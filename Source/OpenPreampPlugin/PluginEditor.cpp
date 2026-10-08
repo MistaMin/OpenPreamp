@@ -5,8 +5,10 @@
 OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     : AudioProcessorEditor(&p), proc(p),
       rightMeter(p), rightMeterSourceBtn(p.apvts, "meterSource", "VU", true),
-      midSideToggle(p.apvts, "midSide", "M / S", Theme::preampCol),
+      midSideToggle(p.apvts, "midSide", "LR / M/S", Theme::preampCol),
       cutsToggle(p.apvts, "cutsEnabled", "CUTS", Theme::preampCol),
+      linkToggle(p.apvts, "channelLink", "LINK", Theme::preampCol),
+      monoMakerToggle(p.apvts, "monoMakerEnabled", "ON", Theme::preampCol),
       preampTypeBtn(p.apvts, "preampType", "MODEL"),
       preampPadBtn(p.apvts, "preampPad", "PAD"),
       meterPanel(p),
@@ -20,6 +22,7 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     preampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
     rightPreampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
     cutsPanel.setAccent(Theme::preampCol,"SHARED / 12 dB PER OCTAVE");
+    monoMakerPanel.setAccent(Theme::preampCol,"SIDE / 6 dB PER OCTAVE");
     controlsPanel.setAccent(Theme::preampCol,"MODEL / DRIVE / QUALITY");
     controlsPanel.setBypassButton(preampBypassBtn);
     preampPanel.addAndMakeVisible(preampGainDial);
@@ -27,13 +30,16 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     rightPreampPanel.addAndMakeVisible(rightGainDial);
     rightPreampPanel.addAndMakeVisible(rightOutputDial);
     for (auto* c : std::initializer_list<juce::Component*>{&highPassDial,&lowPassDial,&cutsToggle}) cutsPanel.addAndMakeVisible(c);
-    for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&hqToggle,&midSideToggle,&rateLabel}) controlsPanel.addAndMakeVisible(c);
-    for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn}) canvas.addAndMakeVisible(c);
+    for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&hqToggle,&rateLabel}) controlsPanel.addAndMakeVisible(c);
+    for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel,&midSideToggle,&linkToggle,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn}) canvas.addAndMakeVisible(c);
+    monoMakerPanel.addAndMakeVisible(monoMakerDial); monoMakerPanel.addAndMakeVisible(monoMakerToggle);
     meterPanel.setChannel(0); rightMeter.setChannel(1);
     meterPanel.setExternallyDriven(); rightMeter.setExternallyDriven();
     auto attach = [&](const char* id,RotaryKnob& knob) { return std::make_unique<SliderAttachment>(p.apvts,id,knob); };
     preampGainAtt=attach("preampGain",preampGainDial); outputGainAtt=attach("outputGain",outputGainDial);
     rightGainAtt=attach("preampGainR",rightGainDial); rightOutputAtt=attach("outputGainR",rightOutputDial);
+    monoMakerAtt=attach("monoMakerFrequency",monoMakerDial);
+    monoMakerDial.setDoubleClickReturnValue(true,20);
     highPassAtt=attach("highPass",highPassDial); lowPassAtt=attach("lowPass",lowPassDial);
     for(auto* knob : {&preampGainDial,&rightGainDial,&outputGainDial,&rightOutputDial}) knob->setDoubleClickReturnValue(true,0);
     highPassDial.setDoubleClickReturnValue(true,20); lowPassDial.setDoubleClickReturnValue(true,20000);
@@ -47,6 +53,9 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     preampCircuitToggle.setTooltip("Circuit at 2x, or lighter native-rate preamp with ADAA when off.");
     hqToggle.setTooltip("Use 4x oversampling when CIRCUIT is on.");
     midSideToggle.setTooltip("Encode Mid/Side before the preamps; decode to stereo after downsampling and output trims.");
+    linkToggle.setTooltip("Link both input and output gains to the left controls. Right settings return when unlinked. Unavailable in M/S.");
+    monoMakerToggle.setTooltip("Reduce bass width with a session-rate 6 dB/octave high-pass on Side only, before the preamp.");
+    monoMakerDial.setTooltip("Side high-pass cutoff: 20–500 Hz. Mid is unchanged. Double-click for 20 Hz.");
     cutsToggle.setTooltip("Shared session-rate 12 dB/octave high-pass and low-pass.");
     for (auto* button : {&meterSourceBtn,&rightMeterSourceBtn}) button->setButtonTooltip("Select input or output for both independent meters.");
     rateLabel.setFont(juce::FontOptions(10.0f));
@@ -79,12 +88,12 @@ void OpenPreampEditor::applyModelLook()
     const auto* plate = goodlookinui::findFaceplate(look->plate);
     if (!plate) plate = face;
     const auto colour = juce::Colour::fromString("ff" + juce::String(look->colour.substr(1)));
-    for (auto* panel : {&preampPanel, &rightPreampPanel, &cutsPanel, &controlsPanel}) {
+    for (auto* panel : {&preampPanel, &rightPreampPanel, &cutsPanel, &controlsPanel, &monoMakerPanel}) {
         panel->setAccentColour(colour);
         if (plate) panel->setPlate(juce::Colour(plate->panelTop), juce::Colour(plate->panelBottom),
                                   juce::Colour(plate->text), juce::Colour(plate->textMid), plate->finish);
     }
-    for (auto* knob : {&preampGainDial, &outputGainDial, &rightGainDial, &rightOutputDial, &highPassDial, &lowPassDial}) {
+    for (auto* knob : {&preampGainDial, &outputGainDial, &rightGainDial, &rightOutputDial, &highPassDial, &lowPassDial, &monoMakerDial}) {
         auto design = knob->getDesign(); design.style = look->style; design.colour = look->colour;
         knob->applyDesign(design);
         if (plate) { const juce::Colour text(plate->text), mid(plate->textMid); knob->setPlateText(&text, &mid); }
@@ -96,6 +105,7 @@ void OpenPreampEditor::applyModelLook()
     }
     preampBypassBtn.setAccent(colour);
     preampCircuitToggle.setAccent(colour); hqToggle.setAccent(colour);
+    linkToggle.setAccent(colour); monoMakerToggle.setAccent(colour);
     cutsToggle.setAccent(colour); midSideToggle.setAccent(colour);
     repaint();
 }
@@ -115,7 +125,7 @@ void OpenPreampEditor::paint(juce::Graphics& g)
     g.setColour(editorLook.textMid);g.setFont(juce::FontOptions(9.0f));
     g.drawText("0 VU = -18 dBFS",24,284,220,14,juce::Justification::centredLeft);
     g.drawText("0 VU = -18 dBFS",516,284,220,14,juce::Justification::centredLeft);
-    g.drawText("INDEPENDENT CHANNELS  /  SHARED PREAMP & CUTS",24,716,520,18,juce::Justification::centredLeft);
+    g.drawText("L/R OR M/S  /  SESSION-RATE CUTS & MONO MAKER",24,716,520,18,juce::Justification::centredLeft);
     g.drawText("Click CLIP to reset",800,716,176,18,juce::Justification::centredRight);
 }
 
@@ -130,12 +140,14 @@ void OpenPreampEditor::resized()
         preampGainDial.setBounds(60,54,148,154);outputGainDial.setBounds(286,54,132,154);
         rightGainDial.setBounds(preampGainDial.getBounds());rightOutputDial.setBounds(outputGainDial.getBounds());
     }
-    cutsPanel.setBounds(16,540,356,164);controlsPanel.setBounds(388,540,596,164);
+    cutsPanel.setBounds(16,540,356,164);monoMakerPanel.setBounds(388,540,196,164);controlsPanel.setBounds(600,540,384,164);
     highPassDial.setBounds(24,54,108,102);lowPassDial.setBounds(150,54,108,102);
     cutsToggle.setBounds(270,80,70,30);
-    preampPadBtn.setBounds(24,56,82,60);preampTypeBtn.setBounds(140,56,94,60);
-    preampCircuitToggle.setBounds(266,72,94,30);hqToggle.setBounds(378,72,94,30);
-    midSideToggle.setBounds(490,72,82,30);rateLabel.setBounds(362,122,210,20);
+    monoMakerDial.setBounds(12,54,98,102);monoMakerToggle.setBounds(116,80,66,30);
+    preampPadBtn.setBounds(18,56,82,60);preampTypeBtn.setBounds(118,56,94,60);
+    preampCircuitToggle.setBounds(236,54,126,30);hqToggle.setBounds(236,96,126,30);
+    midSideToggle.setBounds(405,14,110,24);linkToggle.setBounds(525,14,80,24);
+    rateLabel.setBounds(184,132,178,20);
 #if GOODLOOKINUI_ENABLE_EDITOR
     developerButton.setBounds(316,14,60,24);
 #endif
@@ -158,7 +170,16 @@ void OpenPreampEditor::timerCallback()
     rightMeter.setCaption(ms ? "SIDE LEVEL" : "RIGHT LEVEL");
     preampPanel.setTitle(ms ? "MID" : "LEFT");
     rightPreampPanel.setTitle(ms ? "SIDE" : "RIGHT");
-    midSideToggle.setActive(proc.getTotalNumInputChannels() == 2);
+    const bool stereo = proc.getTotalNumInputChannels() == 2;
+    const bool linked = !ms && proc.apvts.getRawParameterValue("channelLink")->load() > 0.5f;
+    linkToggle.setVisible(!ms); linkToggle.setEnabled(stereo); linkToggle.setActive(stereo);
+    rightGainDial.setEnabled(stereo && !linked); rightOutputDial.setEnabled(stereo && !linked);
+    rightGainDial.setActive(stereo && !linked && !proc.apvts.getRawParameterValue("preampBypass")->load());
+    rightOutputDial.setActive(stereo && !linked);
+    monoMakerToggle.setEnabled(stereo); monoMakerToggle.setActive(stereo);
+    monoMakerDial.setEnabled(stereo);
+    monoMakerDial.setActive(stereo && monoMakerToggle.getToggleState() && !proc.apvts.getRawParameterValue("preampBypass")->load());
+    midSideToggle.setEnabled(stereo); midSideToggle.setActive(stereo);
     if (isShowing()) {
         const auto input = proc.getInputLevel().read(), output = proc.getOutputLevel().read();
         meterPanel.step(input,output,1.0f/30); rightMeter.step(input,output,1.0f/30);

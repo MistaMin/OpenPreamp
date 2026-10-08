@@ -11,8 +11,9 @@ flowchart LR
     I[DAW L/R input] --> E{M/S mode}
     E -->|On| MS[Session-rate M/S encoder]
     E -->|Off| LR[Independent L/R streams]
-    MS --> HP[Shared 12 dB/oct high pass]
-    LR --> HP
+    MS --> MM[Optional session-rate Side-only 6 dB/oct high pass]
+    LR --> MM
+    MM --> HP[Shared 12 dB/oct high pass]
     HP --> LP[Shared 12 dB/oct low pass]
     LP --> G[Independent input trims + shared PAD]
     G --> M{CIRCUIT}
@@ -42,8 +43,8 @@ The cuts are two-pole Butterworth IIR filters (12 dB/octave), shared frequency
 settings with independent L/R or M/S state. They default to high-pass 20 Hz
 and low-pass 20 kHz, have smoothed frequency changes and clamp below Nyquist.
 They run entirely at the session rate. CUTS bypasses both filters. The preamp
-bypass also skips input trims/PAD and cuts, leaving output trims and metering.
-Model Off retains trims/cuts but skips the colored preamp circuit.
+bypass also skips input trims/PAD, cuts and mono maker, leaving output trims and metering.
+Model Off retains trims/cuts/mono maker but skips the colored preamp circuit.
 
 M/S uses an orthonormal matrix: M = (L + R) / sqrt(2), S = (L - R) / sqrt(2).
 The inverse runs after downsampling, latency padding and M/S output trims:
@@ -51,16 +52,28 @@ L = (M + S) / sqrt(2), R = (M - S) / sqrt(2). Equal settings with a clean path
 reconstruct stereo unchanged apart from the reported delay. The right strip
 controls Side in M/S mode. Mono hosts keep the left stream and ignore M/S.
 
+LINK applies the left input and output gain settings to both L/R streams. The
+stored right gain parameters remain unchanged and return when unlinked. M/S
+hides Link and ignores it, preserving independent Mid and Side gains.
+
+The mono maker temporarily encodes M/S in L/R mode, high-passes Side, then
+decodes back to L/R before the cuts and gain trims. In M/S mode it filters the
+already encoded Side directly. This first-order IIR uses a bilinear-transform
+one-pole high-pass: -3 dB at its cutoff, approaching 6 dB attenuation per octave
+below it. Mid is unchanged; low Side energy decreases, making bass narrower.
+The cutoff is smoothed over 10 ms at the session rate, adjustable 20–500 Hz,
+initially 20 Hz and disabled. It has no oversampling stage or added buffer delay.
+
 Each preamp owns its own solver and ADAA history. Circuit on selects 2x;
 HQ selects 4x. Existing oversampling filters and fixed reported latency are
 retained. Filters and gain trims are outside this multirate path.
 
 The two VUs independently measure input/output RMS, peak hold and clip.
 In L/R mode they show Left and Right; in M/S mode they show Mid and Side.
-Input taps are after encoding and before cuts/drive. Output taps are after
+Input taps are after encoding and before mono maker/cuts/drive. Output taps are after
 channel output trims and before decoding. They read audio without changing it.
 The editor reads the shared level accumulator once per tick and distributes
-that reading to both meters, including the hidden second strip. 0 VU = -18 dBFS.
+that reading to both meters, with both strips permanently visible. 0 VU = -18 dBFS.
 The clip lamp is an indicator, not a limiter.
 
 ## Default N-Type circuit

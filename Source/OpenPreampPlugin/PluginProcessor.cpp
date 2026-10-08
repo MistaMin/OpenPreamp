@@ -51,6 +51,14 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
     params.push_back(std::make_unique<juce::AudioParameterBool>(
         juce::ParameterID{"cutsEnabled", 1}, "Input Cuts", true));
 
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID{"channelLink", 1}, "Link L/R Gains", false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID{"monoMakerEnabled", 1}, "Mono Maker", false));
+    auto monoRange = juce::NormalisableRange<float>(20.0f, 500.0f);
+    monoRange.setSkewForCentre(100.0f);
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+        juce::ParameterID{"monoMakerFrequency", 1}, "Mono Maker Frequency", monoRange, 20.0f));
     return {params.begin(), params.end()};
 }
 
@@ -79,6 +87,8 @@ void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     latencyPadding.prepare({sampleRate, juce::uint32(samplesPerBlock), juce::uint32(getTotalNumOutputChannels())});
     setLatencySamples(fixedLatency);
     cuts.prepare(sampleRate);
+    monoMaker.prepare(sampleRate, apvts.getRawParameterValue("monoMakerFrequency")->load());
+    monoMakerActive = false;
     for (auto& engine : preamps) {
         engine.prepare(sampleRate);
         engine.setADAAEnabled(true);
@@ -118,6 +128,11 @@ void OpenPreampProcessor::updateParameters()
     }
     inputBypassed = getBool("preampBypass");
     msActive = getBool("midSide") && getTotalNumInputChannels() == 2;
+    const bool linked = getBool("channelLink") && !msActive;
+    const bool newMonoMaker = getBool("monoMakerEnabled") && !inputBypassed && getTotalNumInputChannels() == 2;
+    if (newMonoMaker != monoMakerActive) monoMaker.reset();
+    monoMakerActive = newMonoMaker;
+    monoMaker.setFrequency(getFloat("monoMakerFrequency"));
     const bool newCuts = getBool("cutsEnabled") && !inputBypassed;
     if (newCuts != cutsActive) cuts.reset();
     cutsActive = newCuts;
@@ -125,9 +140,9 @@ void OpenPreampProcessor::updateParameters()
     static constexpr float padGains[] = {-20.0f, 0.0f, 10.0f};
     const float pad = padGains[std::clamp(getChoice("preampPad"),0,2)];
     inputGains[0].setTargetValue(juce::Decibels::decibelsToGain(getFloat("preampGain")+pad));
-    inputGains[1].setTargetValue(juce::Decibels::decibelsToGain(getFloat("preampGainR")+pad));
+    inputGains[1].setTargetValue(juce::Decibels::decibelsToGain(getFloat(linked ? "preampGain" : "preampGainR")+pad));
     outputGains[0].setTargetValue(juce::Decibels::decibelsToGain(getFloat("outputGain")));
-    outputGains[1].setTargetValue(juce::Decibels::decibelsToGain(getFloat("outputGainR")));
+    outputGains[1].setTargetValue(juce::Decibels::decibelsToGain(getFloat(linked ? "outputGain" : "outputGainR")));
 }
 
 void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
@@ -149,6 +164,18 @@ void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
     }
     inLevel.push(buffer.getArrayOfReadPointers(),numChannels,buffer.getNumSamples());
     for (int i=0;i<buffer.getNumSamples();++i) {
+        // In L/R mode temporarily encode/decode just this linear side filter.
+        // In M/S mode the buffer is already encoded. All of this precedes oversampling.
+        if (monoMakerActive) {
+            if (msActive) buffer.setSample(1,i,monoMaker.process(buffer.getSample(1,i)));
+            else {
+                const float l = buffer.getSample(0,i), r = buffer.getSample(1,i);
+                const float mid = (l+r)*invRootTwo;
+                const float side = monoMaker.process((l-r)*invRootTwo);
+                buffer.setSample(0,i,(mid+side)*invRootTwo);
+                buffer.setSample(1,i,(mid-side)*invRootTwo);
+            }
+        }
         cuts.tick();
         for (int ch=0;ch<numChannels;++ch) {
             float x = buffer.getSample(ch,i);
@@ -206,6 +233,12 @@ void OpenPreampProcessor::setStateInformation(const void* data, int sizeInBytes)
         if (!state.getChildWithProperty("id","cutsEnabled").isValid()) {
             juce::ValueTree cut("PARAM"); cut.setProperty("id","cutsEnabled",nullptr); cut.setProperty("value",0.0f,nullptr); state.appendChild(cut,nullptr);
         }
+        for (const auto id : {"channelLink", "monoMakerEnabled", "monoMakerFrequency"})
+            if (!state.getChildWithProperty("id",id).isValid()) {
+                juce::ValueTree param("PARAM"); param.setProperty("id",id,nullptr);
+                param.setProperty("value", juce::String(id) == "monoMakerFrequency" ? 20.0f : 0.0f,nullptr);
+                state.appendChild(param,nullptr);
+            }
         apvts.replaceState(state);
     }
 }
