@@ -1,4 +1,4 @@
-# OpenPreamp circuit — version 0.2.2
+# OpenPreamp circuit — version 0.2.3
 
 This describes the implementation in this checkout. OpenPreamp is a software
 simulation: it does not control a physical preamp or supply phantom power.
@@ -118,7 +118,7 @@ iterations. The output-node voltage is converted back to digital amplitude.
 Stereo has separate circuit state for left and right.
 
 That repeated network solve explains the CPU cost. A higher session rate means
-more solves per second. OpenPreamp 0.2.2 uses 2x IIR or HQ 4x FIR resampling for the circuit path,
+more solves per second. OpenPreamp 0.2.3 uses 2x IIR or HQ 4x FIR resampling for the circuit path,
 without decimating the circuit back to a fixed rate. Host latency stays fixed
 by padding the shorter paths. The lighter models use first-order ADAA: each
 nonlinearity averages its response between consecutive sample values using

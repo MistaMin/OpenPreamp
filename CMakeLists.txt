@@ -28,6 +28,10 @@ configure_file(Designs/EmbeddedLooks.h.in generated/EmbeddedLooks.h @ONLY)
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Designs/Settings.csv")
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/Designs/Settings.csv" HYBRIDEQ_SETTINGS_TEXT)
 configure_file(Designs/EmbeddedSettings.h.in generated/EmbeddedSettings.h @ONLY)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/Designs/OpenPreampKnobs.csv" OPENPREAMP_KNOB_DESIGN)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/Designs/OpenPreampLooks.csv" OPENPREAMP_MODEL_LOOKS)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Designs/OpenPreampKnobs.csv" "${CMAKE_CURRENT_SOURCE_DIR}/Designs/OpenPreampLooks.csv")
+configure_file(Designs/EmbeddedOpenPreampDesign.h.in generated/EmbeddedOpenPreampDesign.h @ONLY)
 option(HYBRIDEQ_DESIGN_EDITOR "Include GoodLookinUI editor in Debug builds" ON)
 
 set(HYBRIDEQ_FORMATS VST3 Standalone)
@@ -119,8 +123,10 @@ target_sources(OpenPreamp PRIVATE
 
 target_include_directories(OpenPreamp PRIVATE Source "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
+option(OPENPREAMP_DEVELOPER_MODE "Enable OpenPreamp knob/layout and model-look editors" ON)
 target_compile_definitions(OpenPreamp PUBLIC
-    GOODLOOKINUI_ENABLE_EDITOR=0
+    GOODLOOKINUI_ENABLE_EDITOR=$<BOOL:${OPENPREAMP_DEVELOPER_MODE}>
+    OPENPREAMP_DESIGNS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Designs"
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
@@ -173,12 +179,12 @@ if(HYBRIDEQ_BUILD_TESTS)
     juce_add_console_app(OpenPreampSmoke PRODUCT_NAME "OpenPreamp Smoke Test")
     target_sources(OpenPreampSmoke PRIVATE tests/openpreamp_smoke.cpp)
     target_include_directories(OpenPreampSmoke PRIVATE Source "${CMAKE_CURRENT_BINARY_DIR}/generated")
-    target_compile_definitions(OpenPreampSmoke PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 GOODLOOKINUI_ENABLE_EDITOR=0)
+    target_compile_definitions(OpenPreampSmoke PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
     target_link_libraries(OpenPreampSmoke PRIVATE OpenPreamp goodlookinui_juce juce::juce_audio_utils juce::juce_dsp juce::juce_recommended_config_flags)
     juce_add_console_app(OpenPreampCPU PRODUCT_NAME "OpenPreamp CPU Table")
     target_sources(OpenPreampCPU PRIVATE tests/openpreamp_cpu_table.cpp)
     target_include_directories(OpenPreampCPU PRIVATE Source "${CMAKE_CURRENT_BINARY_DIR}/generated")
-    target_compile_definitions(OpenPreampCPU PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 GOODLOOKINUI_ENABLE_EDITOR=0)
+    target_compile_definitions(OpenPreampCPU PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
     target_link_libraries(OpenPreampCPU PRIVATE OpenPreamp goodlookinui_juce juce::juce_audio_utils juce::juce_dsp juce::juce_recommended_config_flags)
 endif()
 

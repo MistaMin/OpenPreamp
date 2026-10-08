@@ -2,7 +2,7 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 #include <cstdio>
 #include <cmath>
-#include <EmbeddedLooks.h>
+#include <EmbeddedOpenPreampDesign.h>
 
 static int failures = 0, checks = 0;
 static void check(bool ok, const char* name) {
@@ -16,7 +16,7 @@ static void set(OpenPreampProcessor& p, const char* id, float value) {
 }
 static bool contained(juce::Component& c) {
     for (auto* child : c.getChildren()) {
-        if (!c.getLocalBounds().contains(child->getBounds()) || !contained(*child)) return false;
+        if (!c.getLocalBounds().contains(child->getBoundsInParent()) || !contained(*child)) return false;
     }
     return true;
 }
@@ -82,9 +82,9 @@ int main() {
     set(p, "preampBypass", 0); set(p, "preampType", 1); set(p, "preampCircuit", 1); set(p, "outputGain", 0);
     audio.clear(); p.processBlock(audio, midi);
     std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());
-    check(editor->getWidth() * 8 == editor->getHeight() * 5, "editor has exact 5:8 aspect ratio");
+    check(editor->getWidth() * 7 == editor->getHeight() * 5 && editor->isResizable(), "editor is resizable with exact 5:7 aspect ratio");
     check(contained(*editor), "all GUI controls fit within their panels");
-    for (auto* child : editor->getChildren()) if (auto* meter = dynamic_cast<MeterPanel*>(child)) {
+    for (auto* surface : editor->getChildren()) for (auto* child : surface->getChildren()) if (auto* meter = dynamic_cast<MeterPanel*>(child)) {
         LevelTracker::Reading in, out; in.peak[0] = 0.3f; in.peak[1] = 0.2f;
         out.peak[0] = 1.1f; out.peak[1] = 0.8f; out.meanSquare[0] = out.meanSquare[1] = 0.015f;
         for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);
@@ -98,8 +98,29 @@ int main() {
         out.peak[0] = 0.42f; out.peak[1] = 0.38f;
         for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);
     }
+    for (const auto size : {juce::Point<int>(450,630), juce::Point<int>(800,1120), juce::Point<int>(600,840)}) {
+        editor->setSize(size.x,size.y);
+        check(contained(*editor), "scaled controls fit at small, large and default editor sizes");
+    }
+#if GOODLOOKINUI_ENABLE_EDITOR
+    bool devOpened = false;
+    for (auto* surface : editor->getChildren()) for (auto* child : surface->getChildren())
+        if (auto* button = dynamic_cast<juce::TextButton*>(child); button && button->getButtonText() == "DEV") {
+            button->onClick();
+            auto& desktop = juce::Desktop::getInstance();
+            for (int i=0;i<desktop.getNumComponents();++i)
+                if (auto* window = dynamic_cast<juce::DocumentWindow*>(desktop.getComponent(i)); window && window->getName() == "OpenPreamp developer tools") {
+                    devOpened = window->isVisible();
+                    const auto devImage = window->getContentComponent()->createComponentSnapshot(window->getContentComponent()->getLocalBounds());
+                    juce::FileOutputStream devFile(juce::File("/private/tmp/openpreamp-023-developer.png"));
+                    devFile.setPosition(0); devFile.truncate(); juce::PNGImageFormat devPng; devPng.writeImageToStream(devImage, devFile);
+                    window->closeButtonPressed();
+                }
+        }
+    check(devOpened, "DEV opens the separate knob/layout and model-look window");
+#endif
     const auto themeBefore = Theme::editorTop;
-    LookTable expectedLooks; expectedLooks.fromCsv(hybridEQLooks);
+    LookTable expectedLooks; expectedLooks.fromCsv(openPreampModelLooks);
     for (int model = 0; model < 5; ++model) {
         set(p, "preampType", float(model));
         set(p, "meterSource", float(model % 2));
@@ -122,9 +143,9 @@ int main() {
             for (auto* child : component.getChildren()) visit(*child);
         };
         visit(*variant);
-        check(matches && knobs == 2 && contained(*variant), "both knob and plate styles follow the exact HybridEQ model mapping; VU source restores");
+        check(matches && knobs == 2 && contained(*variant), "both knob and plate styles follow the saved model mapping; VU source restores");
         const auto image = variant->createComponentSnapshot(variant->getLocalBounds());
-        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-022-model-" + juce::String(model) + ".png"));
+        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-023-model-" + juce::String(model) + ".png"));
         file.setPosition(0); file.truncate(); juce::PNGImageFormat png; png.writeImageToStream(image, file);
     }
     check(Theme::editorTop == themeBefore, "per-instance styles do not mutate the global theme");
@@ -141,7 +162,7 @@ int main() {
     check(!mono.isBusesLayoutSupported(layout), "rejects mismatched input/output buses");
     editor->setVisible(false); // Render the parameter position without waiting for UI animation.
     const auto image = editor->createComponentSnapshot(editor->getLocalBounds());
-    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-022-preview.png"));
+    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-023-preview.png"));
     output.setPosition(0); output.truncate();
     juce::PNGImageFormat png; check(png.writeImageToStream(image, output), "editor preview renders");
     std::printf("%d checks, %d failures\n", checks, failures);
