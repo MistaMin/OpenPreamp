@@ -1,50 +1,67 @@
-# OpenPreamp circuit — version 0.2.3
+# OpenPreamp circuit — version 0.3.0
 
-This describes the implementation in this checkout. OpenPreamp is a software
-simulation: it does not control a physical preamp or supply phantom power.
-CIRCUIT on processes at 2x the session rate, or 4x with HQ enabled.
-CIRCUIT off processes the lighter models at the session rate with ADAA.
+OpenPreamp simulates a preamp; it does not control physical hardware.
+Only the selected preamp circuit is oversampled. Its surrounding processors
+operate at the DAW session rate.
 
 ## Plug-in signal path
 
 ```mermaid
 flowchart LR
-    I[DAW input] --> P[PAD + GAIN control]
-    P --> M{CIRCUIT}
+    I[DAW L/R input] --> E{M/S mode}
+    E -->|On| MS[Session-rate M/S encoder]
+    E -->|Off| LR[Independent L/R streams]
+    MS --> HP[Shared 12 dB/oct high pass]
+    LR --> HP
+    HP --> LP[Shared 12 dB/oct low pass]
+    LP --> G[Independent input trims + shared PAD]
+    G --> M{CIRCUIT}
     M -->|On| U[2x IIR / HQ 4x FIR upsample]
-    U --> C[Selected component circuit]
-    C --> D[Downsample + latency padding]
-    M -->|Off| A[Light preamp + ADAA at session rate]
-    A --> L[Latency padding]
-    D --> T[Output trim]
-    L --> T
-    T --> O[DAW output]
-    I -. read only .-> IM[Input meter tap]
-    T -. read only .-> OM[Output meter tap]
-    IM -.-> V[Selectable input/output VU]
-    OM -.-> V
+    U --> C[Independent preamp circuits]
+    C --> D[Downsample to session rate]
+    M -->|Off| A[Independent light preamps + ADAA at session rate]
+    D --> P[Fixed latency padding]
+    A --> P
+    P --> T[Independent output trims at session rate]
+    T --> DEC{M/S mode}
+    DEC -->|On| DE[Session-rate M/S decoder]
+    DEC -->|Off| O[DAW L/R output]
+    DE --> O
+    MS -.-> V[Channel input VUs]
+    LR -.-> V
+    T -.-> OV[Channel output VUs]
 ```
 
-PAD and GAIN are combined into one smoothed drive setting. They are not two
-independent hardware stages in the implementation. Negative drive attenuates
-the input. Positive drive changes the selected circuit's gain network;
-requests beyond that model's gain limit use additional input trim.
-Drive smoothing has an approximately 40 ms time constant.
+Input trims and PAD are applied before upsampling, with 10 ms linear gain
+ramps at the session rate. The internal circuit gain control is held at unity.
+This is intentionally different from 0.2.3, where GAIN changed the circuit's
+feedback/gain network: 0.3.0 uses input drive into a fixed-gain circuit.
+The lighter preamp path also receives its drive externally and retains ADAA.
 
-CIRCUIT on selects the component-network solver. CIRCUIT off retains the
-lighter preamp coloration model; it does not switch the preamp to clean bypass.
-BYPASS skips the preamp stage while output trim and meters remain active.
-Model Off is a clean drive path, so PAD/GAIN can still affect level.
-There is no separate EQ or harmonics processor. The preamp's nonlinear devices
-naturally generate distortion and harmonics.
+The cuts are two-pole Butterworth IIR filters (12 dB/octave), shared frequency
+settings with independent L/R or M/S state. They default to high-pass 20 Hz
+and low-pass 20 kHz, have smoothed frequency changes and clamp below Nyquist.
+They run entirely at the session rate. CUTS bypasses both filters. The preamp
+bypass also skips input trims/PAD and cuts, leaving output trims and metering.
+Model Off retains trims/cuts but skips the colored preamp circuit.
 
-Output trim is a digital gain after the simulation. It can reduce the final
-level without reducing the drive/distortion that has already occurred.
-Meter taps observe the input before preamp processing and output after trim.
-They do not process the audio. The VU uses mean-square-derived amplitude and
-needle ballistics, calibrated to 0 VU = -18 dBFS. Peak meters show transient
-levels; output peak hold and a latching clip lamp indicate peaks near/above
-full scale. Clip does not mean a limiter has been applied.
+M/S uses an orthonormal matrix: M = (L + R) / sqrt(2), S = (L - R) / sqrt(2).
+The inverse runs after downsampling, latency padding and M/S output trims:
+L = (M + S) / sqrt(2), R = (M - S) / sqrt(2). Equal settings with a clean path
+reconstruct stereo unchanged apart from the reported delay. The right strip
+controls Side in M/S mode. Mono hosts keep the left stream and ignore M/S.
+
+Each preamp owns its own solver and ADAA history. Circuit on selects 2x;
+HQ selects 4x. Existing oversampling filters and fixed reported latency are
+retained. Filters and gain trims are outside this multirate path.
+
+The two VUs independently measure input/output RMS, peak hold and clip.
+In L/R mode they show Left and Right; in M/S mode they show Mid and Side.
+Input taps are after encoding and before cuts/drive. Output taps are after
+channel output trims and before decoding. They read audio without changing it.
+The editor reads the shared level accumulator once per tick and distributes
+that reading to both meters, including the hidden second strip. 0 VU = -18 dBFS.
+The clip lamp is an indicator, not a limiter.
 
 ## Default N-Type circuit
 

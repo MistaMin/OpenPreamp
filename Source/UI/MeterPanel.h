@@ -47,6 +47,11 @@ public:
     static const char* faceCode(Face f) { for (auto& i : faces) if (i.face == f) return i.code; return "cream"; }
     static Face faceFromCode(const juce::String& c) { for (auto& i : faces) if (c == i.code) return i.face; return Face::VuCream; }
 
+    void setChannel(int channel) { channelIndex = std::clamp(channel,-1,1); }
+    int getChannel() const { return channelIndex; }
+    void setCaption(const juce::String& text) { if (caption != text) { caption = text; repaint(); } }
+    void setExternallyDriven() { stopTimer(); }
+
     // --- values the painter shows (exposed so the tests can read them) ---
     float needle() const { return float(vu.position); }
     float ladderDb(int bus, int ch) const { return ladder[bus][ch]; }
@@ -57,7 +62,12 @@ public:
     bool clipped() const { return clip; }
     void resetClip() { clip = false; repaint(); }
     // Advance the ballistics by one UI tick using a reading (also used by the timer).
-    void step(const LevelTracker::Reading& in, const LevelTracker::Reading& out, float dt) {
+    void step(const LevelTracker::Reading& input, const LevelTracker::Reading& output, float dt) {
+        auto in = input, out = output;
+        if (channelIndex >= 0) for (int ch=0;ch<2;++ch) {
+            in.peak[ch] = input.peak[channelIndex]; in.meanSquare[ch] = input.meanSquare[channelIndex];
+            out.peak[ch] = output.peak[channelIndex]; out.meanSquare[ch] = output.meanSquare[channelIndex];
+        }
         const auto& selected = inputSource ? in : out;
         for (int ch = 0; ch < 2; ++ch) {
             fall(ladder[0][ch], toDb(in.peak[ch]), dt);
@@ -88,7 +98,7 @@ public:
         drawPanel(g, b, Theme::panelTop, Theme::panelBottom, Theme::panelFinish);
         g.setColour(Theme::faceAccent.withAlpha(0.85f)); g.fillRect(10.0f, 10.0f, 3.0f, 15.0f);
         g.setColour(Theme::textDark); g.setFont(juce::FontOptions(11.5f, juce::Font::bold));
-        g.drawText("LEVEL", 18, 8, 100, 20, juce::Justification::centredLeft);
+        g.drawText(caption, 18, 8, 100, 20, juce::Justification::centredLeft);
         g.setColour(Theme::textMid); g.setFont(juce::FontOptions(9.0f));
         g.drawText(inputSource ? "INPUT RMS / PEAK" : "OUTPUT RMS / PEAK", 18, 27, 140, 14, juce::Justification::centredLeft);
 
@@ -122,7 +132,7 @@ public:
         const float bx = rx + 22.0f, bw = rw - 22.0f;
         g.drawText("IN", int(rx), 86, 22, 12, juce::Justification::centredLeft);
         g.drawText("OUT", int(rx), 103, 24, 12, juce::Justification::centredLeft);
-        for (int ch = 0; ch < 2; ++ch) {
+        for (int ch = 0; ch < (channelIndex >= 0 ? 1 : 2); ++ch) {
             meters::drawLedLadder(g, {bx, 87.0f + float(ch) * 6.5f, bw, 5.0f}, true, ladder[0][ch], ladder[0][ch], 18);
             meters::drawLedLadder(g, {bx, 104.0f + float(ch) * 6.5f, bw, 5.0f}, true, ladder[1][ch], hold, 18);
         }
@@ -145,6 +155,8 @@ private:
     LevelTracker& outputLevel;
     Face face = Face::VuCream;
     bool inputSource = false;
+    int channelIndex = -1;
+    juce::String caption{"LEVEL"};
     goodlookinui::Motion vu;
     float vuTarget = 0.0f, ladder[2][2] = {{-99, -99}, {-99, -99}}, hold = -99.0f, holdTimer = 0.0f, peakNow = -99.0f;
     bool clip = false;

@@ -1,3 +1,46 @@
+# OpenPreamp 0.3.0 handoff — 2026-10-08
+
+The baseline is saved-design 0.2.3, commit 834665b. `>` expands the same editor
+from 600 × 840 to 1200 × 840, preserving proportional resize and expansion in
+host state. The extra strip duplicates input/output knobs and meter appearance.
+Model, PAD, CIRCUIT, HQ, meter source and input cuts are shared. Channel trims
+are independent even while the second strip is folded away.
+
+The six new parameters are preampGainR, outputGainR, midSide, highPass, lowPass
+and cutsEnabled. Defaults: Right gains 0 dB, M/S off, HP 20 Hz, LP 20 kHz,
+CUTS on. Existing parameter IDs remain stable. Restoring a pre-0.3 state copies
+its stereo gain values to the new right knobs and disables the new cuts.
+GAIN changes now act as session-rate input trims instead of altering circuit
+feedback/gain settings; this is a deliberate gain-staging change.
+
+Processing: optional orthonormal M/S encoder → shared-frequency 12 dB/octave
+Butterworth HP/LP, per-channel state → independent input gains/PAD → native
+ADAA or 2x/4x full circuits → downsample → fixed latency padding → independent
+output trims → optional M/S decoder. Every added linear processor runs at the
+host rate. Each colored preamp owns its own circuit and ADAA state.
+
+The dual VUs independently follow their stream (Left/Right or Mid/Side), with
+input taps before cuts/gain and output taps before M/S decoding. The editor
+reads level accumulators once and feeds both meters; hidden Right stays current.
+Legacy HybridEQ MeterPanel defaults are preserved. Mono ignores M/S.
+
+Validation: Release VST3 built successfully with developer mode OFF. The smoke
+and routing suite passed 197 checks, zero failures: channel trims/isolation,
+independent VU ballistics, 12 dB/octave cuts at 44.1/48/96 kHz, native/2x/4x
+sample-rate placement, every model against a manual M/S encode/decode reference,
+legacy state migration, resize, expansion and state restoration. Folded/expanded
+previews are in Docs/. No Plugin Doctor or listening session was performed. The existing mode-switch behavior still resets
+oversampling filters without a crossfade. M/S routing changes at block boundaries.
+
+Temporary test installs remain owned by this task. Update OpenPreamp.vst3 to
+0.3.0 after verification; keep OpenPreamp 0.2.0.vst3 alongside it. Preserve a
+backup of the previous 0.2.3 bundle in build/. Remove both installed copies
+only when the owner explicitly says testing is finished. Check the receipts'
+SHA-256 hashes before replacing/removing.
+
+The historical DSP notes below describe inherited models and filter choices;
+0.3.0 routing and gain staging are defined above and in CIRCUIT_EXPLAINED.md.
+
 # OpenPreamp 0.2.3 UI/developer handoff — 2026-10-08
 
 0.2.3 keeps the 0.2.2 DSP unchanged. The portrait GUI opens at 600 × 840 (5:7),
