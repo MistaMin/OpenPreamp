@@ -61,7 +61,7 @@ public:
         return ok;
     }
 
-    void restoreDc(double sampleRate) noexcept
+    void restoreDc(double sampleRate)
     {
         solver.restoreDc(sampleRate);
         resetPos();

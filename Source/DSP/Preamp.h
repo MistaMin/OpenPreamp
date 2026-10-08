@@ -67,6 +67,17 @@ public:
     void setBypassed(bool b) noexcept { bypassed.store(b, std::memory_order_relaxed); }
     void setCircuitEnabled(bool enabled) noexcept { circuitOn.store(enabled, std::memory_order_relaxed); }
 
+    // By default the circuit runs at ~96 kHz decimated from the oversampled
+    // host rate. For the standalone preamp plugin the circuit follows the
+    // oversampled host rate directly, so decimation is disabled.
+    void setDecimationEnabled(bool enabled) noexcept
+    {
+        if (decimationEnabled == enabled)
+            return;
+        decimationEnabled = enabled;
+        configuredType = static_cast<PreampType>(-1); // force reconfigure
+    }
+
     // Called every block with the current effective sample rate. The circuit
     // poles are computed from sr, so only force a reconfigure (which also
     // resets the circuit filters' state) when the rate has actually changed
@@ -341,9 +352,13 @@ private:
 
     // Per-type setup when the circuit is (re)configured: internal rate, filters, state.
     template <class C>
-    void configCircuits(std::array<C, kMaxChannels>& circuits, bool ok, double fullScale) noexcept
+    void configCircuits(std::array<C, kMaxChannels>& circuits, bool ok, double fullScale)
     {
-        nDecim = std::max(1, static_cast<int>(std::lround(sr / kCircuitRate)));
+        if (decimationEnabled) {
+            nDecim = std::max(1, static_cast<int>(std::lround(sr / kCircuitRate)));
+        } else {
+            nDecim = 1;
+        }
         const double internalRate = sr / static_cast<double>(nDecim);
         for (size_t ch = 0; ch < static_cast<size_t>(kMaxChannels); ++ch) {
             if (ok) {
@@ -545,6 +560,7 @@ private:
     std::array<double, kMaxChannels> nHeld{}, nLastGain{};
     std::array<int, kMaxChannels> nPhase{};
     int nDecim = 1;
+    bool decimationEnabled = true;
     bool nCircOk = false, bCircOk = false, fCircOk = false, aCircOk = false;
 
     // Brit coupling-network state (double: the poles are below 1 Hz).

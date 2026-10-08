@@ -167,13 +167,16 @@ public:
     }
 
     // Change the sample rate and return to the DC operating point.
-    void restoreDc(double sampleRate) noexcept
+    // Re-freeze the symbolic factorisation because capacitor g_eq (and therefore
+    // the numeric pivot sequence) changes with sample rate.
+    void restoreDc(double sampleRate)
     {
         sr = sampleRate;
         h = 0.5 / sampleRate;
         for (auto& c : caps) c.geq = 2.0 * c.c * sampleRate;
         buildLinear();
         restoreDc();
+        buildSymbolic();
     }
 
     double voltage(int node) const noexcept { return v(node); }

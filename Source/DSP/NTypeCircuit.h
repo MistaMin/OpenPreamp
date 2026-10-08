@@ -50,7 +50,7 @@ public:
 
     static constexpr double kMaxGain = 20.0;    // closed-loop gain limit (26 dB); the engine trims the rest
 
-    void restoreDc(double sampleRate) noexcept { solver.restoreDc(sampleRate); }
+    void restoreDc(double sampleRate) { solver.restoreDc(sampleRate); }
     void restoreDc() noexcept { solver.restoreDc(); }
 
     bool prepare(double sampleRate)

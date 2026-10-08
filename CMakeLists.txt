@@ -77,6 +77,100 @@ if(HYBRIDEQ_CLAP)
     list(APPEND HYBRIDEQ_FORMATS CLAP)
 endif()
 
+# ---------------------------------------------------------------------------
+# OpenPreamp: standalone preamp-only plugin (no EQ, no harmonics panel).
+# It reuses the DSP classes but targets a separate plugin binary with its own
+# parameter layout and a simplified editor.
+# ---------------------------------------------------------------------------
+set(OPENPREAMP_FORMATS VST3 Standalone)
+if(APPLE)
+    list(APPEND OPENPREAMP_FORMATS AU)
+endif()
+if(HYBRIDEQ_LV2)
+    list(APPEND OPENPREAMP_FORMATS LV2)
+endif()
+
+juce_add_plugin(OpenPreamp
+    COMPANY_NAME            "OpenGrid"
+    IS_SYNTH                FALSE
+    NEEDS_MIDI_INPUT        FALSE
+    NEEDS_MIDI_OUTPUT       FALSE
+    PLUGIN_MANUFACTURER_CODE OPre
+    PLUGIN_CODE              OpPr
+    FORMATS                  ${OPENPREAMP_FORMATS}
+    LV2URI                   "https://github.com/MistaMin/OpenPreamp"
+    PRODUCT_NAME             "OpenPreamp"
+    COPY_PLUGIN_AFTER_BUILD  FALSE
+)
+
+if(HYBRIDEQ_CLAP)
+    clap_juce_extensions_plugin(
+        TARGET OpenPreamp
+        CLAP_ID "com.opengrid.openpreamp"
+        CLAP_FEATURES audio-effect preamp distortion
+        CLAP_MANUAL_URL "https://github.com/MistaMin/OpenPreamp"
+        CLAP_SUPPORT_URL "https://github.com/MistaMin/OpenPreamp")
+endif()
+
+target_sources(OpenPreamp PRIVATE
+    Source/OpenPreampPlugin/PluginProcessor.cpp
+    Source/OpenPreampPlugin/PluginEditor.cpp
+)
+
+target_include_directories(OpenPreamp PRIVATE Source "${CMAKE_CURRENT_BINARY_DIR}/generated")
+
+target_compile_definitions(OpenPreamp PUBLIC
+    GOODLOOKINUI_ENABLE_EDITOR=0
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0
+    JUCE_VST3_CAN_REPLACE_VST2=0
+    JUCE_DISPLAY_SPLASH_SCREEN=0
+)
+
+target_link_libraries(OpenPreamp
+    PRIVATE
+        goodlookinui_juce
+        juce::juce_audio_utils
+        juce::juce_dsp
+    PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags
+)
+
+foreach(format IN LISTS OPENPREAMP_FORMATS)
+    if(format STREQUAL "LV2")
+        set(notice_dir "$<TARGET_FILE_DIR:OpenPreamp_${format}>/Licenses")
+    elseif(APPLE)
+        set(notice_dir "$<TARGET_FILE_DIR:OpenPreamp_${format}>/../Resources/Licenses")
+    else()
+        set(notice_dir "$<TARGET_FILE_DIR:OpenPreamp_${format}>/OpenPreamp-Licenses")
+    endif()
+    add_custom_command(TARGET OpenPreamp_${format} PRE_LINK
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${notice_dir}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/BINARY_LICENSE.txt"
+            "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
+            "${CMAKE_CURRENT_SOURCE_DIR}/THIRD_PARTY_NOTICES.txt"
+            "${notice_dir}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/GoodLookinUI/LICENSE"
+            "${notice_dir}/GoodLookinUI-LICENSE.txt"
+        COMMAND ${CMAKE_COMMAND} -E remove_directory "${notice_dir}/third-party"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/Licenses/third-party"
+            "${notice_dir}/third-party"
+        VERBATIM)
+endforeach()
+
+if(HYBRIDEQ_BUILD_TESTS)
+    juce_add_console_app(OpenPreampCPU PRODUCT_NAME "OpenPreamp CPU Table")
+    target_sources(OpenPreampCPU PRIVATE tests/openpreamp_cpu_table.cpp)
+    target_include_directories(OpenPreampCPU PRIVATE Source "${CMAKE_CURRENT_BINARY_DIR}/generated")
+    target_compile_definitions(OpenPreampCPU PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 GOODLOOKINUI_ENABLE_EDITOR=0)
+    target_link_libraries(OpenPreampCPU PRIVATE OpenPreamp goodlookinui_juce juce::juce_audio_utils juce::juce_dsp juce::juce_recommended_config_flags)
+endif()
+
 target_sources(HybridEQ PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp
