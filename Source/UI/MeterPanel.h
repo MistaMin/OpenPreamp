@@ -42,6 +42,12 @@ public:
         repaint();
     }
     bool isInputSource() const { return inputSource; }
+    void setPeakMode(bool peak) {
+        if (selectableMode && peakMode == peak) return;
+        selectableMode = true; peakMode = peak; vu.position = 0.0; vu.velocity = 0.0; repaint();
+    }
+    bool isPeakMode() const { return peakMode; }
+    float displayedDb() const { return selectableMode && !peakMode ? rmsDb : hold; }
     void setFace(Face f) { face = f; repaint(); }
     Face getFace() const { return face; }
     static const char* faceCode(Face f) { for (auto& i : faces) if (i.face == f) return i.code; return "cream"; }
@@ -80,7 +86,7 @@ public:
         else if ((holdTimer -= dt) <= 0.0f) hold = std::max(-99.0f, hold - 12.0f * dt);
         const float power = 0.5f * (selected.meanSquare[0] + selected.meanSquare[1]);
         const float amp = std::sqrt(std::max(power, 0.0f));
-        vuTarget = goodlookinui::juce_adapter::meters::vuPosition(amp / refAmp);
+        vuTarget = goodlookinui::juce_adapter::meters::vuPosition((peakMode ? std::max(selected.peak[0],selected.peak[1]) : amp) / refAmp);
         vu.step(vuTarget, double(dt), 14.0);
         peakNow = -99.0f;
         clock += dt;
@@ -100,7 +106,7 @@ public:
         g.setColour(Theme::textDark); g.setFont(juce::FontOptions(11.5f, juce::Font::bold));
         g.drawText(caption, 18, 8, 100, 20, juce::Justification::centredLeft);
         g.setColour(Theme::textMid); g.setFont(juce::FontOptions(9.0f));
-        g.drawText(inputSource ? "INPUT RMS / PEAK" : "OUTPUT RMS / PEAK", 18, 27, 140, 14, juce::Justification::centredLeft);
+        g.drawText(juce::String(inputSource ? "INPUT " : "OUTPUT ") + (selectableMode ? (peakMode ? "PEAK" : "RMS") : "RMS / PEAK"), 18, 27, 140, 14, juce::Justification::centredLeft);
 
         const auto main = mainRect();
         const float w = float(getWidth());
@@ -137,11 +143,12 @@ public:
             meters::drawLedLadder(g, {bx, 104.0f + float(ch) * 6.5f, bw, 5.0f}, true, ladder[1][ch], hold, 18);
         }
 
-        // peak readout and clip lamp
-        juce::String text = hold <= -90.0f ? juce::String("--") : juce::String(hold, 1);
+        // Selected measurement readout; clip detection remains sample-peak based.
+        const float reading = displayedDb();
+        juce::String text = reading <= -90.0f ? juce::String("--") : juce::String(reading, 1);
         meters::drawSevenSegment(g, {rx, 44.0f, rw - 30.0f, 26.0f}, text, Colour(0xff39ff7a));
         g.setColour(Theme::textMid); g.setFont(juce::FontOptions(8.0f, juce::Font::bold));
-        g.drawText("PEAK dBFS", int(rx), 71, int(rw - 30.0f), 11, juce::Justification::centred);
+        g.drawText(selectableMode && !peakMode ? "RMS dBFS" : "PEAK dBFS", int(rx), 71, int(rw - 30.0f), 11, juce::Justification::centred);
         meters::drawLamp(g, clipLamp(), 5.5f, Colour(0xffff3b30), clip);
         g.drawText("CLIP", int(w) - 38, 63, 36, 11, juce::Justification::centred);
     }
@@ -154,7 +161,7 @@ private:
     LevelTracker& inputLevel;
     LevelTracker& outputLevel;
     Face face = Face::VuCream;
-    bool inputSource = false;
+    bool inputSource = false, peakMode = false, selectableMode = false;
     int channelIndex = -1;
     juce::String caption{"LEVEL"};
     goodlookinui::Motion vu;

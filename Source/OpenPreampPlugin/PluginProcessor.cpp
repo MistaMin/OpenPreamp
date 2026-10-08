@@ -59,6 +59,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
     monoRange.setSkewForCentre(100.0f);
     params.push_back(std::make_unique<juce::AudioParameterFloat>(
         juce::ParameterID{"monoMakerFrequency", 1}, "Mono Maker Frequency", monoRange, 20.0f));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID{"meterMode", 1}, "Meter Mode", juce::StringArray{"Peak", "RMS"}, 0));
     return {params.begin(), params.end()};
 }
 
@@ -233,7 +235,7 @@ void OpenPreampProcessor::setStateInformation(const void* data, int sizeInBytes)
         if (!state.getChildWithProperty("id","cutsEnabled").isValid()) {
             juce::ValueTree cut("PARAM"); cut.setProperty("id","cutsEnabled",nullptr); cut.setProperty("value",0.0f,nullptr); state.appendChild(cut,nullptr);
         }
-        for (const auto id : {"channelLink", "monoMakerEnabled", "monoMakerFrequency"})
+        for (const auto id : {"channelLink", "monoMakerEnabled", "monoMakerFrequency", "meterMode"})
             if (!state.getChildWithProperty("id",id).isValid()) {
                 juce::ValueTree param("PARAM"); param.setProperty("id",id,nullptr);
                 param.setProperty("value", juce::String(id) == "monoMakerFrequency" ? 20.0f : 0.0f,nullptr);

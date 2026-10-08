@@ -5,7 +5,8 @@
 OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     : AudioProcessorEditor(&p), proc(p),
       rightMeter(p), rightMeterSourceBtn(p.apvts, "meterSource", "VU", true),
-      midSideToggle(p.apvts, "midSide", "LR / M/S", Theme::preampCol),
+      meterModeBtn(p.apvts, "meterMode", "MODE", true), rightMeterModeBtn(p.apvts, "meterMode", "MODE", true),
+      midSideToggle(p.apvts, "midSide", "MS MODE", Theme::preampCol),
       cutsToggle(p.apvts, "cutsEnabled", "CUTS", Theme::preampCol),
       linkToggle(p.apvts, "channelLink", "LINK", Theme::preampCol),
       monoMakerToggle(p.apvts, "monoMakerEnabled", "ON", Theme::preampCol),
@@ -31,7 +32,7 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     rightPreampPanel.addAndMakeVisible(rightOutputDial);
     for (auto* c : std::initializer_list<juce::Component*>{&highPassDial,&lowPassDial,&cutsToggle}) cutsPanel.addAndMakeVisible(c);
     for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&hqToggle,&rateLabel}) controlsPanel.addAndMakeVisible(c);
-    for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel,&midSideToggle,&linkToggle,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn}) canvas.addAndMakeVisible(c);
+    for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel,&midSideToggle,&linkToggle,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn,&meterModeBtn,&rightMeterModeBtn}) canvas.addAndMakeVisible(c);
     monoMakerPanel.addAndMakeVisible(monoMakerDial); monoMakerPanel.addAndMakeVisible(monoMakerToggle);
     meterPanel.setChannel(0); rightMeter.setChannel(1);
     meterPanel.setExternallyDriven(); rightMeter.setExternallyDriven();
@@ -52,12 +53,13 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     preampTypeBtn.setButtonTooltip("Shared preamp model for both channels.");
     preampCircuitToggle.setTooltip("Circuit at 2x, or lighter native-rate preamp with ADAA when off.");
     hqToggle.setTooltip("Use 4x oversampling when CIRCUIT is on.");
-    midSideToggle.setTooltip("Encode Mid/Side before the preamps; decode to stereo after downsampling and output trims.");
+    midSideToggle.setTooltip("Off: normal L/R. On: encode Mid/Side before the preamps and decode after downsampling and output trims. Link is disabled in M/S.");
     linkToggle.setTooltip("Link both input and output gains to the left controls. Right settings return when unlinked. Unavailable in M/S.");
     monoMakerToggle.setTooltip("Reduce bass width with a session-rate 6 dB/octave high-pass on Side only, before the preamp.");
     monoMakerDial.setTooltip("Side high-pass cutoff: 20–500 Hz. Mid is unchanged. Double-click for 20 Hz.");
     cutsToggle.setTooltip("Shared session-rate 12 dB/octave high-pass and low-pass.");
     for (auto* button : {&meterSourceBtn,&rightMeterSourceBtn}) button->setButtonTooltip("Select input or output for both independent meters.");
+    for (auto* button : {&meterModeBtn,&rightMeterModeBtn}) button->setButtonTooltip("Switch both meter needles and numeric readouts between Peak and RMS. Clip lamps always detect peaks.");
     rateLabel.setFont(juce::FontOptions(10.0f));
     rateLabel.setJustificationType(juce::Justification::centredRight);
     rateLabel.setInterceptsMouseClicks(false,false);
@@ -135,6 +137,7 @@ void OpenPreampEditor::resized()
     canvas.setTransform(juce::AffineTransform::scale(float(getHeight())/740.0f));
     meterPanel.setBounds(16,68,476,210);rightMeter.setBounds(508,68,476,210);
     meterSourceBtn.setBounds(382,75,92,27);rightMeterSourceBtn.setBounds(874,75,92,27);
+    meterModeBtn.setBounds(284,75,82,27);rightMeterModeBtn.setBounds(776,75,82,27);
     preampPanel.setBounds(16,306,476,218);rightPreampPanel.setBounds(508,306,476,218);
     if(!layoutReady) {
         preampGainDial.setBounds(60,54,148,154);outputGainDial.setBounds(286,54,132,154);
@@ -156,6 +159,8 @@ void OpenPreampEditor::resized()
 void OpenPreampEditor::timerCallback()
 {
     applyModelLook();
+    const bool peak = proc.apvts.getRawParameterValue("meterMode")->load() < 0.5f;
+    meterPanel.setPeakMode(peak); rightMeter.setPeakMode(peak);
     rightMeter.setInputSource(proc.apvts.getRawParameterValue("meterSource")->load() < 0.5f);
     meterPanel.setInputSource(proc.apvts.getRawParameterValue("meterSource")->load() < 0.5f);
     const bool active = proc.apvts.getRawParameterValue("preampBypass")->load() < 0.5f
@@ -172,7 +177,7 @@ void OpenPreampEditor::timerCallback()
     rightPreampPanel.setTitle(ms ? "SIDE" : "RIGHT");
     const bool stereo = proc.getTotalNumInputChannels() == 2;
     const bool linked = !ms && proc.apvts.getRawParameterValue("channelLink")->load() > 0.5f;
-    linkToggle.setVisible(!ms); linkToggle.setEnabled(stereo); linkToggle.setActive(stereo);
+    linkToggle.setVisible(true); linkToggle.setEnabled(stereo && !ms); linkToggle.setActive(stereo && !ms);
     rightGainDial.setEnabled(stereo && !linked); rightOutputDial.setEnabled(stereo && !linked);
     rightGainDial.setActive(stereo && !linked && !proc.apvts.getRawParameterValue("preampBypass")->load());
     rightOutputDial.setActive(stereo && !linked);

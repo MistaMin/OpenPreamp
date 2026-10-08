@@ -8,9 +8,9 @@ VUMT also provides an Amount control; OpenPreamp implements the specifically
 requested Side high-pass rather than adding an unrequested width amount.
 
 New parameters: channelLink (off), monoMakerEnabled (off), monoMakerFrequency
-(20 Hz, range 20–500 Hz). Existing parameter IDs are retained. Linked L/R input
+(20 Hz, range 20–500 Hz), meterMode (Peak initially, RMS alternative). Existing parameter IDs are retained. Linked L/R input
 and output gains both use the left values without overwriting the stored right
-values. Both right knobs are disabled and dimmed. M/S hides Link and ignores
+values. Both right knobs are disabled and dimmed. MS MODE greys out and disables Link and ignores
 its gain routing even if its stored parameter remains on. Mono hosts disable
 stereo-only controls. Old sessions restore new features off at 20 Hz.
 
@@ -21,16 +21,23 @@ the already encoded Side. All operations and 10 ms cutoff smoothing run at
 session rate, before the preamp upsampling. Preamp bypass skips it; model Off
 still permits filtering. Input meters remain before this filter.
 
-The header holds LR / M/S and Link; the bottom row holds cuts, mono maker,
+Peak/RMS buttons beside each meter source selector share meterMode. Both
+needles and numeric readouts switch together; RMS uses mean-square amplitude,
+Peak uses block sample peaks and the peak-hold readout. Clip lamps and LED
+ladders remain peak-based. Meter choice persists in host state and does not
+alter audio. Legacy HybridEQ meters retain their original display behavior.
+
+The header holds MS MODE (off = normal L/R) and Link; the bottom row holds cuts, mono maker,
 and preamp settings. Input Cuts and Preamp both measure 356 × 164; Preamp
 was narrowed to match Input Cuts, with the mono maker centered between them. Saved colours, gain-knob geometry and resize limits are
 retained. Release VST3 built with developer mode OFF and passed strict signature
-verification. All 215 smoke/routing checks passed: linked gains, restoration
-on unlink, Link hidden in M/S, disabled right controls, Side-only 6 dB/octave
+verification. All 219 smoke/routing checks passed: linked gains, restoration
+on unlink, Link visible but disabled and dimmed in M/S, disabled right controls, Side-only 6 dB/octave
 response and Mid preservation at 44.1/48/96 kHz, every model against manually
-encoded/Side-filtered audio at native/2x/4x, state migration, and GUI layout.
+encoded/Side-filtered audio at native/2x/4x, state migration, Peak/RMS needle and numeric behavior, peak clips in RMS,
+shared meter-mode restore, and GUI layout.
 The test VST3 replaces the prior 0.3.1 layout build; the 0.2.0 comparison remains
-untouched. The prior build is backed up in build/OpenPreamp-0.3.1-layout-test-backup.vst3. Remove test installs only
+untouched. The prior equal-width build is backed up in build/OpenPreamp-0.3.1-equal-panels-test-backup.vst3. Remove test installs only
 when the owner explicitly says testing is finished.
 
 ## Earlier 0.3.1 layout handoff
