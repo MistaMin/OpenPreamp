@@ -85,6 +85,8 @@ Edits autosave into `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.c
 these files are baked into the next build. Set developer mode OFF for a release
 without the DEV tools or filesystem autosave. Resizing preserves edited geometry.
 
-The test VST3 uses the saved design with developer mode OFF. The 0.2.0
-comparison remains alongside it. Existing standalone artifacts must be rebuilt
+The current UI-test VST3 has developer mode ON. Click **DEV** in the header
+to edit the channel knobs or model looks; edits autosave to the two CSV files
+in `Designs/`. The previous production build is backed up in `build/`.
+The 0.2.0 comparison remains alongside it. Existing standalone artifacts must be rebuilt
 with developer mode ON before editing the 0.3.1 layout.

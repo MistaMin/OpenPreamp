@@ -30,15 +30,23 @@ alter audio. Legacy HybridEQ meters retain their original display behavior.
 The header holds MS MODE (off = normal L/R) and Link; the bottom row holds cuts, mono maker,
 and preamp settings. Input Cuts and Preamp both measure 356 × 164; Preamp
 was narrowed to match Input Cuts, with the mono maker centered between them. Saved colours, gain-knob geometry and resize limits are
-retained. Release VST3 built with developer mode OFF and passed strict signature
-verification. All 219 smoke/routing checks passed: linked gains, restoration
+retained. Current UI-test Release VST3 built with developer mode ON and passed strict
+signature verification. All 220 smoke/routing checks passed, including opening
+the DEV knob/layout and model-look window: linked gains, restoration
 on unlink, Link visible but disabled and dimmed in M/S, disabled right controls, Side-only 6 dB/octave
 response and Mid preservation at 44.1/48/96 kHz, every model against manually
 encoded/Side-filtered audio at native/2x/4x, state migration, Peak/RMS needle and numeric behavior, peak clips in RMS,
 shared meter-mode restore, and GUI layout.
 The test VST3 replaces the prior 0.3.1 layout build; the 0.2.0 comparison remains
-untouched. The prior equal-width build is backed up in build/OpenPreamp-0.3.1-equal-panels-test-backup.vst3. Remove test installs only
+untouched. The production Peak/RMS build is backed up in build/OpenPreamp-0.3.1-production-test-backup.vst3. Remove test installs only
 when the owner explicitly says testing is finished.
+
+For UI refinement, click DEV in the header. The separate window contains
+Knobs / layout (four channel input/output knobs) and Model looks tabs. Changes
+apply immediately and autosave to Designs/OpenPreampKnobs.csv and
+Designs/OpenPreampLooks.csv. Developer preview is Docs/OpenPreamp-0.3.1-developer.png.
+The installed bundle remains OpenPreamp.vst3, version 0.3.1; its install receipt
+records developer_mode=true. Reload the plug-in to see the new build.
 
 ## Earlier 0.3.1 layout handoff
 
