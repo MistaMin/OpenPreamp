@@ -16,12 +16,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build pkg-config libasound2-dev libjack-jackd2-dev \
-            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev \
+            libx11-dev libxi-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev \
             libfreetype-dev libfontconfig1-dev libgl1-mesa-dev
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DHYBRIDEQ_BUILD_TESTS=OFF -DOPENPREAMP_DEVELOPER_MODE=OFF
       - name: Build
-        run: cmake --build build --target OpenPreamp_VST3 OpenPreamp_LV2 OpenPreamp_CLAP
+        run: cmake --build build --parallel 2 --target OpenPreamp_VST3 OpenPreamp_LV2 OpenPreamp_CLAP
       - name: Package
         run: |
           mkdir -p out && cp -r build/OpenPreamp_artefacts/Release/VST3 build/OpenPreamp_artefacts/Release/LV2 \
