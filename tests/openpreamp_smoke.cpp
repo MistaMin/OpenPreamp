@@ -2,6 +2,7 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 #include <cstdio>
 #include <cmath>
+#include <EmbeddedLooks.h>
 
 static int failures = 0, checks = 0;
 static void check(bool ok, const char* name) {
@@ -25,12 +26,12 @@ int main() {
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);
     check(p.apvts.getParameter("oversampleMode") == nullptr, "oversampling parameter removed");
-    check(p.getParameters().size() == 6, "preamp-only parameter set; no EQ or harmonics controls");
+    check(p.getParameters().size() == 8, "preamp-only parameter set; no EQ or harmonics controls");
     set(p, "preampCircuit", 0);
     p.setPlayConfigDetails(2, 2, 48000, 128);
     p.prepareToPlay(48000, 128);
     const int latency = p.getLatencySamples();
-    check(latency == 0, "native processing has zero latency");
+    check(latency > 0, "reports fixed latency for circuit oversampling");
     for (int pad = 0; pad < 3; ++pad) {
         set(p, "preampPad", float(pad));
         audio.clear(); p.processBlock(audio, midi);
@@ -42,7 +43,9 @@ int main() {
         p.prepareToPlay(rate, 128);
         for (int type : {0, 1, 2, 4}) {
             set(p, "preampType", float(type));
-            for (int circuit = 0; circuit < 2; ++circuit) {
+            for (int hq = 0; hq < 2; ++hq) {
+              set(p, "hqMode", float(hq));
+              for (int circuit = 0; circuit < 2; ++circuit) {
                 set(p, "preampCircuit", float(circuit));
                 bool finite = true;
                 for (int block = 0; block < 3; ++block) {
@@ -54,12 +57,13 @@ int main() {
                         for (int i = 0; i < 128; ++i)
                             finite &= std::isfinite(audio.getSample(ch, i));
                 }
-                check(p.getProcessingSampleRate() == rate && finite, "model/rate/circuit combination produces finite audio at session rate");
+                check(p.getProcessingSampleRate() == rate * (circuit ? (hq ? 4 : 2) : 1) && finite, "model/rate/circuit/HQ combination uses correct rate and produces finite audio");
                 check(p.getLatencySamples() == latency, "latency stays fixed during automation");
+              }
             }
         }
     }
-    set(p, "preampBypass", 1); set(p, "outputGain", 6);
+    set(p, "preampBypass", 1); set(p, "outputGain", 6); set(p, "hqMode", 0);
     p.setPlayConfigDetails(2, 2, 96000, 128); p.prepareToPlay(96000, 128);
     audio.clear(); audio.setSample(0, 0, 0.25f); audio.setSample(1, 0, 0.25f);
     p.processBlock(audio, midi);
@@ -78,6 +82,7 @@ int main() {
     set(p, "preampBypass", 0); set(p, "preampType", 1); set(p, "preampCircuit", 1); set(p, "outputGain", 0);
     audio.clear(); p.processBlock(audio, midi);
     std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());
+    check(editor->getWidth() * 8 == editor->getHeight() * 5, "editor has exact 5:8 aspect ratio");
     check(contained(*editor), "all GUI controls fit within their panels");
     for (auto* child : editor->getChildren()) if (auto* meter = dynamic_cast<MeterPanel*>(child)) {
         LevelTracker::Reading in, out; in.peak[0] = 0.3f; in.peak[1] = 0.2f;
@@ -85,7 +90,44 @@ int main() {
         for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);
         check(meter->clipped() && meter->holdDb() > 0 && meter->needle() > 0, "VU, peak hold, and clip indication respond");
         meter->resetClip(); check(!meter->clipped(), "clip lamp resets");
+        meter->setInputSource(true);
+        in.meanSquare[0] = in.meanSquare[1] = 0.0001f;
+        for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);
+        check(meter->isInputSource() && !meter->clipped() && meter->holdDb() < 0, "VU source changes to input including peak and clip indication");
+        meter->setInputSource(false);
+        out.peak[0] = 0.42f; out.peak[1] = 0.38f;
+        for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);
     }
+    const auto themeBefore = Theme::editorTop;
+    LookTable expectedLooks; expectedLooks.fromCsv(hybridEQLooks);
+    for (int model = 0; model < 5; ++model) {
+        set(p, "preampType", float(model));
+        set(p, "meterSource", float(model % 2));
+        audio.clear(); p.processBlock(audio, midi);
+        std::unique_ptr<juce::AudioProcessorEditor> variant(p.createEditor());
+        const auto name = dynamic_cast<juce::AudioParameterChoice*>(p.apvts.getParameter("preampType"))->getCurrentChoiceName();
+        const auto* expected = expectedLooks.find("preampType", name.toStdString());
+        bool matches = expected != nullptr; int knobs = 0;
+        std::function<void(juce::Component&)> visit = [&](juce::Component& component) {
+            if (auto* knob = dynamic_cast<RotaryKnob*>(&component)) {
+                ++knobs; matches &= expected && knob->getDesign().style == expected->style && knob->getDesign().colour == expected->colour;
+            }
+            if (auto* meter = dynamic_cast<MeterPanel*>(&component))
+                matches &= meter->isInputSource() == (model % 2 == 0);
+            if (auto* panel = dynamic_cast<SectionPanel*>(&component)) {
+                const auto* plate = expected ? goodlookinui::findFaceplate(expected->plate.empty() ? expected->faceplate : expected->plate) : nullptr;
+                juce::Colour colours[4];
+                matches &= plate && panel->getPlate(colours) && colours[0] == juce::Colour(plate->panelTop);
+            }
+            for (auto* child : component.getChildren()) visit(*child);
+        };
+        visit(*variant);
+        check(matches && knobs == 2 && contained(*variant), "both knob and plate styles follow the exact HybridEQ model mapping; VU source restores");
+        const auto image = variant->createComponentSnapshot(variant->getLocalBounds());
+        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-022-model-" + juce::String(model) + ".png"));
+        file.setPosition(0); file.truncate(); juce::PNGImageFormat png; png.writeImageToStream(image, file);
+    }
+    check(Theme::editorTop == themeBefore, "per-instance styles do not mutate the global theme");
     OpenPreampProcessor mono;
     auto layout = mono.getBusesLayout();
     layout.inputBuses.set(0, juce::AudioChannelSet::mono());
@@ -99,7 +141,7 @@ int main() {
     check(!mono.isBusesLayoutSupported(layout), "rejects mismatched input/output buses");
     editor->setVisible(false); // Render the parameter position without waiting for UI animation.
     const auto image = editor->createComponentSnapshot(editor->getLocalBounds());
-    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-preview.png"));
+    juce::FileOutputStream output(juce::File("/private/tmp/openpreamp-022-preview.png"));
     output.setPosition(0); output.truncate();
     juce::PNGImageFormat png; check(png.writeImageToStream(image, output), "editor preview renders");
     std::printf("%d checks, %d failures\n", checks, failures);

@@ -34,6 +34,14 @@ public:
         setTooltip("Output level. Click the CLIP lamp to reset it.");
         startTimerHz(30);
     }
+    void setInputSource(bool input) {
+        if (inputSource == input) return;
+        inputSource = input;
+        hold = -99.0f; holdTimer = 0.0f; clip = false;
+        vu.position = 0.0; vu.velocity = 0.0;
+        repaint();
+    }
+    bool isInputSource() const { return inputSource; }
     void setFace(Face f) { face = f; repaint(); }
     Face getFace() const { return face; }
     static const char* faceCode(Face f) { for (auto& i : faces) if (i.face == f) return i.code; return "cream"; }
@@ -50,23 +58,25 @@ public:
     void resetClip() { clip = false; repaint(); }
     // Advance the ballistics by one UI tick using a reading (also used by the timer).
     void step(const LevelTracker::Reading& in, const LevelTracker::Reading& out, float dt) {
+        const auto& selected = inputSource ? in : out;
         for (int ch = 0; ch < 2; ++ch) {
             fall(ladder[0][ch], toDb(in.peak[ch]), dt);
             fall(ladder[1][ch], toDb(out.peak[ch]), dt);
-            peakNow = std::max(peakNow, toDb(out.peak[ch]));
-            if (out.peak[ch] >= 0.999f) clip = true;
+            peakNow = std::max(peakNow, toDb(selected.peak[ch]));
+            if (selected.peak[ch] >= 0.999f) clip = true;
         }
-        const float outDb = std::max(toDb(out.peak[0]), toDb(out.peak[1]));
+        const float outDb = std::max(toDb(selected.peak[0]), toDb(selected.peak[1]));
         if (outDb >= hold) { hold = outDb; holdTimer = 1.5f; }
         else if ((holdTimer -= dt) <= 0.0f) hold = std::max(-99.0f, hold - 12.0f * dt);
-        const float power = 0.5f * (out.meanSquare[0] + out.meanSquare[1]);
+        const float power = 0.5f * (selected.meanSquare[0] + selected.meanSquare[1]);
         const float amp = std::sqrt(std::max(power, 0.0f));
         vuTarget = goodlookinui::juce_adapter::meters::vuPosition(amp / refAmp);
         vu.step(vuTarget, double(dt), 14.0);
         peakNow = -99.0f;
         clock += dt;
         namespace meters = goodlookinui::juce_adapter::meters;
-        levelL = meters::dbPosition(ladder[1][0]); levelR = meters::dbPosition(ladder[1][1]);
+        const int source = inputSource ? 0 : 1;
+        levelL = meters::dbPosition(ladder[source][0]); levelR = meters::dbPosition(ladder[source][1]);
         meters_level = std::max(levelL, levelR);
         rmsDb = amp > 1.0e-5f ? 20.0f * std::log10(amp) : -99.0f;
         history.push_back(std::max(levelL, levelR)); if (history.size() > 90) history.erase(history.begin());
@@ -80,7 +90,7 @@ public:
         g.setColour(Theme::textDark); g.setFont(juce::FontOptions(11.5f, juce::Font::bold));
         g.drawText("LEVEL", 18, 8, 100, 20, juce::Justification::centredLeft);
         g.setColour(Theme::textMid); g.setFont(juce::FontOptions(9.0f));
-        g.drawText("OUTPUT RMS / PEAK", 18, 27, 140, 14, juce::Justification::centredLeft);
+        g.drawText(inputSource ? "INPUT RMS / PEAK" : "OUTPUT RMS / PEAK", 18, 27, 140, 14, juce::Justification::centredLeft);
 
         const auto main = mainRect();
         const float w = float(getWidth());
@@ -134,6 +144,7 @@ private:
     LevelTracker& inputLevel;
     LevelTracker& outputLevel;
     Face face = Face::VuCream;
+    bool inputSource = false;
     goodlookinui::Motion vu;
     float vuTarget = 0.0f, ladder[2][2] = {{-99, -99}, {-99, -99}}, hold = -99.0f, holdTimer = 0.0f, peakNow = -99.0f;
     bool clip = false;
@@ -145,7 +156,7 @@ private:
 
     // Compact layout for the 290 x 132 bottom-right slot: meter face on the left, readouts on the right.
     float rightColumnX() const { return 12.0f + std::max(120.0f, float(getWidth()) - 24.0f - 116.0f) + 10.0f; }
-    juce::Rectangle<float> mainRect() const { return {12.0f, 44.0f, std::max(120.0f, float(getWidth()) - 24.0f - 116.0f), 80.0f}; }
+    juce::Rectangle<float> mainRect() const { return {12.0f, 44.0f, std::max(120.0f, float(getWidth()) - 24.0f - 116.0f), std::max(80.0f, float(getHeight()) - 52.0f)}; }
     juce::Point<float> clipLamp() const { return {float(getWidth()) - 20.0f, 52.0f}; }
     static float toDb(float amp) { return amp <= 1.0e-5f ? -99.0f : 20.0f * std::log10(amp); }
     static void fall(float& bar, float db, float dt) { bar = db >= bar ? db : std::max(db, bar - 24.0f * dt); }
