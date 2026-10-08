@@ -1,19 +1,28 @@
-# OpenPreamp circuit — version 0.2.0
+# OpenPreamp circuit — version 0.2.2
 
 This describes the implementation in this checkout. OpenPreamp is a software
 simulation: it does not control a physical preamp or supply phantom power.
-The circuit processes at the DAW session rate, once per sample per channel.
+CIRCUIT on processes at 2x the session rate, or 4x with HQ enabled.
+CIRCUIT off processes the lighter models at the session rate with ADAA.
 
 ## Plug-in signal path
 
 ```mermaid
 flowchart LR
     I[DAW input] --> P[PAD + GAIN control]
-    P --> C[Selected preamp model]
-    C --> T[Output trim]
+    P --> M{CIRCUIT}
+    M -->|On| U[2x IIR / HQ 4x FIR upsample]
+    U --> C[Selected component circuit]
+    C --> D[Downsample + latency padding]
+    M -->|Off| A[Light preamp + ADAA at session rate]
+    A --> L[Latency padding]
+    D --> T[Output trim]
+    L --> T
     T --> O[DAW output]
-    I -. read only .-> IM[Input peak meters]
-    T -. read only .-> OM[Output VU / peak / clip]
+    I -. read only .-> IM[Input meter tap]
+    T -. read only .-> OM[Output meter tap]
+    IM -.-> V[Selectable input/output VU]
+    OM -.-> V
 ```
 
 PAD and GAIN are combined into one smoothed drive setting. They are not two
@@ -109,9 +118,15 @@ iterations. The output-node voltage is converted back to digital amplitude.
 Stereo has separate circuit state for left and right.
 
 That repeated network solve explains the CPU cost. A higher session rate means
-more solves per second. There is no oversampling or decimation in OpenPreamp
-0.2.0 and no added buffering latency. Running nonlinear devices at the session
-rate can produce aliasing; increasing the session rate changes that tradeoff.
+more solves per second. OpenPreamp 0.2.2 uses 2x IIR or HQ 4x FIR resampling for the circuit path,
+without decimating the circuit back to a fixed rate. Host latency stays fixed
+by padding the shorter paths. The lighter models use first-order ADAA: each
+nonlinearity averages its response between consecutive sample values using
+an antiderivative (or numerical integration). This reduces aliases at standard
+session rates and adds fractional phase/high-frequency rolloff. The full
+stateful circuit solver is not changed by ADAA.
+
+The method follows [antiderivative antialiasing for memoryless nonlinearities](https://www.research.ed.ac.uk/files/34115216/bilbao_pdf.pdf).
 
 This is a component-network simulation with estimated parameters and simplified
 device models. Brit/FSF use behavioral op-amp models; A-Type's discrete op-amp

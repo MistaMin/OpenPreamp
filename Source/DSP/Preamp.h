@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include "EQFilters.h"
+#include "ADAA.h"
 #include "NTypeCircuit.h"
 #include "BritCircuit.h"
 #include "FsfCircuit.h"
@@ -54,6 +55,7 @@ public:
         configuredType = static_cast<PreampType>(-1); // force (re)configure
         configuredOn = false;
         driveRamp.clear();
+        resetADAA();
         // Build and solve the netlists once, off the audio thread's critical
         // path (allocates). Later sample-rate changes only re-init state.
         nCircOk = nCirc[0].prepare(kCircuitRate) && nCirc[1].prepare(kCircuitRate);
@@ -61,6 +63,9 @@ public:
         fCircOk = fCirc[0].prepare(kCircuitRate) && fCirc[1].prepareLike(fCirc[0], kCircuitRate);
         aCircOk = aCirc[0].prepare(kCircuitRate) && aCirc[1].prepare(kCircuitRate);
     }
+
+    // Opt-in for the lighter preamp path. The full circuit solver is unchanged.
+    void setADAAEnabled(bool enabled) noexcept { adaaEnabled = enabled; resetADAA(); }
 
     void setType(PreampType t) noexcept { type.store(t, std::memory_order_relaxed); }
     void setDriveDB(float db) noexcept { driveTargetDB.store(db, std::memory_order_relaxed); }
@@ -140,6 +145,10 @@ public:
 
 private:
     static constexpr int kMaxChannels = 2;
+    std::array<std::array<AdaaStage, 4>, kMaxChannels> adaaStages;
+    bool adaaEnabled = false;
+    void resetADAA() noexcept { for (auto& channel : adaaStages) for (auto& stage : channel) stage.reset(); }
+
 
     void prepareDriveRamp(int numSamples)
     {
@@ -180,37 +189,25 @@ private:
                     data[i] = data[i] * ramp[i];
             }
         } else if (t == PreampType::FSF) {
-            // Light static model of a transformer-coupled input + output
-            // stage: a soft, slightly asymmetric input curve (odd + a touch
-            // of even) followed by a gentler output-transformer curve, so
-            // harmonics are generated at both ends of the gain stage.
-            constexpr float inW1 = 0.62f, inK1 = 1.15f;
-            constexpr float inW2 = 0.38f, inK2 = 2.2f;
-            constexpr float inNorm = inW1 * inK1 + inW2 * inK2;
-            constexpr float inAsym = 0.06f;
-            constexpr float outDrive = 1.35f;
-            constexpr float outAsym = 0.08f;
-            if (circuit) {
-                for (int i = 0; i < numSamples; ++i) {
-                    const float s = data[i] * ramp[i];
-                    float in = (inW1 * std::tanh(inK1 * s) + inW2 * std::tanh(inK2 * s)) / inNorm
-                               + inAsym * s * s;
-                    float y = std::tanh(outDrive * in) / outDrive + outAsym * in * std::abs(in);
-                    data[i] = lpFilters[channel].process(hpFilters[channel].process(y));
-                }
-            } else {
-                for (int i = 0; i < numSamples; ++i) {
-                    const float s = data[i] * ramp[i];
-                    float in = (inW1 * std::tanh(inK1 * s) + inW2 * std::tanh(inK2 * s)) / inNorm
-                               + inAsym * s * s;
-                    data[i] = std::tanh(outDrive * in) / outDrive + outAsym * in * std::abs(in);
-                }
+            constexpr double inW1 = 0.62, inK1 = 1.15, inW2 = 0.38, inK2 = 2.2;
+            constexpr double norm = inW1 * inK1 + inW2 * inK2;
+            auto inputCurve = [](double x) { return (inW1 * std::tanh(inK1 * x) + inW2 * std::tanh(inK2 * x)) / norm + 0.06 * x * x; };
+            auto inputPrimitive = [](double x) { return (inW1 * logCosh(inK1 * x) / inK1 + inW2 * logCosh(inK2 * x) / inK2) / norm + 0.02 * x * x * x; };
+            auto outputCurve = [](double x) { return std::tanh(1.35 * x) / 1.35 + 0.08 * x * std::abs(x); };
+            auto outputPrimitive = [](double x) { return logCosh(1.35 * x) / (1.35 * 1.35) + (0.08 / 3.0) * std::pow(std::abs(x), 3.0); };
+            auto& stages = adaaStages[static_cast<size_t>(channel)];
+            for (int i = 0; i < numSamples; ++i) {
+                const double x = double(data[i]) * double(ramp[i]);
+                const double in = adaaEnabled && !circuit ? stages[0].process(x, inputCurve, inputPrimitive) : inputCurve(x);
+                const double out = adaaEnabled && !circuit ? stages[1].process(in, outputCurve, outputPrimitive) : outputCurve(in);
+                data[i] = circuit ? lpFilters[static_cast<size_t>(channel)].process(hpFilters[static_cast<size_t>(channel)].process(float(out))) : float(out);
             }
         } else if (t == PreampType::AType) {
-            // Light static model: gentle transformer-style soft clip with a touch of even order.
+            auto curve = [](double x) { return std::tanh(1.4 * x) / 1.4 + 0.03 * x * std::abs(x); };
+            auto primitive = [](double x) { return logCosh(1.4 * x) / (1.4 * 1.4) + 0.01 * std::pow(std::abs(x), 3.0); };
             for (int i = 0; i < numSamples; ++i) {
-                const double x = static_cast<double>(data[i]) * static_cast<double>(ramp[i]);
-                data[i] = static_cast<float>(std::tanh(1.4 * x) / 1.4 + 0.03 * x * std::abs(x));
+                const double x = double(data[i]) * double(ramp[i]);
+                data[i] = float(adaaEnabled && !circuit ? adaaStages[static_cast<size_t>(channel)][0].process(x, curve, primitive) : curve(x));
             }
         } else if (t == PreampType::N) {
             processN(data, numSamples, channel, circuit);
@@ -241,16 +238,20 @@ private:
             const double kappa = openGain / g1 - 1.0;  // degeneration (Re * gm)
 
             const double v = static_cast<double>(data[i]) * pad * vScale;
-            const double legA = solveLeg(v, kappa);
-            const double legB = solveLeg(-v, kappa);
-            double o1 = railLimit(0.5 * swing * ((1.0 + legMismatch) * legA - legB - legMismatch), railClip);
+            auto inputCurve = [&](double value) {
+                const double legA = solveLeg(value, kappa), legB = solveLeg(-value, kappa);
+                return railLimit(0.5 * swing * ((1.0 + legMismatch) * legA - legB - legMismatch), railClip);
+            };
+            double o1 = adaaEnabled && !circuit ? adaaStages[ch][0].processNumerical(v, inputCurve) : inputCurve(v);
 
             if (circuit) {
                 brit1[ch] += britA1 * (o1 - brit1[ch]);
                 o1 -= brit1[ch];
             }
 
-            double o2 = railLimit(g2 * o1, railClip);
+            const double secondInput = g2 * o1;
+            auto outputCurve = [](double value) { return railLimit(value, railClip); };
+            double o2 = adaaEnabled && !circuit ? adaaStages[ch][1].processNumerical(secondInput, outputCurve) : outputCurve(secondInput);
 
             if (circuit) {
                 brit2[ch] += britA2 * (o2 - brit2[ch]);
@@ -283,19 +284,31 @@ private:
 
             const double x = static_cast<double>(data[i]) * pad;
 
-            double v = coreSaturate(x, 2.0);
+            auto inputCurve = [](double value) { return coreSaturate(value, 2.0); };
+            auto inputPrimitive = [](double value) { return 4.0 * std::hypot(1.0, value / 2.0); };
+            double v = adaaEnabled ? adaaStages[ch][0].process(x, inputCurve, inputPrimitive) : inputCurve(x);
 
             double y1 = solveLoop(v, betaGain, a0Gain, kGain, vS, nY1[ch]);
-            y1 = asymLimit(y1, 1.5, 1.1);
+            if (adaaEnabled) {
+                const double warm = y1;
+                auto stageCurve = [&](double value) { double state = warm; return asymLimit(solveLoop(value, betaGain, a0Gain, kGain, vS, state), 1.5, 1.1); };
+                y1 = adaaStages[ch][1].processNumerical(v, stageCurve);
+            } else y1 = asymLimit(y1, 1.5, 1.1);
             nDc1[ch] += dcA * (y1 - nDc1[ch]);
             y1 -= nDc1[ch];
 
             double y2 = solveLoop(y1, betaDrv, a0Drv, kDrv, vS, nY2[ch]);
-            y2 = asymLimit(y2, 1.6, 1.3);
+            if (adaaEnabled) {
+                const double warm = y2;
+                auto stageCurve = [&](double value) { double state = warm; return asymLimit(solveLoop(value, betaDrv, a0Drv, kDrv, vS, state), 1.6, 1.3); };
+                y2 = adaaStages[ch][2].processNumerical(y1, stageCurve);
+            } else y2 = asymLimit(y2, 1.6, 1.3);
             nDc2[ch] += dcA * (y2 - nDc2[ch]);
             y2 -= nDc2[ch];
 
-            data[i] = static_cast<float>(coreSaturate(y2, 2.5));
+            auto outputCurve = [](double value) { return coreSaturate(value, 2.5); };
+            auto outputPrimitive = [](double value) { return 6.25 * std::hypot(1.0, value / 2.5); };
+            data[i] = float(adaaEnabled ? adaaStages[ch][3].process(y2, outputCurve, outputPrimitive) : outputCurve(y2));
         }
     }
 
@@ -436,6 +449,7 @@ private:
         if (on == configuredOn && t == configuredType)
             return;
 
+        resetADAA();
         configuredOn = on;
         configuredType = t;
 

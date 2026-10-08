@@ -1,6 +1,6 @@
 // Per-configuration CPU table for the standalone OpenPreamp plugin.
 // Measures the OpenPreampProcessor across sample rate x block size, with the
-// circuit decimation disabled so the netlist runs at the session rate.
+// circuit decimation disabled so the netlist follows the selected 2x/4x processing rate.
 // PAD stays at unity for every measurement.
 #include "OpenPreampPlugin/PluginProcessor.h"
 #include <chrono>
@@ -9,11 +9,13 @@
 
 namespace {
 
-double measure(double sr, int bs, bool circuit, double seconds = 4.0)
+double measure(double sr, int bs, bool circuit, bool hq, double seconds = 4.0)
 {
     OpenPreampProcessor p;
     p.setPlayConfigDetails(2, 2, sr, bs);
     p.prepareToPlay(sr, bs);
+    if (auto* prm = p.apvts.getParameter("hqMode"))
+        prm->setValueNotifyingHost(hq ? 1.0f : 0.0f);
     if (auto* prm = p.apvts.getParameter("preampCircuit"))
         prm->setValueNotifyingHost(circuit ? 1.0f : 0.0f);
     if (auto* prm = p.apvts.getParameter("preampType"))
@@ -50,10 +52,11 @@ int main()
 
     for (double sr : rates)
         for (int bs : blocks)
-            for (bool circuit : {false, true}) {
-                const double cpu = measure(sr, bs, circuit);
+            for (int mode = 0; mode < 3; ++mode) {
+                const bool circuit = mode > 0;
+                const double cpu = measure(sr, bs, circuit, mode == 2);
                 std::printf("%-9.0f %-6d %-9s %8.1f%% %6.1fx\n",
-                            sr, bs, circuit ? "ON" : "off", cpu, 100.0 / cpu);
+                            sr, bs, mode == 2 ? "HQ 4x" : circuit ? "ON 2x" : "ADAA 1x", cpu, 100.0 / cpu);
                 std::fflush(stdout);
             }
     return 0;

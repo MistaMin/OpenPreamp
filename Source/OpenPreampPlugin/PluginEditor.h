@@ -32,8 +32,15 @@ private:
     CycleButton preampTypeBtn;
     CycleButton preampPadBtn;
     MeterPanel meterPanel;
+    CycleButton meterSourceBtn;
+    SmallToggle hqToggle;
+    LookTable modelLooks;
+    Theme::Look editorLook = Theme::current();
+    int lastModel = -1;
+    void applyModelLook();
     juce::TooltipWindow tooltips{this, 700};
     juce::String rateText;
+    juce::Label rateLabel;
     void timerCallback() override;
     RotaryKnob preampGainDial{"GAIN", KnobValueType::Gain, Theme::preampCol};
     BypassButton preampBypassBtn;

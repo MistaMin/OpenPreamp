@@ -28,6 +28,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
         juce::ParameterID{"outputGain", 1}, "Output Gain",
         juce::NormalisableRange<float>(-24.0f, 24.0f, 0.1f), 0.0f));
 
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID{"hqMode", 1}, "HQ Mode", false));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID{"meterSource", 1}, "VU Source",
+        juce::StringArray{"Input", "Output"}, 1));
+
     return {params.begin(), params.end()};
 }
 
@@ -46,12 +52,18 @@ bool OpenPreampProcessor::isBusesLayoutSupported(const BusesLayout& layout) cons
         && layout.getMainInputChannelSet() == output;
 }
 
-void OpenPreampProcessor::prepareToPlay(double sampleRate, int)
+void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     sampleRateAtomic.store(sampleRate, std::memory_order_relaxed);
-    setLatencySamples(0);
+    multirate.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+    multirate.setMode(dsp::OversampleMode::FourX);
+    fixedLatency = int(std::ceil(multirate.getLatencySamples()));
+    latencyPadding.setMaximumDelayInSamples(fixedLatency + 1);
+    latencyPadding.prepare({sampleRate, juce::uint32(samplesPerBlock), juce::uint32(getTotalNumOutputChannels())});
+    setLatencySamples(fixedLatency);
     preamp.prepare(sampleRate);
-    // The circuit runs directly at the session rate, without decimation or resampling.
+    preamp.setADAAEnabled(true);
+    // The circuit follows the selected 2x/4x rate directly; never decimate it back to 96 kHz.
     preamp.setDecimationEnabled(false);
     preamp.setSampleRate(sampleRate);
     updateParameters();
@@ -68,6 +80,13 @@ void OpenPreampProcessor::updateParameters()
     auto getBool = [&](const juce::String& id) {
         return apvts.getRawParameterValue(id)->load() > 0.5f;
     };
+
+    const bool circuitActive = getBool("preampCircuit") && !getBool("preampBypass") && getChoice("preampType") != 3;
+    const int factor = circuitActive ? (getBool("hqMode") ? 4 : 2) : 1;
+    multirate.setMode(factor == 4 ? dsp::OversampleMode::FourX : factor == 2 ? dsp::OversampleMode::TwoX : dsp::OversampleMode::Native);
+    effectiveFactorAtomic.store(factor, std::memory_order_relaxed);
+    latencyPadding.setDelay(float(fixedLatency) - multirate.getLatencySamples());
+    preamp.setSampleRate(multirate.getEffectiveSampleRate());
 
     static constexpr float padGains[] = {-20.0f, 0.0f, 10.0f};
     preamp.setType(static_cast<dsp::PreampType>(getChoice("preampType")));
@@ -87,10 +106,17 @@ void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
         buffer.clear(i, 0, buffer.getNumSamples());
     inLevel.push(buffer.getArrayOfReadPointers(), buffer.getNumChannels(), buffer.getNumSamples());
 
-    float* channels[2] = {buffer.getWritePointer(0), nullptr};
-    const int numChannels = std::min(buffer.getNumChannels(), 2);
-    if (numChannels > 1) channels[1] = buffer.getWritePointer(1);
-    preamp.processBlock(channels, numChannels, buffer.getNumSamples());
+    auto block = multirate.upsample(buffer);
+    const int numChannels = std::min(int(block.getNumChannels()), 2);
+    float* channels[2] = {block.getChannelPointer(0), nullptr};
+    if (numChannels > 1) channels[1] = block.getChannelPointer(1);
+    preamp.processBlock(channels, numChannels, int(block.getNumSamples()));
+    multirate.downsample(buffer);
+    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+        for (int i = 0; i < buffer.getNumSamples(); ++i) {
+            latencyPadding.pushSample(ch, buffer.getSample(ch, i));
+            buffer.setSample(ch, i, latencyPadding.popSample(ch));
+        }
 
     float outGainDB = apvts.getRawParameterValue("outputGain")->load();
     float outGain = juce::Decibels::decibelsToGain(outGainDB);

@@ -2,6 +2,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 #include "DSP/Preamp.h"
+#include "DSP/Resampler.h"
 #include "Toolkit.h"
 
 class OpenPreampProcessor;
@@ -17,7 +18,8 @@ public:
 
     juce::AudioProcessorEditor* createEditor() override;
     bool isBusesLayoutSupported(const BusesLayout&) const override;
-    double getProcessingSampleRate() const { return sampleRateAtomic.load(std::memory_order_relaxed); }
+    int getEffectiveOversampleFactor() const { return effectiveFactorAtomic.load(std::memory_order_relaxed); }
+    double getProcessingSampleRate() const { return sampleRateAtomic.load(std::memory_order_relaxed) * getEffectiveOversampleFactor(); }
     bool hasEditor() const override { return true; }
 
     const juce::String getName() const override { return JucePlugin_Name; }
@@ -44,6 +46,10 @@ private:
     void updateParameters();
 
     dsp::PreampEngine preamp;
+    dsp::MultirateEngine multirate;
+    juce::dsp::DelayLine<float> latencyPadding;
+    int fixedLatency = 0;
+    std::atomic<int> effectiveFactorAtomic{1};
     LevelTracker inLevel, outLevel;
     std::atomic<double> sampleRateAtomic{44100.0};
 

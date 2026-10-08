@@ -29,6 +29,8 @@ public:
         repaint();
     }
 
+    void setAccent(juce::Colour colour) { accentColour = colour; repaint(); }
+
     bool getActive() const { return isActive; }
 
     void paintButton(juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override
