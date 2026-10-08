@@ -54,7 +54,7 @@ controls Side in M/S mode. Mono hosts keep the left stream and ignore M/S.
 
 LINK applies the left input and output gain settings to both L/R streams. The
 stored right gain parameters remain unchanged and return when unlinked. M/S
-hides Link and ignores it, preserving independent Mid and Side gains.
+greys out and disables Link and ignores its gain routing, preserving independent Mid and Side gains.
 
 The mono maker temporarily encodes M/S in L/R mode, high-passes Side, then
 decodes back to L/R before the cuts and gain trims. In M/S mode it filters the
@@ -68,7 +68,11 @@ Each preamp owns its own solver and ADAA history. Circuit on selects 2x;
 HQ selects 4x. Existing oversampling filters and fixed reported latency are
 retained. Filters and gain trims are outside this multirate path.
 
-The two VUs independently measure input/output RMS, peak hold and clip.
+The two VUs independently measure input/output. The shared Peak / RMS choice
+switches their needles and numeric dBFS readouts: sample peaks with peak hold,
+or root-mean-square amplitude. Both modes retain the needle ballistics and
+-18 dBFS reference; clip lamps and small LED ladders always detect peaks.
+Peak is the initial selection. This mode affects metering only.
 In L/R mode they show Left and Right; in M/S mode they show Mid and Side.
 Input taps are after encoding and before mono maker/cuts/drive. Output taps are after
 channel output trims and before decoding. They read audio without changing it.

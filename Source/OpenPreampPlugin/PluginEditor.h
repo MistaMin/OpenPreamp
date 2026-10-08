@@ -46,6 +46,7 @@ private:
     RotaryKnob lowPassDial{"LOW PASS", KnobValueType::Frequency, Theme::preampCol};
     MeterPanel rightMeter;
     CycleButton rightMeterSourceBtn;
+    CycleButton meterModeBtn, rightMeterModeBtn;
     SmallToggle midSideToggle, cutsToggle, linkToggle, monoMakerToggle;
     RotaryKnob monoMakerDial{"FREQUENCY", KnobValueType::Frequency, Theme::preampCol};
     std::unique_ptr<SliderAttachment> monoMakerAtt;

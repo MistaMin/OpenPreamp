@@ -9,16 +9,18 @@ without an EQ, spectrum display or separate harmonics engine.
   first-order antiderivative antialiasing (ADAA). HQ does not change this path.
 - **Off / bypass:** no circuit oversampling. Output trim and meters remain active.
 - **1000 × 740 resizable editor:** independent channel VUs with input/output selection,
-  peak ladders, peak hold and resettable clip lamps. Model changes
+  click **Peak / RMS** to switch the needles and numeric readouts together
+  (Peak initially). Peak ladders, peak hold and clip lamps keep detecting peaks
+  in either mode. Model changes
   load OpenPreamp's saved plate, knob style and color mappings.
 - **Both channels always visible:** paired input/output controls below the dual
   meters, with shared input cuts and preamp controls in the bottom row.
   Independent input and output trims process Left/Right. **LINK** makes both
   right gains follow the left controls and greys out the right knobs. Unlinking
   restores the saved independent right settings. Link starts off.
-- **LR / M/S:** encodes before cuts and preamps; decodes after downsampling and
-  channel output trims. The strips and VUs become Mid/Side. Link disappears
-  and its gain linking is ignored while M/S is on. Mono ignores M/S.
+- **MS MODE:** encodes before cuts and preamps; decodes after downsampling and
+  channel output trims. The strips and VUs become Mid/Side. Normal L/R is the default with MS MODE off. Link stays
+  visible but greyed out and disabled while M/S is on; gain linking is ignored. Mono ignores M/S.
 - **HIGH PASS / LOW PASS:** shared 12 dB/octave Butterworth cuts, initially
   20 Hz / 20 kHz. CUTS toggles both. Their independent channel state, input/output
   trims, PAD and M/S matrix run at the session rate outside oversampling.

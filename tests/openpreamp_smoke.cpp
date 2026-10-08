@@ -28,7 +28,7 @@ int main() {
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);
     check(p.apvts.getParameter("oversampleMode") == nullptr, "oversampling parameter removed");
-    check(p.getParameters().size() == 17, "preamp-only parameter set; no EQ or harmonics controls");
+    check(p.getParameters().size() == 18, "preamp-only parameter set; no EQ or harmonics controls");
     set(p, "preampCircuit", 0);
     p.setPlayConfigDetails(2, 2, 48000, 128);
     p.prepareToPlay(48000, 128);

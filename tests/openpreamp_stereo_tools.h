@@ -24,19 +24,37 @@ static void runStereoToolsChecks() {
     for(bool ms : {false,true}) {
         OpenPreampProcessor p;set(p,"channelLink",1);set(p,"midSide",ms ? 1 : 0);
         std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());
-        bool linkVisible=false,rightEnabled=true,rightDimmed=false;int gainControls=0;
+        bool linkVisible=false,linkEnabled=false,linkActive=false,rightEnabled=true,rightDimmed=false;int gainControls=0;
         for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren()) {
-            if(auto* button=dynamic_cast<SmallToggle*>(child);button && button->getButtonText()=="LINK")linkVisible=button->isVisible();
+            if(auto* button=dynamic_cast<SmallToggle*>(child);button && button->getButtonText()=="LINK"){linkVisible=button->isVisible();linkEnabled=button->isEnabled();linkActive=button->getActive();}
             if(auto* panel=dynamic_cast<SectionPanel*>(child);panel && panel->getX()==508)
                 for(auto* control : panel->getChildren())if(auto* knob=dynamic_cast<RotaryKnob*>(control)) {
                     ++gainControls;rightEnabled &= knob->isEnabled();rightDimmed |= !knob->getActive();
                 }
         }
-        check(gainControls==2 && linkVisible==!ms && rightEnabled==ms && rightDimmed==!ms,
-            ms ? "M/S hides Link and enables both Side controls" : "Link greys and disables both right controls in L/R");
+        check(gainControls==2 && linkVisible && linkEnabled==!ms && linkActive==!ms && rightEnabled==ms && rightDimmed==!ms,
+            ms ? "M/S keeps Link visible but disabled and dimmed, with both Side controls enabled" : "Link greys and disables both right controls in L/R");
         const auto image=editor->createComponentSnapshot(editor->getLocalBounds());
         juce::FileOutputStream file(juce::File(ms ? "/private/tmp/openpreamp-031-ms.png" : "/private/tmp/openpreamp-031-linked.png"));
         file.setPosition(0);file.truncate();juce::PNGImageFormat png;png.writeImageToStream(image,file);
+    }
+    {
+        LevelTracker input,output;MeterPanel meter(input,output);meter.setExternallyDriven();meter.setChannel(0);
+        LevelTracker::Reading in,out;out.peak[0]=.5f;out.meanSquare[0]=.01f;
+        meter.setPeakMode(false);for(int n=0;n<60;++n)meter.step(in,out,1.0f/30);
+        const float rmsNeedle=meter.needle(),rmsDb=meter.displayedDb();
+        meter.setPeakMode(true);for(int n=0;n<60;++n)meter.step(in,out,1.0f/30);
+        check(meter.needle()>rmsNeedle && std::abs(rmsDb+20)<1e-4f && std::abs(meter.displayedDb()+6.0206f)<1e-4f,
+            "Peak/RMS switches both needle measurement and numeric dBFS readout");
+        meter.setPeakMode(false);out.peak[0]=1.1f;meter.step(in,out,1.0f/30);
+        check(meter.clipped(),"RMS mode retains peak-based clip indication");
+        OpenPreampProcessor p;
+        for(int mode : {0,1}) {
+            set(p,"meterMode",float(mode));std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int matching=0;
+            for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren())
+                if(auto* vu=dynamic_cast<MeterPanel*>(child);vu && vu->isPeakMode()==(mode==0))++matching;
+            check(matching==2,"Both independent VUs restore the shared Peak/RMS choice");
+        }
     }
     for(double rate : {44100.0,48000.0,96000.0})for(bool ms : {false,true}) {
         auto amplitude = [&](double frequency,bool side,bool enabled) {
