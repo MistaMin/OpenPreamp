@@ -1,6 +1,5 @@
 #pragma once
 #include <juce_gui_basics/juce_gui_basics.h>
-#include "../PluginProcessor.h"
 #include "../Toolkit.h"
 #include "Theme.h"
 #include <GoodLookinUI.h>
@@ -29,7 +28,9 @@ public:
         {Face::Columns, "columns", "80s dash: colour bar columns (L/R)", true}, {Face::NeonBars, "neonbars", "Cyberpunk: neon bars", true},
         {Face::HexRing, "hexring", "Cyberpunk: hex ring", true}, {Face::Scope, "scope", "Cyberpunk: glitch scope", true},
         {Face::Chassis, "chassis", "Cyberpunk: yellow chassis", true}};
-    explicit MeterPanel(HybridEQProcessor& p) : proc(p) {
+    template <typename Processor>
+    explicit MeterPanel(Processor& p) : MeterPanel(p.getInputLevel(), p.getOutputLevel()) {}
+    MeterPanel(LevelTracker& input, LevelTracker& output) : inputLevel(input), outputLevel(output) {
         setTooltip("Output level. Click the CLIP lamp to reset it.");
         startTimerHz(30);
     }
@@ -130,7 +131,8 @@ public:
     }
 
 private:
-    HybridEQProcessor& proc;
+    LevelTracker& inputLevel;
+    LevelTracker& outputLevel;
     Face face = Face::VuCream;
     goodlookinui::Motion vu;
     float vuTarget = 0.0f, ladder[2][2] = {{-99, -99}, {-99, -99}}, hold = -99.0f, holdTimer = 0.0f, peakNow = -99.0f;
@@ -150,7 +152,7 @@ private:
 
     void timerCallback() override {
         if (!isShowing()) return;
-        step(proc.getInputLevel().read(), proc.getOutputLevel().read(), 1.0f / 30.0f);
+        step(inputLevel.read(), outputLevel.read(), 1.0f / 30.0f);
         const float sig = float(vu.position) * 100.0f + ladder[0][0] + ladder[0][1] + ladder[1][0] + ladder[1][1] + hold + (clip ? 1000.0f : 0.0f);
         if (std::abs(sig - lastSig) > 0.05f) { lastSig = sig; repaint(); }
     }

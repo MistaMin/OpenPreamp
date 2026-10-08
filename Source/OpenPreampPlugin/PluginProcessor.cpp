@@ -39,14 +39,21 @@ OpenPreampProcessor::OpenPreampProcessor()
 {
 }
 
-void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+bool OpenPreampProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
+{
+    const auto output = layout.getMainOutputChannelSet();
+    return (output == juce::AudioChannelSet::mono() || output == juce::AudioChannelSet::stereo())
+        && layout.getMainInputChannelSet() == output;
+}
+
+void OpenPreampProcessor::prepareToPlay(double sampleRate, int)
 {
     sampleRateAtomic.store(sampleRate, std::memory_order_relaxed);
-    currentSampleRate = sampleRate;
-    multirateEngine.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+    setLatencySamples(0);
     preamp.prepare(sampleRate);
-    // Standalone preamp: the netlist follows the oversampled host rate directly.
+    // The circuit runs directly at the session rate, without decimation or resampling.
     preamp.setDecimationEnabled(false);
+    preamp.setSampleRate(sampleRate);
     updateParameters();
 }
 
@@ -62,40 +69,11 @@ void OpenPreampProcessor::updateParameters()
         return apvts.getRawParameterValue(id)->load() > 0.5f;
     };
 
-    // OpenPreamp rate policy (HANDOFF §5.1):
-    //   - circuit OFF: native rate
-    //   - circuit ON:  session rate if >= 88.2/96 kHz, otherwise 4x oversampled
-    //   - user can push higher with 4x or 8x oversampling, but the circuit-on
-    //     floor is always 4x below 88.2/96 kHz.
-    static constexpr dsp::OversampleMode allModes[] = {
-        dsp::OversampleMode::Native,
-        dsp::OversampleMode::FourX,
-        dsp::OversampleMode::EightX
-    };
-    static constexpr int allFactors[] = {1, 4, 8};
-
-    int userFactor = allFactors[std::clamp(getChoice("preampPad"), 0, 2)];
-    if (getBool("preampCircuit")) {
-        const double nativeCircuitFloor = (currentSampleRate >= 88200.0) ? 1 : 4;
-        userFactor = std::max(userFactor, static_cast<int>(nativeCircuitFloor));
-    }
-
-    dsp::OversampleMode effectiveMode = dsp::OversampleMode::Native;
-    for (int i = 0; i < 3; ++i)
-        if (allFactors[i] == userFactor)
-            effectiveMode = allModes[i];
-
-    multirateEngine.setMode(effectiveMode);
-    effectiveFactorAtomic.store(userFactor, std::memory_order_relaxed);
-
     static constexpr float padGains[] = {-20.0f, 0.0f, 10.0f};
     preamp.setType(static_cast<dsp::PreampType>(getChoice("preampType")));
-    preamp.setDriveDB(getFloat("preampGain") + padGains[getChoice("preampPad")]);
+    preamp.setDriveDB(getFloat("preampGain") + padGains[std::clamp(getChoice("preampPad"), 0, 2)]);
     preamp.setBypassed(getBool("preampBypass"));
     preamp.setCircuitEnabled(getBool("preampCircuit"));
-
-    double effectiveSR = multirateEngine.getEffectiveSampleRate();
-    preamp.setSampleRate(effectiveSR);
 }
 
 void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
@@ -109,16 +87,10 @@ void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
         buffer.clear(i, 0, buffer.getNumSamples());
     inLevel.push(buffer.getArrayOfReadPointers(), buffer.getNumChannels(), buffer.getNumSamples());
 
-    auto osBlock = multirateEngine.upsample(buffer);
-    int numCh = std::min(static_cast<int>(osBlock.getNumChannels()), 2);
-    int numSamp = static_cast<int>(osBlock.getNumSamples());
-    float* chPtrs[2] = {};
-    for (int ch = 0; ch < numCh; ++ch)
-        chPtrs[ch] = osBlock.getChannelPointer(static_cast<size_t>(ch));
-
-    preamp.processBlock(chPtrs, numCh, numSamp);
-
-    multirateEngine.downsample(buffer);
+    float* channels[2] = {buffer.getWritePointer(0), nullptr};
+    const int numChannels = std::min(buffer.getNumChannels(), 2);
+    if (numChannels > 1) channels[1] = buffer.getWritePointer(1);
+    preamp.processBlock(channels, numChannels, buffer.getNumSamples());
 
     float outGainDB = apvts.getRawParameterValue("outputGain")->load();
     float outGain = juce::Decibels::decibelsToGain(outGainDB);
