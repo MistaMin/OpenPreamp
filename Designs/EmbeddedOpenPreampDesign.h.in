@@ -1,0 +1,3 @@
+#pragma once
+inline constexpr const char* openPreampKnobDesign = R"design(@OPENPREAMP_KNOB_DESIGN@)design";
+inline constexpr const char* openPreampModelLooks = R"looks(@OPENPREAMP_MODEL_LOOKS@)looks";

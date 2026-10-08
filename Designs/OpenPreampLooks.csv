@@ -1,0 +1,7 @@
+GoodLookinUI looks version 1
+parameter,choice,colour,faceplate,style,plate
+"preampType","Brit","#C7A66A","Silver","console","Granite"
+"preampType","N-Type","#A32323","Navy","A","Marine"
+"preampType","FSF","#F2D21E","Teal","FS","Royal"
+"preampType","Off","#7A7F82","Graphite","Snk",""
+"preampType","A-Type","#3F8FD8","Cream","A","Black"

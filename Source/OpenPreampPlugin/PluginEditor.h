@@ -1,22 +1,22 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
-#include "PluginProcessor.h"
-#include "../UI/RotaryKnob.h"
-#include "../UI/CycleButton.h"
-#include "../UI/BypassButton.h"
-#include "../UI/SmallToggle.h"
-#include "../UI/SectionPanel.h"
-#include "../UI/VerticalPair.h"
-#include "../UI/Theme.h"
-#include "../Toolkit.h"
-#include "../UI/ValueFormat.h"
-#include "../UI/MeterPanel.h"
+#include "OpenPreampPlugin/PluginProcessor.h"
+#include "UI/RotaryKnob.h"
+#include "UI/CycleButton.h"
+#include "UI/BypassButton.h"
+#include "UI/SmallToggle.h"
+#include "UI/SectionPanel.h"
+#include "UI/VerticalPair.h"
+#include "UI/Theme.h"
+#include "Toolkit.h"
+#include "UI/ValueFormat.h"
+#include "UI/MeterPanel.h"
 #include <memory>
 
 class OpenPreampEditor : public juce::AudioProcessorEditor, private juce::Timer {
 public:
     explicit OpenPreampEditor(OpenPreampProcessor&);
-    ~OpenPreampEditor() override = default;
+    ~OpenPreampEditor() override;
 
     void paint(juce::Graphics&) override;
     void resized() override;
@@ -24,6 +24,17 @@ public:
 private:
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
+#if GOODLOOKINUI_ENABLE_EDITOR
+    juce::TextButton developerButton{"DEV"};
+    goodlookinui::juce_adapter::Studio designStudio;
+    std::unique_ptr<LookStudio> lookStudio;
+    DesignAutosave designAutosave;
+    std::unique_ptr<juce::DocumentWindow> developerWindow;
+    void setupDeveloperTools();
+#endif
+    bool layoutReady = false;
+    void loadKnobLayout(const std::string&);
+    juce::Component canvas;
     OpenPreampProcessor& proc;
 
     SectionPanel preampPanel{"PREAMP"};

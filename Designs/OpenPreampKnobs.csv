@@ -1,0 +1,4 @@
+GoodLookinUI design version 1
+id,parameter,label,style,colour,x,y,width,height,font size,marks
+preampGain,preampGain,GAIN,A,#A32323,196,56,176,198,9.5,auto
+outputGain,outputGain,OUTPUT,A,#A32323,52,52,132,144,9.5,auto

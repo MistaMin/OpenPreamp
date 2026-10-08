@@ -1,4 +1,25 @@
-# OpenPreamp 0.2.2 handoff — 2026-10-08
+# OpenPreamp 0.2.3 UI/developer handoff — 2026-10-08
+
+0.2.3 keeps the 0.2.2 DSP unchanged. The portrait GUI opens at 600 × 840 (5:7),
+resizes proportionally, has a larger VU/output knob and a slightly smaller main
+knob. Buttons are narrower. The output knob label clears the panel divider.
+
+DEV opens separate GoodLookinUI knob/layout and model-look tools. Geometry and
+looks autosave to the OpenPreamp-specific Designs CSVs and are baked into builds.
+The standalone is the editing artifact; the installed VST3s remain 0.2.0 and 0.2.2.
+The 0.2.0 comparison has a separate name and class IDs; its DSP/UI source came
+from c4eda25. Both temporary installed copies must be removed when the owner
+says testing is finished. The receipts are build/OpenPreamp-test-install.json
+and build/OpenPreamp-0.2.0-comparison-install.json. Check hashes before removal.
+
+Validation: 157 smoke checks passed with zero failures, including proportional
+resizing at 450 × 630, 600 × 840 and 800 × 1120, model looks and the DEV window.
+GUI and developer-window previews are saved in Docs/. The standalone built
+successfully; no new VST3 was installed.
+
+The processing notes below describe the inherited 0.2.2 DSP and its validation.
+
+# Inherited 0.2.2 notes
 
 ## Scope and baseline
 
