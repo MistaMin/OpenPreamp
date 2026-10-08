@@ -140,14 +140,14 @@ void OpenPreampEditor::resized()
         preampGainDial.setBounds(60,54,148,154);outputGainDial.setBounds(286,54,132,154);
         rightGainDial.setBounds(preampGainDial.getBounds());rightOutputDial.setBounds(outputGainDial.getBounds());
     }
-    cutsPanel.setBounds(16,540,356,164);monoMakerPanel.setBounds(388,540,196,164);controlsPanel.setBounds(600,540,384,164);
+    cutsPanel.setBounds(16,540,356,164);monoMakerPanel.setBounds(402,540,196,164);controlsPanel.setBounds(628,540,356,164);
     highPassDial.setBounds(24,54,108,102);lowPassDial.setBounds(150,54,108,102);
     cutsToggle.setBounds(270,80,70,30);
     monoMakerDial.setBounds(12,54,98,102);monoMakerToggle.setBounds(116,80,66,30);
     preampPadBtn.setBounds(18,56,82,60);preampTypeBtn.setBounds(118,56,94,60);
-    preampCircuitToggle.setBounds(236,54,126,30);hqToggle.setBounds(236,96,126,30);
+    preampCircuitToggle.setBounds(222,54,110,30);hqToggle.setBounds(222,96,110,30);
     midSideToggle.setBounds(405,14,110,24);linkToggle.setBounds(525,14,80,24);
-    rateLabel.setBounds(184,132,178,20);
+    rateLabel.setBounds(154,132,178,20);
 #if GOODLOOKINUI_ENABLE_EDITOR
     developerButton.setBounds(316,14,60,24);
 #endif
