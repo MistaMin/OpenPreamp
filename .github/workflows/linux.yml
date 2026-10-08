@@ -1,4 +1,4 @@
-# Builds the Linux formats (VST3, LV2, CLAP, standalone) on GitHub's Ubuntu runners and uploads them as artifacts.
+# Builds the Linux formats (VST3, LV2, CLAP) on GitHub's Ubuntu runners and uploads them as artifacts.
 name: Linux build
 on:
   workflow_dispatch:
@@ -19,16 +19,22 @@ jobs:
             libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev \
             libfreetype-dev libfontconfig1-dev libgl1-mesa-dev
       - name: Configure
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DHYBRIDEQ_BUILD_TESTS=OFF
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DHYBRIDEQ_BUILD_TESTS=OFF -DOPENPREAMP_DEVELOPER_MODE=OFF
       - name: Build
-        run: cmake --build build --target HybridEQ_VST3 HybridEQ_LV2 HybridEQ_CLAP HybridEQ_Standalone
+        run: cmake --build build --target OpenPreamp_VST3 OpenPreamp_LV2 OpenPreamp_CLAP
       - name: Package
         run: |
-          mkdir -p out && cp -r build/HybridEQ_artefacts/Release/VST3 build/HybridEQ_artefacts/Release/LV2 \
-            build/HybridEQ_artefacts/Release/CLAP build/HybridEQ_artefacts/Release/Standalone out/
-          cp BINARY_LICENSE.txt THIRD_PARTY_NOTICES.txt LICENSE out/
-          tar -C out -czf HybridEQ-${{ github.ref_name }}-linux-x86_64.tar.gz .
+          mkdir -p out && cp -r build/OpenPreamp_artefacts/Release/VST3 build/OpenPreamp_artefacts/Release/LV2 \
+            build/OpenPreamp_artefacts/Release/CLAP out/
+          cp LICENSE CHANGELOG.md RELEASE_NOTES.md out/
+          cp output/pdf/OpenPreamp-User-Manual.pdf out/
+          mkdir -p out/Licenses
+          cp Licenses/OpenPreamp-BINARY_LICENSE.txt out/Licenses/BINARY_LICENSE.txt
+          cp Licenses/OpenPreamp-THIRD_PARTY_NOTICES.txt out/Licenses/THIRD_PARTY_NOTICES.txt
+          cp third_party/GoodLookinUI/LICENSE out/Licenses/GoodLookinUI-LICENSE.txt
+          cp -r Licenses/third-party out/Licenses/
+          tar -C out -czf OpenPreamp-${{ github.ref_name }}-linux-x86_64.tar.gz .
       - uses: actions/upload-artifact@v4
         with:
-          name: HybridEQ-linux
-          path: HybridEQ-*-linux-x86_64.tar.gz
+          name: OpenPreamp-linux
+          path: OpenPreamp-*-linux-x86_64.tar.gz

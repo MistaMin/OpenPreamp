@@ -22,7 +22,7 @@ static void runStereoToolsChecks() {
             "M/S ignores Link and uses independent Side input and output trims");
     }
     for(bool ms : {false,true}) {
-        OpenPreampProcessor p;set(p,"channelLink",1);set(p,"midSide",ms ? 1 : 0);
+        OpenPreampProcessor p;set(p,"channelLink",1);set(p,"midSide",ms ? 1 : 0);prepare(p);
         std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());
         bool linkVisible=false,linkEnabled=false,linkActive=false,rightEnabled=true,rightDimmed=false;int gainControls=0;
         for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren()) {
@@ -35,7 +35,7 @@ static void runStereoToolsChecks() {
         check(gainControls==2 && linkVisible && linkEnabled==!ms && linkActive==!ms && rightEnabled==ms && rightDimmed==!ms,
             ms ? "M/S keeps Link visible but disabled and dimmed, with both Side controls enabled" : "Link greys and disables both right controls in L/R");
         const auto image=editor->createComponentSnapshot(editor->getLocalBounds());
-        juce::FileOutputStream file(juce::File(ms ? "/private/tmp/openpreamp-031-ms.png" : "/private/tmp/openpreamp-031-linked.png"));
+        juce::FileOutputStream file(juce::File(ms ? "/private/tmp/openpreamp-100-ms.png" : "/private/tmp/openpreamp-100-linked.png"));
         file.setPosition(0);file.truncate();juce::PNGImageFormat png;png.writeImageToStream(image,file);
     }
     {
@@ -54,6 +54,11 @@ static void runStereoToolsChecks() {
             for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren())
                 if(auto* vu=dynamic_cast<MeterPanel*>(child);vu && vu->isPeakMode()==(mode==0))++matching;
             check(matching==2,"Both independent VUs restore the shared Peak/RMS choice");
+            if(mode==1) {
+                const auto image=editor->createComponentSnapshot(editor->getLocalBounds());
+                juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-100-rms.png"));
+                file.setPosition(0);file.truncate();juce::PNGImageFormat png;png.writeImageToStream(image,file);
+            }
         }
     }
     {
@@ -76,7 +81,7 @@ static void runStereoToolsChecks() {
         check(buttons==4,"Both VUs expose direct-click MODE and source keys");
         editor->setSize(400,296);
         const auto image=editor->createComponentSnapshot(editor->getLocalBounds());
-        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-031-small.png"));
+        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-100-small.png"));
         file.setPosition(0);file.truncate();juce::PNGImageFormat png;png.writeImageToStream(image,file);
     }
     for(double rate : {44100.0,48000.0,96000.0})for(bool ms : {false,true}) {

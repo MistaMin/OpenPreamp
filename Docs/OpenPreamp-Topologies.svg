@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="900" height="476" preserveAspectRatio="xMinYMin meet" viewBox="0 0 900 476" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="900" height="476"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-476)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="12" y="453" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,10%,18%); stroke:none;" transform="translate(0,906) scale(1,-1)">N-Type</text>
+			<rect x="12.0" y="386" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="61.452" y="418" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,836) scale(1,-1)">Input transformer</text>
+			<text x="82.648" y="401" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,802) scale(1,-1)">+ coupling</text>
+			<path d="M 220.5,412 L 232.5,412 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="232.5 412, 227.5 416, 227.5 408" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="235.5" y="386" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="288.851" y="418" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,836) scale(1,-1)">Three-transistor</text>
+			<text x="290.776" y="401" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,802) scale(1,-1)">feedback stage</text>
+			<path d="M 444,412 L 456,412 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="456 412, 451 416, 451 408" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="459.0" y="386" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="537.25" y="418" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,836) scale(1,-1)">Class-A</text>
+			<text x="522.844" y="401" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,802) scale(1,-1)">output driver</text>
+			<path d="M 667.5,412 L 679.5,412 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="679.5 412, 674.5 416, 674.5 408" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="682.5" y="386" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="726.506" y="418" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,836) scale(1,-1)">Output transformer</text>
+			<text x="742.641" y="401" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,802) scale(1,-1)">+ load / Zobel</text>
+			<text x="12" y="341" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,10%,18%); stroke:none;" transform="translate(0,682) scale(1,-1)">Brit</text>
+			<rect x="12.0" y="274" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="68.445" y="306" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,612) scale(1,-1)">Balanced input</text>
+			<text x="69.432" y="289" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,578) scale(1,-1)">+ RF networks</text>
+			<path d="M 220.5,300 L 232.5,300 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="232.5 300, 227.5 304, 227.5 296" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="235.5" y="274" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="293.898" y="306" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,612) scale(1,-1)">Matched pair /</text>
+			<text x="290.398" y="289" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,578) scale(1,-1)">instrumentation</text>
+			<path d="M 444,300 L 456,300 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="456 300, 451 304, 451 296" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="459.0" y="274" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="514.29" y="306" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,612) scale(1,-1)">Difference amp</text>
+			<text x="523.047" y="289" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,578) scale(1,-1)">+ DC servos</text>
+			<path d="M 667.5,300 L 679.5,300 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="679.5 300, 674.5 304, 674.5 296" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="682.5" y="274" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="756.067" y="306" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,612) scale(1,-1)">Balanced</text>
+			<text x="754.912" y="289" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,578) scale(1,-1)">line driver</text>
+			<text x="12" y="229" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,10%,18%); stroke:none;" transform="translate(0,458) scale(1,-1)">FSF</text>
+			<rect x="12.0" y="162" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="61.452" y="194" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,388) scale(1,-1)">Input transformer</text>
+			<text x="74.08699999999999" y="177" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,354) scale(1,-1)">+ gain ladder</text>
+			<path d="M 220.5,188 L 232.5,188 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="232.5 188, 227.5 192, 227.5 184" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="235.5" y="162" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="290.398" y="194" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,388) scale(1,-1)">Op-amp stages</text>
+			<text x="306.148" y="177" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,354) scale(1,-1)">+ coupling</text>
+			<path d="M 444,188 L 456,188 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="456 188, 451 192, 451 184" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="459.0" y="162" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="532.581" y="194" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,388) scale(1,-1)">Class-AB</text>
+			<text x="528.675" y="177" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,354) scale(1,-1)">output pair</text>
+			<path d="M 667.5,188 L 679.5,188 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="679.5 188, 674.5 192, 674.5 184" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="682.5" y="162" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="747.135" y="194" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,388) scale(1,-1)">Transformer</text>
+			<text x="737.776" y="177" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,354) scale(1,-1)">feedback / load</text>
+			<text x="12" y="117" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,10%,18%); stroke:none;" transform="translate(0,234) scale(1,-1)">A-Type</text>
+			<rect x="12.0" y="50" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="99.182" y="82" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">Input</text>
+			<text x="78.96600000000001" y="65" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,130) scale(1,-1)">transformer</text>
+			<path d="M 220.5,76 L 232.5,76 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="232.5 76, 227.5 80, 227.5 72" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="235.5" y="50" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="296.635" y="82" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">Amplifier with</text>
+			<text x="303.621" y="65" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,130) scale(1,-1)">T feedback</text>
+			<path d="M 444,76 L 456,76 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="456 76, 451 80, 451 72" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="459.0" y="50" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="534.128" y="82" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">Coupling</text>
+			<text x="537.243" y="65" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,130) scale(1,-1)">network</text>
+			<path d="M 667.5,76 L 679.5,76 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="679.5 76, 674.5 80, 674.5 72" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="682.5" y="50" width="205.5" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="726.506" y="82" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">Output transformer</text>
+			<text x="765.986" y="65" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,130) scale(1,-1)">+ load</text>
+		</g>
+	</g>
+</svg>

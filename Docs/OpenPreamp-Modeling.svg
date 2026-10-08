@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="900" height="364" preserveAspectRatio="xMinYMin meet" viewBox="0 0 900 364" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="900" height="364"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-364)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="12" y="341" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,10%,18%); stroke:none;" transform="translate(0,682) scale(1,-1)">Preparation</text>
+			<rect x="12.0" y="274" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="109.986" y="306" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,612) scale(1,-1)">Build network</text>
+			<path d="M 295,300 L 307,300 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="307 300, 302 304, 302 296" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="310.0" y="274" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="424.331" y="306" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,612) scale(1,-1)">Find DC</text>
+			<text x="403.695" y="289" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,578) scale(1,-1)">operating point</text>
+			<path d="M 593,300 L 605,300 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="605 300, 600 304, 600 296" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="608.0" y="274" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="688.479" y="306" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,612) scale(1,-1)">Calibrate reference</text>
+			<text x="698.979" y="289" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,578) scale(1,-1)">gain near 1 kHz</text>
+			<text x="12" y="229" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,10%,18%); stroke:none;" transform="translate(0,458) scale(1,-1)">Each circuit sample</text>
+			<rect x="12.0" y="162" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="104.141" y="194" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,388) scale(1,-1)">Input amplitude</text>
+			<text x="121.648" y="177" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,354) scale(1,-1)">to voltage</text>
+			<path d="M 295,188 L 307,188 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="307 188, 302 192, 302 184" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="310.0" y="162" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="391.641" y="194" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,388) scale(1,-1)">Solve currents and</text>
+			<text x="406.418" y="177" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,354) scale(1,-1)">node voltages</text>
+			<path d="M 593,188 L 605,188 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="605 188, 600 192, 600 184" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="608.0" y="162" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(63%,13%,13%); fill-rule: evenodd;"/>
+			<text x="702.472" y="194" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,388) scale(1,-1)">Output voltage</text>
+			<text x="709.871" y="177" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,354) scale(1,-1)">to amplitude</text>
+			<text x="12" y="117" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(6%,10%,18%); stroke:none;" transform="translate(0,234) scale(1,-1)">State and nonlinearity</text>
+			<rect x="12.0" y="50" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="108.425" y="82" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">Capacitor and</text>
+			<text x="99.878" y="65" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,130) scale(1,-1)">inductor memory</text>
+			<path d="M 295,76 L 307,76 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="307 76, 302 80, 302 72" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="310.0" y="50" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="411.493" y="82" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">Transistors /</text>
+			<text x="400.202" y="65" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,130) scale(1,-1)">saturating cores</text>
+			<path d="M 593,76 L 605,76 Z" style="stroke: rgb(32%,37%,47%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="605 76, 600 80, 600 72" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(32%,37%,47%); fill-rule: evenodd;"/>
+			<rect x="608.0" y="50" width="280.0" height="53" rx="6" ry="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,10%,18%); fill-rule: evenodd;"/>
+			<text x="693.925" y="82" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">Newton iterations</text>
+			<text x="688.479" y="65" style="font-family: Helvetica; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,130) scale(1,-1)">from previous state</text>
+		</g>
+	</g>
+</svg>

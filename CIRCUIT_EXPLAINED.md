@@ -1,4 +1,4 @@
-# OpenPreamp circuit — version 0.3.1
+# OpenPreamp circuit — version 1.0.0
 
 OpenPreamp simulates a preamp; it does not control physical hardware.
 Only the selected preamp circuit is oversampled. Its surrounding processors
@@ -108,8 +108,8 @@ together rather than processing six unrelated effects in sequence.
    Its interaction with surrounding impedances affects bass response and phase.
 3. **Three-transistor gain stage:** BC184C-family transistor models amplify
    the signal. A feedback network returns part of the output to control gain.
-   The gain control changes its R11 resistor, altering feedback instead of
-   merely multiplying the finished output. Junction nonlinearity and headroom
+   The modeled gain network contains the R11 feedback resistor. OpenPreamp
+   holds this internal gain at unity and applies the GUI input trim externally. Junction nonlinearity and headroom
    make the response depend on signal level and gain.
 4. **Interstage coupling:** passes the changing audio signal to the driver
    while maintaining the stages' separate operating points.
@@ -152,7 +152,7 @@ iterations. The output-node voltage is converted back to digital amplitude.
 Stereo has separate circuit state for left and right.
 
 That repeated network solve explains the CPU cost. A higher session rate means
-more solves per second. OpenPreamp 0.2.3 uses 2x IIR or HQ 4x FIR resampling for the circuit path,
+more solves per second. OpenPreamp 1.0.0 uses 2x IIR or HQ 4x FIR resampling for the circuit path,
 without decimating the circuit back to a fixed rate. Host latency stays fixed
 by padding the shorter paths. The lighter models use first-order ADAA: each
 nonlinearity averages its response between consecutive sample values using
