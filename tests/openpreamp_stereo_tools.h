@@ -56,6 +56,29 @@ static void runStereoToolsChecks() {
             check(matching==2,"Both independent VUs restore the shared Peak/RMS choice");
         }
     }
+    {
+        OpenPreampProcessor p;std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int buttons=0;
+        for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren())if(auto* choice=dynamic_cast<CycleButton*>(child)) {
+            juce::String label;juce::TextButton* key=nullptr;
+            for(auto* control : choice->getChildren()) {
+                if(auto* title=dynamic_cast<juce::Label*>(control))label=title->getText();
+                if(auto* button=dynamic_cast<juce::TextButton*>(control))key=button;
+            }
+            if(key && (label=="MODE" || label=="VU")) {
+                const char* id=label=="MODE" ? "meterMode" : "meterSource";
+                const float original=p.apvts.getRawParameterValue(id)->load();
+                key->onClick();const float toggled=p.apvts.getRawParameterValue(id)->load();
+                key->onClick();const float restored=p.apvts.getRawParameterValue(id)->load();
+                check(std::abs(toggled-(1-original))<1e-6f && std::abs(restored-original)<1e-6f,"Two-choice meter key changes host parameter directly on each click");
+                ++buttons;
+            }
+        }
+        check(buttons==4,"Both VUs expose direct-click MODE and source keys");
+        editor->setSize(400,296);
+        const auto image=editor->createComponentSnapshot(editor->getLocalBounds());
+        juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-031-small.png"));
+        file.setPosition(0);file.truncate();juce::PNGImageFormat png;png.writeImageToStream(image,file);
+    }
     for(double rate : {44100.0,48000.0,96000.0})for(bool ms : {false,true}) {
         auto amplitude = [&](double frequency,bool side,bool enabled) {
             OpenPreampProcessor p;clean(p);set(p,"midSide",ms ? 1 : 0);set(p,"monoMakerEnabled",enabled ? 1 : 0);set(p,"monoMakerFrequency",200);prepare(p,rate);

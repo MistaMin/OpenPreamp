@@ -17,7 +17,7 @@ public:
     }
 };
 
-// A mechanical choice key opens a dropdown bound to stable DSP choice values.
+// Two-choice keys toggle directly; larger choice sets open a dropdown.
 class CycleButton : public juce::Component, private juce::AudioProcessorValueTreeState::Listener {
 public:
     CycleButton(juce::AudioProcessorValueTreeState& state, const juce::String& paramIDToUse,
@@ -40,7 +40,13 @@ public:
         button.setColour(juce::TextButton::buttonOnColourId, Theme::buttonBottom);
         button.setColour(juce::TextButton::textColourOffId, Theme::buttonText);
         button.setColour(juce::TextButton::textColourOnId, Theme::buttonText);
-        button.onClick = [this] { showChoices(); };
+        button.onClick = [this] {
+            if (param && param->choices.size() == 2) {
+                param->beginChangeGesture();
+                param->setValueNotifyingHost(param->getNormalisableRange().convertTo0to1(float(1-param->getIndex())));
+                param->endChangeGesture(); updateText();
+            } else showChoices();
+        };
         addAndMakeVisible(button);
 
         updateText();
