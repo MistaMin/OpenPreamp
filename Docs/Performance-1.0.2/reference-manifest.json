@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-15",
+  "circuit_source_revision": "2c870dece509292cbf7a0c20a18d09a264ceb603",
+  "circuit_source_version": "1.0.0",
+  "processor_snapshot_version": "1.0.1",
+  "processor_snapshot_note": "Working development binary, not a pinned 1.0.0 processor. Use for checkpoint comparisons only.",
+  "system": "macOS-15.7.5-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "compiler": "Apple clang version 16.0.0 (clang-1600.0.26.3)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+  "sha256": {
+    "Source/DSP/CircuitSolver.h": "4c2d97b878744028612195d155d3f4bc5ac8fc6c8b985d378459e055319a11fe",
+    "Source/DSP/BritCircuit.h": "eec9803f4564c4843c4c54c79feb17b98c86ed498ae53b5bde0ed6e9763f3924",
+    "Source/DSP/NTypeCircuit.h": "0dfcf47c369046696d369c2f1496682204a4a7d6a05c8e48cd7d80763352ab27",
+    "Source/DSP/FsfCircuit.h": "1160f22b6517a1ff51e3dcacd5408d312ebb72c426c6c7cdf9dd13a6b9d65a74",
+    "Source/DSP/ATypeCircuit.h": "f2ba35f698ffeff26acc1bc5eed1c156157d390bedf30bcaa8962b67e8231dcb",
+    "OpenPreampCPU-1.0.1": "57cb98f97403691c0136d45ddbbcaef5d628b0022868df56eb5f1bbf2740dbb5",
+    "tests/openpreamp_reference_trace.cpp": "2c1d12fca8cb3284c7d5a95d72ebae253556179e3a3b70ed244f6f1931e5e4b0",
+    "reference-trace": "6b051bdd4e3345cef6a17b332bb1fc92ff1c1093f9432a2be562db1458d979a9"
+  },
+  "scope": "Independent original circuit headers; stage instrumentation must match their trace output byte-for-byte.",
+  "trace_comparison": {
+    "samples": 131072,
+    "fixtures": [
+      {
+        "fixture": "atype-192000.bin",
+        "samples": 16384,
+        "sha256": "1f32c2890634759669ac815a6048511ef0f5632177b93feba6f515bd4f3c3800",
+        "byte_identical": true
+      },
+      {
+        "fixture": "atype-96000.bin",
+        "samples": 16384,
+        "sha256": "92b8ca17c6655aa57c0217f597da6a60dbfa67b08207c0d2f1b47bf2f84cf4f9",
+        "byte_identical": true
+      },
+      {
+        "fixture": "brit-192000.bin",
+        "samples": 16384,
+        "sha256": "8b068ca10617e7362e3d59366dea9bdee0512f5378d0adf901add47d90f0d669",
+        "byte_identical": true
+      },
+      {
+        "fixture": "brit-96000.bin",
+        "samples": 16384,
+        "sha256": "79649bf92fba240fb59c15fc7d871c0f08b249753c3b07cf336ad8af88fb84de",
+        "byte_identical": true
+      },
+      {
+        "fixture": "fsf-192000.bin",
+        "samples": 16384,
+        "sha256": "4f9003a7db25f3acc61b21078bc00f990e21c1d8a8feb1bb5782bde5b864bd5f",
+        "byte_identical": true
+      },
+      {
+        "fixture": "fsf-96000.bin",
+        "samples": 16384,
+        "sha256": "1c36b52f39034b705f44f16295fae48274b8a185d8c9ea0d0aee3f8d8d80cc0d",
+        "byte_identical": true
+      },
+      {
+        "fixture": "ntype-192000.bin",
+        "samples": 16384,
+        "sha256": "372875d536327aea3cfc14e15cb2941894709ed469738e4dc3600b6052b10785",
+        "byte_identical": true
+      },
+      {
+        "fixture": "ntype-96000.bin",
+        "samples": 16384,
+        "sha256": "137feeaedad348f1e2c99d29099510904dd34c607b0ed1281037f9184a51c4c1",
+        "byte_identical": true
+      }
+    ],
+    "instrumented_executable_sha256": "789019831d2635668712c9e4e8cf44d8dc6449e9164fef41618e9d01e90c589e",
+    "instrumented_source_sha256": {
+      "Source/DSP/CircuitStageProbe.h": "bb3173bff26098be14eec864a0e28c89b98d6995ca3fec6840d260cfe092a058",
+      "Source/DSP/BritCircuit.h": "2e481fb2331c6f85d0c66a9262069615c4823bf3bc8cf94ea0bc4d69313b9ec7",
+      "Source/DSP/NTypeCircuit.h": "97829df2dbb06bb68cc56d34cc82e32f5b75dc53ad6879108145f1980d9b6333",
+      "Source/DSP/FsfCircuit.h": "61872c9125a489812f05be8e28577563f2d8aa73f49a13cfb10d414aa52a82ce",
+      "Source/DSP/ATypeCircuit.h": "eb5712c861ea9c2fdcef8fb089e0aa457b7ba84efa5e7daaaed872d38fe8380b"
+    }
+  },
+  "independent_reference_reproduction_passed": true
+}

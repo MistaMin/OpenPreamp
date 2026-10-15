@@ -12,11 +12,12 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
       monoMakerToggle(p.apvts, "monoMakerEnabled", "ON", Theme::preampCol),
       preampTypeBtn(p.apvts, "preampType", "MODEL"),
       preampPadBtn(p.apvts, "preampPad", "PAD"),
+      circuitEngineBtn(p.apvts,"circuitEngine","ENGINE",true),
       meterPanel(p),
       meterSourceBtn(p.apvts, "meterSource", "VU", true),
-      hqToggle(p.apvts, "hqMode", "HQ MODE", Theme::preampCol),
+      oversamplingBtn(p.apvts, "preampOversampling", "OS", true),
       preampBypassBtn(p.apvts, "preampBypass", Theme::preampCol),
-      preampCircuitToggle(p.apvts, "preampCircuit", "CIRCUIT", Theme::preampCol)
+      preampCircuitToggle(p.apvts, "preampCircuit", "MODELED", Theme::preampCol)
 {
     addAndMakeVisible(canvas);
     modelLooks.fromCsv(openPreampModelLooks);
@@ -31,7 +32,7 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     rightPreampPanel.addAndMakeVisible(rightGainDial);
     rightPreampPanel.addAndMakeVisible(rightOutputDial);
     for (auto* c : std::initializer_list<juce::Component*>{&highPassDial,&lowPassDial,&cutsToggle}) cutsPanel.addAndMakeVisible(c);
-    for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&hqToggle,&rateLabel}) controlsPanel.addAndMakeVisible(c);
+    for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&oversamplingBtn,&circuitEngineBtn,&rateLabel}) controlsPanel.addAndMakeVisible(c);
     for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel,&midSideToggle,&linkToggle,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn,&meterModeBtn,&rightMeterModeBtn}) canvas.addAndMakeVisible(c);
     monoMakerPanel.addAndMakeVisible(monoMakerDial); monoMakerPanel.addAndMakeVisible(monoMakerToggle);
     meterPanel.setChannel(0); rightMeter.setChannel(1);
@@ -51,8 +52,9 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     preampBypassBtn.setTooltip("Bypass cuts and preamp; output trims and meters remain active.");
     preampPadBtn.setButtonTooltip("Shared input offset: -20 dB, unity, or +10 dB.");
     preampTypeBtn.setButtonTooltip("Shared preamp model for both channels.");
-    preampCircuitToggle.setTooltip("Circuit at 2x, or lighter native-rate preamp with ADAA when off.");
-    hqToggle.setTooltip("Use 4x oversampling when CIRCUIT is on.");
+    preampCircuitToggle.setTooltip("Off: Standard preamp. On: the selected Circuit or HQ engine. Standard and Circuit use ADAA only at 1x.");
+    circuitEngineBtn.setButtonTooltip("HQ: full component model. Circuit Preview: reduced model, still under validation, with differences in driven harmonics and recovery. Turn MODELED off for Standard.");
+    oversamplingBtn.setButtonTooltip("Select 1x, 2x or 4x for any engine. Default: Standard/Circuit 1x, HQ 2x; old sessions retain their saved rates. ADAA is automatic at 1x for Standard/Circuit and off at 2x/4x. The displayed factor is the effective rate.");
     midSideToggle.setTooltip("Off: normal L/R. On: encode Mid/Side before the preamps and decode after downsampling and output trims. Link is disabled in M/S.");
     linkToggle.setTooltip("Link both input and output gains to the left controls. Right settings return when unlinked. Unavailable in M/S.");
     monoMakerToggle.setTooltip("Reduce bass width with a session-rate 6 dB/octave high-pass on Side only, before the preamp.");
@@ -102,11 +104,11 @@ void OpenPreampEditor::applyModelLook()
     }
     if (plate) {
         const juce::Colour text(plate->text), mid(plate->textMid);
-        preampPadBtn.setPlateText(&text, &mid); preampTypeBtn.setPlateText(&text, &mid);
+        preampPadBtn.setPlateText(&text, &mid); preampTypeBtn.setPlateText(&text, &mid); circuitEngineBtn.setPlateText(&text,&mid);oversamplingBtn.setPlateText(&text,&mid);
         rateLabel.setColour(juce::Label::textColourId, mid);
     }
     preampBypassBtn.setAccent(colour);
-    preampCircuitToggle.setAccent(colour); hqToggle.setAccent(colour);
+    preampCircuitToggle.setAccent(colour);oversamplingBtn.refreshTheme();
     linkToggle.setAccent(colour); monoMakerToggle.setAccent(colour);
     cutsToggle.setAccent(colour); midSideToggle.setAccent(colour);
     repaint();
@@ -148,9 +150,10 @@ void OpenPreampEditor::resized()
     cutsToggle.setBounds(270,80,70,30);
     monoMakerDial.setBounds(12,54,98,102);monoMakerToggle.setBounds(116,80,66,30);
     preampPadBtn.setBounds(14,56,100,60);preampTypeBtn.setBounds(120,56,112,60);
-    preampCircuitToggle.setBounds(244,56,96,26);hqToggle.setBounds(244,96,96,26);
+    preampCircuitToggle.setBounds(244,56,96,26);oversamplingBtn.setBounds(244,96,96,26);
     midSideToggle.setBounds(405,14,110,24);linkToggle.setBounds(525,14,80,24);
-    rateLabel.setBounds(154,132,178,20);
+    circuitEngineBtn.setBounds(14,128,146,26);
+    rateLabel.setBounds(172,132,168,20);
 #if GOODLOOKINUI_ENABLE_EDITOR
     developerButton.setBounds(316,14,60,24);
 #endif
@@ -167,7 +170,9 @@ void OpenPreampEditor::timerCallback()
                      && proc.apvts.getRawParameterValue("preampType")->load() != 3.0f;
     preampGainDial.setActive(proc.apvts.getRawParameterValue("preampBypass")->load() < 0.5f); preampPadBtn.setActive(proc.apvts.getRawParameterValue("preampBypass")->load() < 0.5f);
     preampTypeBtn.setActive(active); preampCircuitToggle.setActive(active);
-    hqToggle.setActive(active && preampCircuitToggle.getToggleState());
+    oversamplingBtn.setActive(active);
+    oversamplingBtn.setDisplayTextOverride(juce::String(proc.getEffectiveOversampleFactor())+"x");
+    circuitEngineBtn.setActive(active && preampCircuitToggle.getToggleState());
     rightGainDial.setActive(!proc.apvts.getRawParameterValue("preampBypass")->load());
     highPassDial.setActive(cutsToggle.getToggleState() && proc.apvts.getRawParameterValue("preampBypass")->load() < 0.5f); lowPassDial.setActive(highPassDial.getActive());
     const bool ms = proc.apvts.getRawParameterValue("midSide")->load() > 0.5f && proc.getTotalNumInputChannels() == 2;
@@ -191,7 +196,8 @@ void OpenPreampEditor::timerCallback()
         meterPanel.repaint(); rightMeter.repaint();
     }
     const int factor = proc.getEffectiveOversampleFactor();
-    const auto text = juce::String(factor) + "x  /  " + juce::String(proc.getProcessingSampleRate() / 1000.0, 1) + " kHz";
+    const auto engineName = !active ? "Off" : !preampCircuitToggle.getToggleState() ? "Standard" : proc.apvts.getRawParameterValue("circuitEngine")->load() < 0.5f ? "HQ" : "Circuit";
+    const auto text = juce::String(engineName) + " " + juce::String(factor) + "x" + (proc.isADAAActive()?" ADAA":"") + " / " + juce::String(proc.getProcessingSampleRate() / 1000.0, 1) + " kHz";
     if (rateText != text) { rateText = text; rateLabel.setText(text, juce::dontSendNotification); }
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include "CircuitSolver.h"
+#include "CircuitStageProbe.h"
 
 // FSF: transformer-coupled console mic preamp channel, simulated from a
 // transcribed netlist (kept privately, not distributed). Signal path: mic
@@ -101,6 +101,8 @@ public:
     }
 
     CircuitSolver& core() noexcept { return solver; }
+    auto stageProbes() const noexcept { return readCircuitStages(solver,probeNodes); }
+    const auto& stageConnections() const noexcept { return probeNodes; }
     std::array<double, kPositions> gainDb{};
     double outScale = 1.0;
     double vFull = 1.0;
@@ -241,6 +243,14 @@ private:
         s.addR(Y, 0, 1e6);
         s.addR(O, 0, 1e6);
         s.addR(Y, O, 600.0);
+        probeNodes = {{
+            {"input_transformer",nSp,nSn,S5,0},
+            {"input_loading",S5,0,P1,0},
+            {"gain_stage",P1,0,O1,0},
+            {"interstage_coupling",O1,0,P3,0},
+            {"class_ab_driver",P3,0,OUT,0},
+            {"output_transformer",OUT,0,nOutP,nOutN},
+        }};
     }
 
     // Small-signal 1 kHz gain at every switch position; output normalised to
@@ -274,6 +284,7 @@ private:
         setPos(kRefPos);
     }
 
+    std::array<CircuitStageNodes,6> probeNodes{};
     CircuitSolver solver;
     int nSp = 0, nSn = 0, nOutP = 0, nOutN = 0;
     std::array<int, 6> rM{};

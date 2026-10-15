@@ -1,0 +1,27 @@
+Audio-processing samples only: 14.598 sampled CPU seconds (including untimed warm-up).
+Preamp nonlinear processing: 99.74%
+Processor overhead / inlined session processing: 0.26%
+
+Top leaf symbols (share of audio-processing samples):
+exp: 53.93%
+dsp::PreampEngine::solveLeg(double, double): 20.94%
+dsp::PreampEngine::solveLoop(double, double, double, double, double, double&): 10.01%
+log1p: 6.47%
+pow: 4.08%
+DYLD-STUB$$exp: 2.36%
+dsp::PreampEngine::processBlock(float* const*, int, int): 1.68%
+OpenPreampProcessor::processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&): 0.16%
+DYLD-STUB$$log1p: 0.13%
+hypot: 0.12%
+
+Scheduled cores:
+CPU 2 (P Core): 26.87%
+CPU 4 (P Core): 23.24%
+CPU 3 (P Core): 22.93%
+CPU 5 (P Core): 16.02%
+CPU 6 (P Core): 7.81%
+CPU 7 (P Core): 1.88%
+CPU 8 (P Core): 0.82%
+CPU 9 (P Core): 0.25%
+CPU 1 (E Core): 0.11%
+CPU 0 (E Core): 0.08%

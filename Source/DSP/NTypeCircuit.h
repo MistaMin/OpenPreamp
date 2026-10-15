@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CircuitSolver.h"
+#include "CircuitStageProbe.h"
 
 // N-Type: transformer-coupled line path, simulated from a transcribed
 // amplifier-card netlist (kept privately, not distributed). Signal path:
@@ -92,6 +92,8 @@ public:
     double outputVolts() const noexcept { return solver.voltage(nOutP); }
     double voltage(int n) const noexcept { return solver.voltage(n); }
     CircuitSolver& core() noexcept { return solver; }
+    auto stageProbes() const noexcept { return readCircuitStages(solver,probeNodes); }
+    const auto& stageConnections() const noexcept { return probeNodes; }
     int outNode() const noexcept { return nOutP; }
     int inNode() const noexcept { return nIn; }
 
@@ -193,6 +195,13 @@ private:
         s.addR(nOutP, 0, kLoad);
         s.addR(nOutP, zn, 1.5e3);        // Zobel
         s.addC(zn, 0, 10e-9);
+        probeNodes = {{
+            {"input_transformer",nIn,0,U,0},
+            {"feedback_preamp",U,0,out,0},
+            {"interstage_coupling",out,0,n1,0},
+            {"class_a_driver",n1,0,N,B},
+            {"output_transformer",N,B,nOutP,0},
+        }};
     }
 
     // Measure small-signal 1 kHz gain at the stock gain setting so that the
@@ -215,6 +224,7 @@ private:
         solver.restoreDc();
     }
 
+    std::array<CircuitStageNodes,5> probeNodes{};
     CircuitSolver solver;
     int nIn = 0, nOutP = 0, rGain = 0;
 };

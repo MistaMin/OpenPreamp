@@ -1,0 +1,9 @@
+{
+  "rejected": [
+    "identification",
+    "identification-v2",
+    "identification-v3"
+  ],
+  "reason": "Stale fixed input source voltage was retained when measuring nominal DC. These drafts are not valid fitting data. Corrected capture: identification-v4.",
+  "regression_test": "test_stale_source_voltage_rejects_dc_reference"
+}

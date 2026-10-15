@@ -1,0 +1,358 @@
+PASS oversampling parameter removed
+PASS preamp-only parameter set; no EQ or harmonics controls
+PASS new sessions default to the validated Full engine
+PASS reports fixed latency for circuit oversampling
+PASS PAD does not alter session rate
+PASS PAD does not alter session rate
+PASS PAD does not alter session rate
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS model/rate/circuit/HQ combination uses correct rate and produces finite audio
+PASS latency stays fixed during automation
+PASS bypass impulse arrives at reported latency with output trim
+PASS input meter receives dry audio
+PASS output meter receives trimmed audio
+PASS state round-trip preserves all parameters
+PASS legacy sessions restore the Full circuit engine even over a Reduced instance
+PASS Reduced engine selection persists independently of HQ
+PASS editor is resizable with exact 100:74 aspect ratio
+PASS all GUI controls fit within their panels
+PASS VU, peak hold, and clip indication respond
+PASS clip lamp resets
+PASS VU source changes to input including peak and clip indication
+PASS VU, peak hold, and clip indication respond
+PASS clip lamp resets
+PASS VU source changes to input including peak and clip indication
+PASS scaled controls fit at small, large and default editor sizes
+PASS scaled controls fit at small, large and default editor sizes
+PASS scaled controls fit at small, large and default editor sizes
+PASS scaled controls fit at small, large and default editor sizes
+PASS scaled controls fit at small, large and default editor sizes
+PASS both knob and plate styles follow the saved model mapping; VU source restores
+PASS both knob and plate styles follow the saved model mapping; VU source restores
+PASS both knob and plate styles follow the saved model mapping; VU source restores
+PASS both knob and plate styles follow the saved model mapping; VU source restores
+PASS both knob and plate styles follow the saved model mapping; VU source restores
+PASS per-instance styles do not mutate the global theme
+PASS accepts matched mono buses
+PASS mono audio processes safely
+PASS rejects mismatched input/output buses
+PASS editor preview renders
+PASS both independent meters are visible by default
+PASS old folded state restores to the standard dual-channel layout
+PASS independent input/output trims affect only their own channel at session rate
+PASS M/S encode/decode round trip preserves correlated and anti-phase stereo
+PASS M/S input meters observe separate Mid and Side streams
+PASS M/S encode/decode round trip preserves correlated and anti-phase stereo
+PASS M/S input meters observe separate Mid and Side streams
+PASS Side output trim acts before decoder and changes stereo width
+PASS dual-mono VU RMS, peak hold and clip lamps are independent
+PASS 12 dB/octave session-rate cuts reject low/high tones at multiple host rates
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS 12 dB/octave session-rate cuts reject low/high tones at multiple host rates
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS 12 dB/octave session-rate cuts reject low/high tones at multiple host rates
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS cut/gain/M/S domain stays at host rate independently of preamp oversampling
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS all preamp models match manual M/S + native Side filter before processing and decoding after native/2x/4x
+PASS preamp state is independent between channels in native/2x/HQ modes
+PASS preamp state is independent between channels in native/2x/HQ modes
+PASS preamp state is independent between channels in native/2x/HQ modes
+PASS old stereo state migrates right gains and leaves newly added cuts disabled
+PASS Link applies left input AND output trims to right audio
+PASS Unlink restores the independent right trim values
+PASS M/S ignores Link and uses independent Side input and output trims
+PASS Link greys and disables both right controls in L/R
+PASS M/S keeps Link visible but disabled and dimmed, with both Side controls enabled
+PASS Peak/RMS switches both needle measurement and numeric dBFS readout
+PASS RMS mode retains peak-based clip indication
+PASS Both independent VUs restore the shared Peak/RMS choice
+PASS Both independent VUs restore the shared Peak/RMS choice
+PASS Two-choice meter key changes host parameter directly on each click
+PASS Two-choice meter key changes host parameter directly on each click
+PASS Two-choice meter key changes host parameter directly on each click
+PASS Two-choice meter key changes host parameter directly on each click
+PASS Both VUs expose direct-click MODE and source keys
+PASS Mono maker attenuates only Side bass at 6 dB/octave across host rates and L/R or M/S
+PASS Mono maker preserves Mid bass and correlated mono audio
+PASS Mono maker attenuates only Side bass at 6 dB/octave across host rates and L/R or M/S
+PASS Mono maker preserves Mid bass and correlated mono audio
+PASS Mono maker attenuates only Side bass at 6 dB/octave across host rates and L/R or M/S
+PASS Mono maker preserves Mid bass and correlated mono audio
+PASS Mono maker attenuates only Side bass at 6 dB/octave across host rates and L/R or M/S
+PASS Mono maker preserves Mid bass and correlated mono audio
+PASS Mono maker attenuates only Side bass at 6 dB/octave across host rates and L/R or M/S
+PASS Mono maker preserves Mid bass and correlated mono audio
+PASS Mono maker attenuates only Side bass at 6 dB/octave across host rates and L/R or M/S
+PASS Mono maker preserves Mid bass and correlated mono audio
+PASS Preamp bypass also bypasses mono maker
+PASS Old sessions retain independent gains and restore new mono maker off at 20 Hz
+357 checks, 0 failures

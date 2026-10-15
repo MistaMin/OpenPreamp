@@ -1,0 +1,31 @@
+{
+  "version": "1.0.2",
+  "date": "2026-10-15",
+  "architecture": "arm64",
+  "developer_ui": false,
+  "processor_ui_checks": 555,
+  "native_adaa_checks": 58,
+  "reduced_kernel_checks": 336,
+  "failures": 0,
+  "audio_callbacks": 960,
+  "cpp_callback_allocations": 0,
+  "cpp_callback_frees": 0,
+  "direct_malloc_interception": false,
+  "matched_audio_renders": 16,
+  "matched_audio_renders_byte_identical": true,
+  "standard_adaa_failures": 0,
+  "light_table_failures": 0,
+  "light_table_worst_peak_error": 1.91032887e-05,
+  "light_table_worst_relative_residual_db": -97.29,
+  "vst3_signature": "strict ad-hoc verification passed after manifest generation",
+  "installed": false,
+  "released": false,
+  "hq_sound_acceptance": false,
+  "binary_sha256": {
+    "build/OpenPreampSmoke_artefacts/Release/OpenPreampSmoke": "313f40f04a8f09cfa3d574d495047112a80b7e7c45a6b5caebbe7fe32fb95d3b",
+    "build/OpenPreampCPU_artefacts/Release/OpenPreampCPU": "fa0e0b52256259f159ee96f7fc2edbd64884e5bb51e934b9ad882a3b56d05443",
+    "build/OpenPreampNativeADAA": "b3067842f76b729f3ae103fa8117906fe949ba0039ba61ddf57dbee8de467ed4",
+    "build/OpenPreampRealtime_artefacts/Release/OpenPreampRealtime": "1240929674c7d3e8916fdca38d5e8b9477e45fabba8757a1072a76f8c1dd3312",
+    "build/OpenPreamp_artefacts/Release/VST3/OpenPreamp.vst3/Contents/MacOS/OpenPreamp": "3867a5db7de82edb08afb3df39a87ddc54fb764eac48286f77b6c16ea0b091a0"
+  }
+}

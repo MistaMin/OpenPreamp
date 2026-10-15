@@ -1,0 +1,771 @@
+{
+  "date": "2026-10-15",
+  "version": "1.0.2",
+  "capture_directory": "build/validation/reduced-circuit-1.0.2/identification-v4",
+  "role": "identification-candidate",
+  "runtime_promotion_allowed": false,
+  "note": "No fitted LTI runtime filters or validated dynamics yet. Memory observations are identification data, not a dynamics fit. Do not promote on static diagnostics alone. A fresh final holdout is still required.",
+  "candidate_file_sha256": "13b8cb93ba50213e90e8ebcd7fd810a24a379bff2ba6832a43fbf4071a351a99",
+  "profiles": [
+    {
+      "model": "brit",
+      "stage": "input_coupling",
+      "signed_gain_1khz": 0.988154010940828,
+      "phase_1khz_rad": 0.0005112773544410141,
+      "input_domain_volts": [
+        -6.8,
+        6.8
+      ],
+      "worst_static_residual_db": -86.15339574712353,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": 6.92212651653156e-15,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 7.89967297287232e-15
+        },
+        "driven_bass": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": -0.02104940737846364,
+          "input_rms_volts": 4.8083261120685235,
+          "output_rms_volts": 4.750956607802561
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -1.32424153086249e-05,
+          "output_mean_volts": 0.011176405678661037,
+          "input_rms_volts": 0.036063836077192005,
+          "output_rms_volts": 0.037592295380809784
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": -0.3168506523050652,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 0.32743489475777476
+        }
+      }
+    },
+    {
+      "model": "brit",
+      "stage": "input_pair",
+      "signed_gain_1khz": 1.8978152634872647,
+      "phase_1khz_rad": -0.0014830635037582488,
+      "input_domain_volts": [
+        -6.721284595350392,
+        6.721284595350392
+      ],
+      "worst_static_residual_db": -85.48813090306805,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 6.92212651653156e-15,
+          "output_mean_volts": 9.107747992001638e-15,
+          "input_rms_volts": 7.89967297287232e-15,
+          "output_rms_volts": 1.2093468661947004e-14
+        },
+        "driven_bass": {
+          "input_mean_volts": -0.02104940737846364,
+          "output_mean_volts": -0.03994806280836618,
+          "input_rms_volts": 4.750956607802561,
+          "output_rms_volts": 9.01647018835172
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.011176405678661037,
+          "output_mean_volts": 0.021210882092652265,
+          "input_rms_volts": 0.037592295380809784,
+          "output_rms_volts": 0.0713432257313914
+        },
+        "late_recovery": {
+          "input_mean_volts": -0.3168506523050652,
+          "output_mean_volts": -0.6013268427285737,
+          "input_rms_volts": 0.32743489475777476,
+          "output_rms_volts": 0.6214138744151126
+        }
+      }
+    },
+    {
+      "model": "brit",
+      "stage": "instrumentation",
+      "signed_gain_1khz": 1.913258446766701,
+      "phase_1khz_rad": -0.0003329527905698257,
+      "input_domain_volts": [
+        -12.755842272893714,
+        12.755842272893714
+      ],
+      "worst_static_residual_db": -85.68570116311749,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 9.135304830862145e-15,
+          "output_mean_volts": 1.743372308966498e-14,
+          "input_rms_volts": 1.2114805609980183e-14,
+          "output_rms_volts": 2.312085030536568e-14
+        },
+        "driven_bass": {
+          "input_mean_volts": -0.04038558483303682,
+          "output_mean_volts": -0.07575088628140861,
+          "input_rms_volts": 9.01562530757903,
+          "output_rms_volts": 17.23173383853817
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.01935684667945969,
+          "output_mean_volts": 0.036937589763317825,
+          "input_rms_volts": 0.07202363531066218,
+          "output_rms_volts": 0.1378039056978692
+        },
+        "late_recovery": {
+          "input_mean_volts": -0.5611523838327072,
+          "output_mean_volts": -1.0727833849062949,
+          "input_rms_volts": 0.6369831271233074,
+          "output_rms_volts": 1.219280109378277
+        }
+      }
+    },
+    {
+      "model": "brit",
+      "stage": "difference",
+      "signed_gain_1khz": 0.9999798239072327,
+      "phase_1khz_rad": -3.641517877606649e-05,
+      "input_domain_volts": [
+        -24.309306366120758,
+        24.309306366120758
+      ],
+      "worst_static_residual_db": -79.57917910800282,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 1.743372308966498e-14,
+          "output_mean_volts": 1.7292826517898484e-14,
+          "input_rms_volts": 2.312085030536568e-14,
+          "output_rms_volts": 2.2950957835412692e-14
+        },
+        "driven_bass": {
+          "input_mean_volts": -0.07575088628140861,
+          "output_mean_volts": -0.026906679110570715,
+          "input_rms_volts": 17.23173383853817,
+          "output_rms_volts": 10.90880060473832
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.036937589763317825,
+          "output_mean_volts": 0.03175040373347173,
+          "input_rms_volts": 0.1378039056978692,
+          "output_rms_volts": 0.13658618328906683
+        },
+        "late_recovery": {
+          "input_mean_volts": -1.0727833849062949,
+          "output_mean_volts": -1.0189663553698767,
+          "input_rms_volts": 1.219280109378277,
+          "output_rms_volts": 1.1763496145773233
+        }
+      }
+    },
+    {
+      "model": "brit",
+      "stage": "line_driver",
+      "signed_gain_1khz": 1.6984162777643899,
+      "phase_1khz_rad": 0.004661418321386592,
+      "input_domain_volts": [
+        -12.365388200282514,
+        12.365388200282514
+      ],
+      "worst_static_residual_db": -51.23671579737625,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 1.7292826517898484e-14,
+          "output_mean_volts": 8.238255878173555e-15,
+          "input_rms_volts": 2.2950957835412692e-14,
+          "output_rms_volts": 1.8742473177778268e-14
+        },
+        "driven_bass": {
+          "input_mean_volts": -0.026906679110570715,
+          "output_mean_volts": 0.0030337868338105524,
+          "input_rms_volts": 10.90880060473832,
+          "output_rms_volts": 11.677726328705685
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.03175040373347173,
+          "output_mean_volts": -0.026528482542881315,
+          "input_rms_volts": 0.13658618328906683,
+          "output_rms_volts": 0.22186051888002006
+        },
+        "late_recovery": {
+          "input_mean_volts": -1.0189663553698767,
+          "output_mean_volts": 0.75752060339972,
+          "input_rms_volts": 1.1763496145773233,
+          "output_rms_volts": 0.8063120619512794
+        }
+      }
+    },
+    {
+      "model": "ntype",
+      "stage": "input_transformer",
+      "signed_gain_1khz": 0.2460975615272896,
+      "phase_1khz_rad": 0.014474514577142342,
+      "input_domain_volts": [
+        -8.0,
+        8.0
+      ],
+      "worst_static_residual_db": -61.33330300312845,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": -3.3544940914549497e-14,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 1.2967173534805612e-12
+        },
+        "driven_bass": {
+          "input_mean_volts": 4.7369515717340015e-17,
+          "output_mean_volts": -6.548170259215169e-05,
+          "input_rms_volts": 5.656854249492381,
+          "output_rms_volts": 1.3572116818942372
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -1.5579312127793983e-05,
+          "output_mean_volts": 6.854384136934351e-05,
+          "input_rms_volts": 0.0424280424437553,
+          "output_rms_volts": 0.010441800313426675
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": -6.506755325108935e-06,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 6.519057003154694e-06
+        }
+      }
+    },
+    {
+      "model": "ntype",
+      "stage": "feedback_preamp",
+      "signed_gain_1khz": 7.256676105510002,
+      "phase_1khz_rad": -0.04450250683050366,
+      "input_domain_volts": [
+        -1.9647919464627572,
+        1.9647919464627572
+      ],
+      "worst_static_residual_db": -33.175174945285335,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -3.3544940914549497e-14,
+          "output_mean_volts": -1.8807785473062423e-11,
+          "input_rms_volts": 1.2967173534805612e-12,
+          "output_rms_volts": 2.4298400503590397e-11
+        },
+        "driven_bass": {
+          "input_mean_volts": -6.548170259215169e-05,
+          "output_mean_volts": 1.1308728706078441,
+          "input_rms_volts": 1.3572116818942372,
+          "output_rms_volts": 5.557271663680877
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 6.854384136934351e-05,
+          "output_mean_volts": -0.7053041885076274,
+          "input_rms_volts": 0.010441800313426675,
+          "output_rms_volts": 0.8184989274512785
+        },
+        "late_recovery": {
+          "input_mean_volts": -6.506755325108935e-06,
+          "output_mean_volts": 0.029182750535488276,
+          "input_rms_volts": 6.519057003154694e-06,
+          "output_rms_volts": 0.02998085255897111
+        }
+      }
+    },
+    {
+      "model": "ntype",
+      "stage": "interstage_coupling",
+      "signed_gain_1khz": 0.9999457221491324,
+      "phase_1khz_rad": 0.0006580095540659497,
+      "input_domain_volts": [
+        -9.746049508464441,
+        9.746049508464441
+      ],
+      "worst_static_residual_db": -40.5687527267969,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -1.8807785473062423e-11,
+          "output_mean_volts": -1.361097347227122e-11,
+          "input_rms_volts": 2.4298400503590397e-11,
+          "output_rms_volts": 1.8912366151962993e-11
+        },
+        "driven_bass": {
+          "input_mean_volts": 1.1308728706078441,
+          "output_mean_volts": -2.011962950355395,
+          "input_rms_volts": 5.557271663680877,
+          "output_rms_volts": 5.8127455209013705
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -0.7053041885076274,
+          "output_mean_volts": 0.6485997057315701,
+          "input_rms_volts": 0.8184989274512785,
+          "output_rms_volts": 0.6942411300284749
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.029182750535488276,
+          "output_mean_volts": 0.19759544408391794,
+          "input_rms_volts": 0.02998085255897111,
+          "output_rms_volts": 0.24210548103485335
+        }
+      }
+    },
+    {
+      "model": "ntype",
+      "stage": "class_a_driver",
+      "signed_gain_1khz": -3.5134964024142112,
+      "phase_1khz_rad": -0.013544197370550187,
+      "input_domain_volts": [
+        -6.983583987289445,
+        6.983583987289445
+      ],
+      "worst_static_residual_db": -33.65582237618873,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -1.361097347227122e-11,
+          "output_mean_volts": 4.506800796752783e-11,
+          "input_rms_volts": 1.8912366151962993e-11,
+          "output_rms_volts": 6.053351444633323e-11
+        },
+        "driven_bass": {
+          "input_mean_volts": -2.011962950355395,
+          "output_mean_volts": 1.6947722174835473,
+          "input_rms_volts": 5.8127455209013705,
+          "output_rms_volts": 12.470668235173752
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.6485997057315701,
+          "output_mean_volts": -1.0816512642930858,
+          "input_rms_volts": 0.6942411300284749,
+          "output_rms_volts": 1.2954648208583222
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.19759544408391794,
+          "output_mean_volts": -0.25920580086498923,
+          "input_rms_volts": 0.24210548103485335,
+          "output_rms_volts": 0.4810777155550111
+        }
+      }
+    },
+    {
+      "model": "ntype",
+      "stage": "output_transformer",
+      "signed_gain_1khz": 1.5115033092823247,
+      "phase_1khz_rad": -0.01694767935445153,
+      "input_domain_volts": [
+        -17.861124037239204,
+        17.861124037239204
+      ],
+      "worst_static_residual_db": -41.1579712762681,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 4.506800796752783e-11,
+          "output_mean_volts": 5.094060147071225e-11,
+          "input_rms_volts": 6.053351444633323e-11,
+          "output_rms_volts": 7.058102757881199e-11
+        },
+        "driven_bass": {
+          "input_mean_volts": 1.6947722174835473,
+          "output_mean_volts": 0.02816341913926534,
+          "input_rms_volts": 12.470668235173752,
+          "output_rms_volts": 18.623839112357523
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -1.0816512642930858,
+          "output_mean_volts": -1.3727091257682598,
+          "input_rms_volts": 1.2954648208583222,
+          "output_rms_volts": 1.85342336529227
+        },
+        "late_recovery": {
+          "input_mean_volts": -0.25920580086498923,
+          "output_mean_volts": 0.20314931214604598,
+          "input_rms_volts": 0.4810777155550111,
+          "output_rms_volts": 0.6110455281534924
+        }
+      }
+    },
+    {
+      "model": "fsf",
+      "stage": "input_transformer",
+      "signed_gain_1khz": 4.0525234344548995,
+      "phase_1khz_rad": -0.004886719462059622,
+      "input_domain_volts": [
+        -3.2,
+        3.2
+      ],
+      "worst_static_residual_db": -75.27016603353628,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": -2.4833632771709665e-27,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 8.545941430138537e-23
+        },
+        "driven_bass": {
+          "input_mean_volts": 1.578983857244667e-17,
+          "output_mean_volts": -3.700121521960556e-05,
+          "input_rms_volts": 2.262741699796952,
+          "output_rms_volts": 9.020201108779935
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -6.231724851117584e-06,
+          "output_mean_volts": 0.0053871639821719336,
+          "input_rms_volts": 0.01697121697750212,
+          "output_rms_volts": 0.0691777514349094
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": -0.008386765503313963,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 0.01015193843769356
+        }
+      }
+    },
+    {
+      "model": "fsf",
+      "stage": "input_loading",
+      "signed_gain_1khz": 0.9999999932194158,
+      "phase_1khz_rad": 7.225686919004852e-06,
+      "input_domain_volts": [
+        -12.706967185142846,
+        12.706967185142846
+      ],
+      "worst_static_residual_db": -77.12660056660631,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -2.4833632771709665e-27,
+          "output_mean_volts": -2.4833648363382687e-27,
+          "input_rms_volts": 8.545941430138537e-23,
+          "output_rms_volts": 8.545944645773791e-23
+        },
+        "driven_bass": {
+          "input_mean_volts": -3.700121521960556e-05,
+          "output_mean_volts": 7.599924791861667e-05,
+          "input_rms_volts": 9.020201108779935,
+          "output_rms_volts": 9.020211775816717
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.0053871639821719336,
+          "output_mean_volts": 0.006167656949560751,
+          "input_rms_volts": 0.0691777514349094,
+          "output_rms_volts": 0.06924455095609569
+        },
+        "late_recovery": {
+          "input_mean_volts": -0.008386765503313963,
+          "output_mean_volts": -0.00822787147605613,
+          "input_rms_volts": 0.01015193843769356,
+          "output_rms_volts": 0.010032836625684879
+        }
+      }
+    },
+    {
+      "model": "fsf",
+      "stage": "gain_stage",
+      "signed_gain_1khz": 1.6763973422853158,
+      "phase_1khz_rad": -0.0013340715996417061,
+      "input_domain_volts": [
+        -12.706924273615938,
+        12.706924273615938
+      ],
+      "worst_static_residual_db": -77.12261633219985,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -2.4833648363382687e-27,
+          "output_mean_volts": -9.697727272606466e-26,
+          "input_rms_volts": 8.545944645773791e-23,
+          "output_rms_volts": 3.3379834460763978e-21
+        },
+        "driven_bass": {
+          "input_mean_volts": 7.599924791861667e-05,
+          "output_mean_volts": -3.700576674036584e-05,
+          "input_rms_volts": 9.020211775816717,
+          "output_rms_volts": 10.65387360071265
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.006167656949560751,
+          "output_mean_volts": 0.01654436875297035,
+          "input_rms_volts": 0.06924455095609569,
+          "output_rms_volts": 0.11694601452406175
+        },
+        "late_recovery": {
+          "input_mean_volts": -0.00822787147605613,
+          "output_mean_volts": -0.03225963897429044,
+          "input_rms_volts": 0.010032836625684879,
+          "output_rms_volts": 0.034228657419914696
+        }
+      }
+    },
+    {
+      "model": "fsf",
+      "stage": "interstage_coupling",
+      "signed_gain_1khz": 0.999999866884455,
+      "phase_1khz_rad": 0.0004976418659152043,
+      "input_domain_volts": [
+        -12.307477455019264,
+        12.307477455019264
+      ],
+      "worst_static_residual_db": -71.21451913452817,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -9.697727272606466e-26,
+          "output_mean_volts": -7.233031928468743e-25,
+          "input_rms_volts": 3.3379834460763978e-21,
+          "output_rms_volts": 3.337983720240003e-21
+        },
+        "driven_bass": {
+          "input_mean_volts": -3.700576674036584e-05,
+          "output_mean_volts": -0.0013599263151181477,
+          "input_rms_volts": 10.65387360071265,
+          "output_rms_volts": 10.65363290641004
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": 0.01654436875297035,
+          "output_mean_volts": -0.008528539023632304,
+          "input_rms_volts": 0.11694601452406175,
+          "output_rms_volts": 0.1158641412162314
+        },
+        "late_recovery": {
+          "input_mean_volts": -0.03225963897429044,
+          "output_mean_volts": 0.004770591128496733,
+          "input_rms_volts": 0.034228657419914696,
+          "output_rms_volts": 0.010801058488692698
+        }
+      }
+    },
+    {
+      "model": "fsf",
+      "stage": "class_ab_driver",
+      "signed_gain_1khz": 2.0068099751727844,
+      "phase_1khz_rad": -0.03480723494604109,
+      "input_domain_volts": [
+        -12.314089875266939,
+        12.314089875266939
+      ],
+      "worst_static_residual_db": -57.824434110653144,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -7.233031928468743e-25,
+          "output_mean_volts": -1.1969293602746018e-21,
+          "input_rms_volts": 3.337983720240003e-21,
+          "output_rms_volts": 3.427533590364825e-17
+        },
+        "driven_bass": {
+          "input_mean_volts": -0.0013599263151181477,
+          "output_mean_volts": 0.0022498412867646305,
+          "input_rms_volts": 10.65363290641004,
+          "output_rms_volts": 11.004464744262513
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -0.008528539023632304,
+          "output_mean_volts": -0.04456312084851052,
+          "input_rms_volts": 0.1158641412162314,
+          "output_rms_volts": 0.23597921679228373
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.004770591128496733,
+          "output_mean_volts": 0.10065781520672593,
+          "input_rms_volts": 0.010801058488692698,
+          "output_rms_volts": 0.10422439597111781
+        }
+      }
+    },
+    {
+      "model": "fsf",
+      "stage": "output_transformer",
+      "signed_gain_1khz": 0.954372718484626,
+      "phase_1khz_rad": 0.0011266522073860364,
+      "input_domain_volts": [
+        -11.744439041091274,
+        11.744439041091274
+      ],
+      "worst_static_residual_db": -64.7398430813231,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": -1.1969293602746018e-21,
+          "output_mean_volts": -1.1027581907517163e-21,
+          "input_rms_volts": 3.427533590364825e-17,
+          "output_rms_volts": 3.303290736941045e-17
+        },
+        "driven_bass": {
+          "input_mean_volts": 0.0022498412867646305,
+          "output_mean_volts": 0.0034840316535670645,
+          "input_rms_volts": 11.004464744262513,
+          "output_rms_volts": 10.502067878436117
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -0.04456312084851052,
+          "output_mean_volts": -0.060583974513160145,
+          "input_rms_volts": 0.23597921679228373,
+          "output_rms_volts": 0.23196882025785148
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.10065781520672593,
+          "output_mean_volts": 0.1584870644826627,
+          "input_rms_volts": 0.10422439597111781,
+          "output_rms_volts": 0.17343346778574797
+        }
+      }
+    },
+    {
+      "model": "atype",
+      "stage": "input_transformer",
+      "signed_gain_1khz": 7.038378636339739,
+      "phase_1khz_rad": 0.01101840759768208,
+      "input_domain_volts": [
+        -2.4,
+        2.4
+      ],
+      "worst_static_residual_db": -87.15832562910819,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": 0.0,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 0.0
+        },
+        "driven_bass": {
+          "input_mean_volts": -3.947459643111668e-18,
+          "output_mean_volts": 7.938406356642089e-07,
+          "input_rms_volts": 1.697056274847714,
+          "output_rms_volts": 11.64873678418531
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -4.673793638338219e-06,
+          "output_mean_volts": -3.3166383166246894e-05,
+          "input_rms_volts": 0.01272841273312659,
+          "output_rms_volts": 0.08958764581895211
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": -1.9111626251677466e-08,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 5.400932742366875e-08
+        }
+      }
+    },
+    {
+      "model": "atype",
+      "stage": "gain_stage",
+      "signed_gain_1khz": 1.99998769600191,
+      "phase_1khz_rad": -0.00032539727544113003,
+      "input_domain_volts": [
+        -16.776058906957594,
+        16.776058906957594
+      ],
+      "worst_static_residual_db": -76.46324855666231,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": 0.0,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 0.0
+        },
+        "driven_bass": {
+          "input_mean_volts": 7.938406356642089e-07,
+          "output_mean_volts": -0.0008952183579639142,
+          "input_rms_volts": 11.64873678418531,
+          "output_rms_volts": 11.599953108856255
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -3.3166383166246894e-05,
+          "output_mean_volts": -0.014683885069478778,
+          "input_rms_volts": 0.08958764581895211,
+          "output_rms_volts": 0.17978334718220673
+        },
+        "late_recovery": {
+          "input_mean_volts": -1.9111626251677466e-08,
+          "output_mean_volts": 0.009452490943108995,
+          "input_rms_volts": 5.400932742366875e-08,
+          "output_rms_volts": 0.009474424773016677
+        }
+      }
+    },
+    {
+      "model": "atype",
+      "stage": "output_coupling",
+      "signed_gain_1khz": 1.0000108229342968,
+      "phase_1khz_rad": 0.0011447023273021203,
+      "input_domain_volts": [
+        -12.718991078026809,
+        12.718991078026809
+      ],
+      "worst_static_residual_db": -58.42295401532838,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": 0.0,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 0.0
+        },
+        "driven_bass": {
+          "input_mean_volts": -0.0008952183579639142,
+          "output_mean_volts": 0.0026833532640415884,
+          "input_rms_volts": 11.599953108856255,
+          "output_rms_volts": 11.628185031715795
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -0.014683885069478778,
+          "output_mean_volts": -5.900881215507143e-05,
+          "input_rms_volts": 0.17978334718220673,
+          "output_rms_volts": 0.17925884110875356
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.009452490943108995,
+          "output_mean_volts": 0.0005991465863295603,
+          "input_rms_volts": 0.009474424773016677,
+          "output_rms_volts": 0.0119998955289565
+        }
+      }
+    },
+    {
+      "model": "atype",
+      "stage": "output_transformer",
+      "signed_gain_1khz": 1.813422712660766,
+      "phase_1khz_rad": 0.0007583936266450819,
+      "input_domain_volts": [
+        -12.741510671323754,
+        12.741510671323754
+      ],
+      "worst_static_residual_db": -65.9403529986098,
+      "static_explanation_pass": true,
+      "memory_observations": {
+        "baseline": {
+          "input_mean_volts": 0.0,
+          "output_mean_volts": 0.0,
+          "input_rms_volts": 0.0,
+          "output_rms_volts": 0.0
+        },
+        "driven_bass": {
+          "input_mean_volts": 0.0026833532640415884,
+          "output_mean_volts": 0.005261420546565193,
+          "input_rms_volts": 11.628185031715795,
+          "output_rms_volts": 21.08594342734279
+        },
+        "quiet_after_overload": {
+          "input_mean_volts": -5.900881215507143e-05,
+          "output_mean_volts": 0.0024402395060001106,
+          "input_rms_volts": 0.17925884110875356,
+          "output_rms_volts": 0.32509185918798716
+        },
+        "late_recovery": {
+          "input_mean_volts": 0.0005991465863295603,
+          "output_mean_volts": 0.0013096459665855513,
+          "input_rms_volts": 0.0119998955289565,
+          "output_rms_volts": 0.02150650496660333
+        }
+      }
+    }
+  ]
+}

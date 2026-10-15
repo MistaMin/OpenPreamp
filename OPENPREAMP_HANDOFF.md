@@ -1,3 +1,79 @@
+# OpenPreamp 1.0.2 measured-engine checkpoint — 2026-10-15
+
+VERSION is 1.0.2, development only. Read Docs/REDUCED_ENGINE_PLAN.md first.
+Engine names are now Standard / Circuit Preview / HQ. Older Full/Reduced labels
+in reports mean HQ/Circuit. OS now offers Default/1x/2x/4x. Default is native
+Standard/Circuit with ADAA, and HQ 2x. Standard/Circuit ADAA is off at 2x/4x.
+The appended preampOversampling parameter preserves all old IDs/order; legacy
+hqMode and saved legacyRateDefaults preserve old sessions' rates. Explicit
+selection overrides legacy defaults. MODELED off is Standard; MODELED on
+uses the ENGINE choice. HQ remains the default full model.
+The supplied HQ_TO_ECO_ENGINEERING_GUIDE.md is the engineering reference.
+Reduced Preview exists for all four models, but all four fail at least one full
+fidelity gate. Full remains the default. No new calibration was promoted.
+
+New: independently frozen original circuit reference, 20 read-only stage ports,
+impulse/eight-level drive/memory identification, strict validity checks and measured
+1,025-knot residual/primitive candidates. Nominal DC and source reset are explicit.
+Earlier capture drafts with stale source DC are invalidated; use identification-v4.
+All inspected 1.0.1 validation data is development data, not an untouched holdout.
+
+Evidence lives in build/validation/reduced-circuit-1.0.2 and compact reports in
+Docs/Performance-1.0.2. The original/instrumented trace check covers 131,072 samples;
+it is a circuit comparison, not complete processor compatibility. Original full
+equations, parameter semantics and installed 1.0.0/0.2.0 plug-ins are retained.
+No release, installation or public push is authorized by this checkpoint. AAX stays
+private; remove comparison plug-ins only when the owner says testing is finished.
+
+Next: stable stage filters, measured-stage cascade, identified bias/transformer
+memory, measured-stage ADAA validation, fresh full-chain holdouts, complete matched CPU/host and
+listening gates. The older 1.0.1 section below describes the initial light-table
+phase and is superseded by this checkpoint.
+
+Native Circuit ADAA uses the existing procedural preview curves, not the newly
+identified stage maps. Tables and exact interpolant primitives are prepared off
+the audio thread; per-channel residual histories preserve quiet HF response.
+See Docs/Performance-1.0.2/Native-ADAA/README.md for native alias/stability tests,
+saved-rate migration, matched 2x/4x renders and C++ allocation/free checks.
+
+# OpenPreamp 1.0.1 CPU development checkpoint — 2026-10-09 (historical)
+
+VERSION is now 1.0.1. Public release remains signed/notarized 1.0.0; no new
+release, tag, public push or installation was performed. Changes are uncommitted.
+
+The CPU-reduction process has begun with profiling, a repeatable harness and
+accelerated Circuit-off Brit/N-Type curves. Read Docs/CPU_OPTIMIZATION.md and
+Docs/Performance-1.0.1 for complete matrices, sampled profiling and validation.
+The full component-network Circuit/HQ algorithms, fixed latency, host parameter
+IDs and saved-session meanings are retained. Shared HybridEQ opts out by default.
+
+Tables are built during preparation, shared between instances, and substitute
+for expensive numerical-ADAA curve evaluations at fixed internal unity gain.
+Brit falls back outside table bounds. N-Type retains its original outer Newton
+solves, warm-start and DC histories; quadrature jumps >0.25 from the warm value
+fall back to reference equations. Numerical ADAA still uses eight integration
+points. Variable internal gain retains the original path. An attempted removal
+of N-Type outer solves failed the error gate and is absent from the final code.
+
+Native M1 Max validation: 144 waveform cases plus exercised-path/fallback gates,
+ADAA/alias tests, and 226 processor/routing/UI checks all passed. Worst waveform
+peak error 0.0000191033, worst relative residual -97.29 dB. 150 reference and 150
+candidate CPU configurations cover all models at 48/96 kHz, blocks 32/64/256,
+and five synthetic signals. No listening approval or Intel/universal validation.
+
+Local development VST3: build/OpenPreamp_artefacts/Release/VST3/OpenPreamp.vst3,
+arm64, version 1.0.1, developer mode OFF, strict ad-hoc signature verification
+passed. It is not a release/notarized binary and is not installed. The signed
+1.0.0 installation and 0.2.0 comparison remain untouched. Remove test plug-ins
+only when the owner explicitly says testing is finished.
+
+Next: listen to matched exports, profile remaining N-Type outer solves/fallbacks,
+then assess integrated tables. A reduced dynamic replacement fitted to the full
+circuit is a separate stage; it has not been implemented. The 1–1.5% target and
+5x full-circuit CPU reduction are not established. Public pushes use github,
+never origin; AAX remains private and must not be distributed. Released manual
+and release assets still document 1.0.0 and need revision before a future release.
+
 # OpenPreamp 1.0.0 release handoff - 2026-10-08
 
 Production universal Mac build: arm64 + x86_64, macOS 11+, developer mode OFF.

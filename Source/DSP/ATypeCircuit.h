@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CircuitSolver.h"
+#include "CircuitStageProbe.h"
 
 // A-Type: transformer-coupled 500-series mic preamp, simulated from a
 // transcribed netlist (kept privately, not distributed). Signal path: RF
@@ -83,6 +83,8 @@ public:
     }
 
     CircuitSolver& core() noexcept { return solver; }
+    auto stageProbes() const noexcept { return readCircuitStages(solver,probeNodes); }
+    const auto& stageConnections() const noexcept { return probeNodes; }
     double outScale = 1.0;
     double vFull = 1.0;
 
@@ -167,6 +169,12 @@ private:
 
         // load
         s.addR(nOutP, nOutN, 600.0);
+        probeNodes = {{
+            {"input_transformer",nSp,nSn,TP1,0},
+            {"gain_stage",TP1,0,A,0},
+            {"output_coupling",A,0,B,0},
+            {"output_transformer",B,0,nOutP,nOutN},
+        }};
     }
 
     // Unity at the reference gain at 1 kHz.
@@ -192,6 +200,7 @@ private:
         restoreDc();
     }
 
+    std::array<CircuitStageNodes,4> probeNodes{};
     CircuitSolver solver;
     int nSp = 0, nSn = 0, nOutP = 0, nOutN = 0, rPa = 0, rPb = 0, rHigh = 0;
     double lastGain = 0.0;

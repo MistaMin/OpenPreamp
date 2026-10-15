@@ -6,6 +6,7 @@
 #include <cmath>
 #include "EQFilters.h"
 #include "ADAA.h"
+#include "StaticCurveTable.h"
 #include "NTypeCircuit.h"
 #include "BritCircuit.h"
 #include "FsfCircuit.h"
@@ -48,6 +49,7 @@ class PreampEngine {
 public:
     void prepare(double sampleRate)
     {
+        (void) lightTables(); // one-time table setup off the audio thread
         sr = sampleRate;
         slewCoef = 1.0f - static_cast<float>(std::exp(-1.0 / (sampleRate * 0.04)));
         updateEnvCoeffs(sampleRate);
@@ -65,7 +67,13 @@ public:
     }
 
     // Opt-in for the lighter preamp path. The full circuit solver is unchanged.
-    void setADAAEnabled(bool enabled) noexcept { adaaEnabled = enabled; resetADAA(); }
+    void setADAAEnabled(bool enabled) noexcept { if(adaaEnabled!=enabled){adaaEnabled=enabled;resetADAA();} }
+
+    // Opt-in fixed-unity light curves. Shared HybridEQ keeps its reference path.
+    // Configure while stopped; no host parameter or session identity changes.
+    void setLightTablesEnabled(bool enabled) noexcept { lightTablesEnabled = enabled; resetADAA(); }
+
+    void reserveProcessingSamples(int maximum) { driveRamp.resize(size_t(std::max(1,maximum))); }
 
     void setType(PreampType t) noexcept { type.store(t, std::memory_order_relaxed); }
     void setDriveDB(float db) noexcept { driveTargetDB.store(db, std::memory_order_relaxed); }
@@ -147,6 +155,7 @@ private:
     static constexpr int kMaxChannels = 2;
     std::array<std::array<AdaaStage, 4>, kMaxChannels> adaaStages;
     bool adaaEnabled = false;
+    bool lightTablesEnabled = false;
     void resetADAA() noexcept { for (auto& channel : adaaStages) for (auto& stage : channel) stage.reset(); }
 
 
@@ -157,6 +166,7 @@ private:
 
         const float target = static_cast<float>(
             std::pow(10.0, driveTargetDB.load(std::memory_order_relaxed) * 0.05));
+        if (driveState == target) { std::fill_n(driveRamp.data(), numSamples, driveState); return; }
         for (int i = 0; i < numSamples; ++i) {
             driveState += (target - driveState) * slewCoef;
             driveRamp[static_cast<size_t>(i)] = driveState;
@@ -242,7 +252,9 @@ private:
                 const double legA = solveLeg(value, kappa), legB = solveLeg(-value, kappa);
                 return railLimit(0.5 * swing * ((1.0 + legMismatch) * legA - legB - legMismatch), railClip);
             };
-            double o1 = adaaEnabled && !circuit ? adaaStages[ch][0].processNumerical(v, inputCurve) : inputCurve(v);
+            const bool useTable = lightTablesEnabled && adaaEnabled && !circuit && g == 1.0;
+            auto inputEvaluation = [&](double value) { return useTable ? lightTables().britInput.evaluate(value, inputCurve) : inputCurve(value); };
+            double o1 = adaaEnabled && !circuit ? adaaStages[ch][0].processNumerical(v, inputEvaluation) : inputCurve(v);
 
             if (circuit) {
                 brit1[ch] += britA1 * (o1 - brit1[ch]);
@@ -251,7 +263,8 @@ private:
 
             const double secondInput = g2 * o1;
             auto outputCurve = [](double value) { return railLimit(value, railClip); };
-            double o2 = adaaEnabled && !circuit ? adaaStages[ch][1].processNumerical(secondInput, outputCurve) : outputCurve(secondInput);
+            auto outputEvaluation = [&](double value) { return useTable ? lightTables().britOutput.evaluate(value, outputCurve) : outputCurve(value); };
+            double o2 = adaaEnabled && !circuit ? adaaStages[ch][1].processNumerical(secondInput, outputEvaluation) : outputCurve(secondInput);
 
             if (circuit) {
                 brit2[ch] += britA2 * (o2 - brit2[ch]);
@@ -288,11 +301,15 @@ private:
             auto inputPrimitive = [](double value) { return 4.0 * std::hypot(1.0, value / 2.0); };
             double v = adaaEnabled ? adaaStages[ch][0].process(x, inputCurve, inputPrimitive) : inputCurve(x);
 
+            const bool useTable = lightTablesEnabled && adaaEnabled && g == 1.0;
             double y1 = solveLoop(v, betaGain, a0Gain, kGain, vS, nY1[ch]);
             if (adaaEnabled) {
                 const double warm = y1;
                 auto stageCurve = [&](double value) { double state = warm; return asymLimit(solveLoop(value, betaGain, a0Gain, kGain, vS, state), 1.5, 1.1); };
-                y1 = adaaStages[ch][1].processNumerical(v, stageCurve);
+                // Preserve finite-iteration behavior on large quadrature jumps.
+                // The outer solve maintains the original warm-start history.
+                auto evaluation = [&](double value) { return useTable && std::abs(value - warm) < 0.25 ? lightTables().nGain.evaluate(value, stageCurve) : stageCurve(value); };
+                y1 = adaaStages[ch][1].processNumerical(v, evaluation);
             } else y1 = asymLimit(y1, 1.5, 1.1);
             nDc1[ch] += dcA * (y1 - nDc1[ch]);
             y1 -= nDc1[ch];
@@ -301,7 +318,10 @@ private:
             if (adaaEnabled) {
                 const double warm = y2;
                 auto stageCurve = [&](double value) { double state = warm; return asymLimit(solveLoop(value, betaDrv, a0Drv, kDrv, vS, state), 1.6, 1.3); };
-                y2 = adaaStages[ch][2].processNumerical(y1, stageCurve);
+                // Preserve finite-iteration behavior on large quadrature jumps.
+                // The outer solve maintains the original warm-start history.
+                auto evaluation = [&](double value) { return useTable && std::abs(value - warm) < 0.25 ? lightTables().nDriver.evaluate(value, stageCurve) : stageCurve(value); };
+                y2 = adaaStages[ch][2].processNumerical(y1, evaluation);
             } else y2 = asymLimit(y2, 1.6, 1.3);
             nDc2[ch] += dcA * (y2 - nDc2[ch]);
             y2 -= nDc2[ch];
@@ -444,6 +464,31 @@ private:
         return v / std::pow(1.0 + t4 * t4, 0.125);
     }
 
+    struct LightTables {
+        StaticCurveTable<8193> britInput;
+        StaticCurveTable<4097> britOutput, nGain, nDriver;
+        LightTables() {
+            britInput.build(64.0, [](double v) {
+                return railLimit(0.5 * 1.0 * (1.0015 * solveLeg(v, 19.0) - solveLeg(-v, 19.0) - 0.0015), 1.2);
+            });
+            britOutput.build(2.0, [](double v) { return railLimit(v, 1.2); });
+            nGain.build(2.0, [](double v) {
+                double y = 0.0;
+                for (int i = 0; i < 4; ++i) solveLoop(v, 1.0 - 1.0 / 200.0, 300.0, 0.5, 20.0, y);
+                return asymLimit(y, 1.5, 1.1);
+            });
+            nDriver.build(4.0, [](double v) {
+                double y = 0.0;
+                for (int i = 0; i < 4; ++i) solveLoop(v, 1.0 - 1.0 / 20.0, 60.0, 2.0, 20.0, y);
+                return asymLimit(y, 1.6, 1.3);
+            });
+        }
+    };
+    static const LightTables& lightTables() {
+        static const LightTables tables;
+        return tables;
+    }
+
     void ensureCircuitConfig(PreampType t, bool on)
     {
         if (on == configuredOn && t == configuredType)
@@ -459,12 +504,12 @@ private:
                 nY1[ch] = nY2[ch] = 0.0;
                 nDc1[ch] = nDc2[ch] = 0.0;
             }
-            configCircuits(nCirc, nCircOk, kNFullScaleVolts);
+            if (on) configCircuits(nCirc, nCircOk, kNFullScaleVolts);
             return;
         }
 
         if (t == PreampType::AType) {
-            configCircuits(aCirc, aCircOk, kAFullScaleVolts);
+            if (on) configCircuits(aCirc, aCircOk, kAFullScaleVolts);
             return;
         }
 
@@ -480,7 +525,7 @@ private:
             brit1.fill(0.0);
             brit2.fill(0.0);
             brit3.fill(0.0);
-            configCircuits(bCirc, bCircOk, kBritFullScaleVolts);
+            if (on) configCircuits(bCirc, bCircOk, kBritFullScaleVolts);
             return;
         }
 
@@ -496,7 +541,7 @@ private:
             lpFilters[static_cast<size_t>(ch)].setCoeffs(lpCoeffs);
             lpFilters[static_cast<size_t>(ch)].reset();
         }
-        if (t == PreampType::FSF)
+        if (t == PreampType::FSF && on)
             configCircuits(fCirc, fCircOk, kFsfFullScaleVolts);
     }
 

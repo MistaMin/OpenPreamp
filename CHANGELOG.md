@@ -1,5 +1,25 @@
 # OpenPreamp version history
 
+## 1.0.2 - development (2026-10-15)
+
+- Name the engines Standard (lighter), Circuit Preview (reduced) and HQ (full component model).
+- Add Default/1x/2x/4x oversampling. Circuit defaults to 1x with prepared residual ADAA; Standard and Circuit disable ADAA at 2x/4x. HQ retains its 2x default.
+- Append the new rate parameter while retaining existing IDs/order and the legacy 4x parameter; old sessions preserve their previous rates.
+- Follow the HQ-to-Eco guide with a pinned, independently buildable circuit reference and read-only stage probes for all four models.
+- Add stage impulse/drive/memory captures, strict reference-validity checks, measured 1,025-knot residual/antiderivative extraction and capture regression tests.
+- Correct stale source voltage in offline DC capture setup; runtime solver behavior is retained.
+- Keep Full as the default. Existing Reduced previews have not passed complete sound acceptance; new measured candidates are identification data only.
+- See Docs/REDUCED_ENGINE_PLAN.md for the contract, evidence and remaining acceptance gates.
+
+## 1.0.1 - development (2026-10-09)
+
+CPU-reduction work in progress.
+
+- Repeatable CPU baselines with warm-up, processor-only timing, multiple signals, rates and buffers, and buffer-deadline checks.
+- Accelerated Circuit-off Brit and N-Type with prepared transfer-curve tables and conservative reference fallbacks; existing ADAA integration and histories retained.
+- Waveform, aliasing and 226 processor/UI regression checks passed on native Apple Silicon. See Docs/CPU_OPTIMIZATION.md for measured results and remaining work.
+- Preserve the released Circuit/HQ algorithms and session parameter identities.
+
 ## 1.0.0 - 2026-10-08
 
 First public release of the preamp and metering tool extracted from HybridEQ.

@@ -22,13 +22,17 @@ static bool contained(juce::Component& c) {
 }
 #include "openpreamp_routing.h"
 #include "openpreamp_stereo_tools.h"
-int main() {
+#include "openpreamp_render.h"
+#include "openpreamp_rate_checks.h"
+int main(int argc,char** argv) {
     juce::ScopedJuceInitialiser_GUI gui;
+    if(argc==3 && juce::String(argv[1])=="--render")return renderComparisons(juce::File(argv[2]));
     OpenPreampProcessor p;
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);
     check(p.apvts.getParameter("oversampleMode") == nullptr, "oversampling parameter removed");
-    check(p.getParameters().size() == 18, "preamp-only parameter set; no EQ or harmonics controls");
+    check(p.getParameters().size() == 20, "preamp-only parameter set with appended oversampling choice");
+    check(p.apvts.getRawParameterValue("circuitEngine")->load()==0, "new sessions default to the validated Full engine");
     set(p, "preampCircuit", 0);
     p.setPlayConfigDetails(2, 2, 48000, 128);
     p.prepareToPlay(48000, 128);
@@ -43,6 +47,8 @@ int main() {
     for (double rate : {44100.0, 48000.0, 96000.0, 192000.0}) {
         p.setPlayConfigDetails(2, 2, rate, 128);
         p.prepareToPlay(rate, 128);
+        for(int backend=0;backend<2;++backend) {
+        set(p,"circuitEngine",float(backend));
         for (int type : {0, 1, 2, 4}) {
             set(p, "preampType", float(type));
             for (int hq = 0; hq < 2; ++hq) {
@@ -59,10 +65,11 @@ int main() {
                         for (int i = 0; i < 128; ++i)
                             finite &= std::isfinite(audio.getSample(ch, i));
                 }
-                check(p.getProcessingSampleRate() == rate * (circuit ? (hq ? 4 : 2) : 1) && finite, "model/rate/circuit/HQ combination uses correct rate and produces finite audio");
+                check(p.getProcessingSampleRate() == rate * (circuit ? (hq ? 4 : backend ? 1 : 2) : 1) && finite, "model/rate/engine combination uses correct default rate and produces finite audio");
                 check(p.getLatencySamples() == latency, "latency stays fixed during automation");
               }
             }
+        }
         }
     }
     set(p, "preampBypass", 1); set(p, "outputGain", 6); set(p, "hqMode", 0);
@@ -81,6 +88,15 @@ int main() {
         if (auto* ranged = dynamic_cast<juce::RangedAudioParameter*>(parameter))
             stateMatches &= std::abs(restored.apvts.getParameter(ranged->paramID)->getValue() - ranged->getValue()) < 1e-6f;
     check(stateMatches, "state round-trip preserves all parameters");
+    auto legacy=p.apvts.copyState();legacy.removeChild(legacy.getChildWithProperty("id","circuitEngine"),nullptr);
+    auto legacyXml=legacy.createXml();juce::MemoryBlock legacyData;
+    juce::AudioProcessor::copyXmlToBinary(*legacyXml,legacyData);
+    set(restored,"circuitEngine",1);
+    restored.setStateInformation(legacyData.getData(),int(legacyData.getSize()));
+    check(restored.apvts.getRawParameterValue("circuitEngine")->load()==0, "legacy sessions restore the Full circuit engine even over a Reduced instance");
+    set(p,"circuitEngine",1);p.getStateInformation(state);
+    restored.setStateInformation(state.getData(),int(state.getSize()));
+    check(restored.apvts.getRawParameterValue("circuitEngine")->load()==1, "Reduced engine selection persists independently of HQ");
     set(p, "preampBypass", 0); set(p, "preampType", 1); set(p, "preampCircuit", 1); set(p, "outputGain", 0);
     audio.clear(); p.processBlock(audio, midi);
     std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());
@@ -178,6 +194,7 @@ int main() {
     check(dualEditor->getWidth()==1000 && dualEditor->getHeight()==740 && contained(*dualEditor), "old folded state restores to the standard dual-channel layout");
     runRoutingChecks();
     runStereoToolsChecks();
+    runRateChecks();
     std::printf("%d checks, %d failures\n", checks, failures);
     return failures ? 1 : 0;
 }

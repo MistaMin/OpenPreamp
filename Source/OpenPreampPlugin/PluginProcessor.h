@@ -3,6 +3,7 @@
 #include <juce_dsp/juce_dsp.h>
 #include "DSP/Preamp.h"
 #include "DSP/Resampler.h"
+#include "DSP/ReducedCircuitBank.h"
 #include "Toolkit.h"
 #include "SessionCuts.h"
 #include "SessionMonoMaker.h"
@@ -21,8 +22,11 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
     bool isBusesLayoutSupported(const BusesLayout&) const override;
     int getEffectiveOversampleFactor() const { return effectiveFactorAtomic.load(std::memory_order_relaxed); }
+    bool isADAAActive() const { return adaaActiveAtomic.load(std::memory_order_relaxed); }
     double getProcessingSampleRate() const { return sampleRateAtomic.load(std::memory_order_relaxed) * getEffectiveOversampleFactor(); }
     double getSessionProcessorSampleRate() const { return cuts.getSampleRate(); }
+    // Offline benchmark/reference selection; never call concurrently with audio.
+    void setLightTablesEnabled(bool enabled) { for (auto& engine : preamps) engine.setLightTablesEnabled(enabled); }
     bool hasEditor() const override { return true; }
 
     const juce::String getName() const override { return JucePlugin_Name; }
@@ -46,7 +50,15 @@ public:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
 private:
+    enum ParameterIndex { Type, Pad, Input, Bypass, Circuit, Output, HQ, MeterSource,
+        InputR, OutputR, MS, HP, LP, Cuts, Link, MonoEnabled, MonoFrequency, MeterMode, Engine, Oversampling, ParameterCount };
+    std::array<std::atomic<float>*,ParameterCount> parameterValues{};
+    float value(ParameterIndex index) const noexcept { return parameterValues[size_t(index)]->load(std::memory_order_relaxed); }
     void updateParameters();
+    std::unique_ptr<dsp::ReducedCircuitBank> reducedBank;
+    std::array<dsp::ReducedCircuitKernel,2> reducedKernels;
+    bool reducedActive=false;
+    int reducedType=-1, reducedFactor=0;
 
     std::array<dsp::PreampEngine,2> preamps;
     SessionCuts cuts;
@@ -58,6 +70,7 @@ private:
     juce::dsp::DelayLine<float> latencyPadding;
     int fixedLatency = 0;
     std::atomic<int> effectiveFactorAtomic{1};
+    std::atomic<bool> adaaActiveAtomic{false},legacyRateDefaults{false};
     LevelTracker inLevel, outLevel;
     std::atomic<double> sampleRateAtomic{44100.0};
 

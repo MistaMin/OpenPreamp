@@ -9,16 +9,16 @@ static void check(bool ok, const char* name) {
     std::printf("%s %s\n", ok ? "PASS" : "FAIL", name);
     if (!ok) ++failures;
 }
-static double aliasRatio(dsp::PreampType type, double rate, bool enabled) {
+static double aliasRatio(dsp::PreampType type, double rate, bool enabled, bool tables = false) {
     constexpr int n = 8192, tone = 1501, block = 128;
     dsp::PreampEngine preamp;
     preamp.prepare(rate); preamp.setType(type); preamp.setCircuitEnabled(false);
-    preamp.setADAAEnabled(enabled); preamp.setDriveDB(12.0f);
+    preamp.setADAAEnabled(enabled); preamp.setLightTablesEnabled(tables); preamp.setDriveDB(0.0f);
     std::vector<float> fftData(size_t(2 * n), 0.0f);
     float data[block]; float* channels[] = {data};
     for (int offset = 0; offset < 3 * n; offset += block) {
         for (int i = 0; i < block; ++i)
-            data[i] = float(0.7 * std::sin(juce::MathConstants<double>::twoPi * tone * ((offset + i) % n) / n));
+            data[i] = float(0.7 * std::pow(10.0, 12.0 / 20.0) * std::sin(juce::MathConstants<double>::twoPi * tone * ((offset + i) % n) / n));
         preamp.processBlock(channels, 1, block);
         if (offset >= 2 * n) std::copy(data, data + block, fftData.begin() + offset - 2 * n);
     }
@@ -48,6 +48,8 @@ int main() {
             const double plain = aliasRatio(type, rate, false), aa = aliasRatio(type, rate, true);
             const double reduction = 10.0 * std::log10(plain / aa);
             std::printf("rate=%.0f model=%d alias reduction=%.2f dB (relative to fundamental)\n", rate, int(type), reduction);
+            const double candidate = aliasRatio(type, rate, true, true);
+            check(std::isfinite(candidate) && candidate <= aa * std::pow(10.0, 0.2 / 10.0), "table curves do not increase measured alias ratio by more than 0.2 dB");
             check(std::isfinite(reduction) && reduction > 1.0, "ADAA reduces actual preamp alias energy by more than 1 dB");
         }
     std::printf("%d failures\n", failures);

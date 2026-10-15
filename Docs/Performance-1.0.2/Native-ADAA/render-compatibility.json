@@ -1,0 +1,109 @@
+{
+  "count": 17,
+  "all_identical": true,
+  "renders": [
+    {
+      "file": "atype-2x-full.wav",
+      "reference_sha256": "ac41c803b3bd9ba9faa81afd4b42f3ac5a04b0128d9e7efb94b195e106e1e177",
+      "current_sha256": "ac41c803b3bd9ba9faa81afd4b42f3ac5a04b0128d9e7efb94b195e106e1e177",
+      "identical": true
+    },
+    {
+      "file": "atype-2x-reduced.wav",
+      "reference_sha256": "08fe47fcfc78f13f806f260a30da9ad39d7ab1d9d921542a9fbaf46b1985023a",
+      "current_sha256": "08fe47fcfc78f13f806f260a30da9ad39d7ab1d9d921542a9fbaf46b1985023a",
+      "identical": true
+    },
+    {
+      "file": "atype-4x-full.wav",
+      "reference_sha256": "122dc856afa2d35397e0142e09aa2edbeabb0654911f20342e0cb83e26508c25",
+      "current_sha256": "122dc856afa2d35397e0142e09aa2edbeabb0654911f20342e0cb83e26508c25",
+      "identical": true
+    },
+    {
+      "file": "atype-4x-reduced.wav",
+      "reference_sha256": "7b85b75c7a618bc270e24f9a5f05f9c0b27da02af8db8c3dca7a9b5fabe09751",
+      "current_sha256": "7b85b75c7a618bc270e24f9a5f05f9c0b27da02af8db8c3dca7a9b5fabe09751",
+      "identical": true
+    },
+    {
+      "file": "brit-2x-full.wav",
+      "reference_sha256": "2519a5f548104e01441c4a8b77ce7fed07784613a1491c8d5566b36c2d9ceee6",
+      "current_sha256": "2519a5f548104e01441c4a8b77ce7fed07784613a1491c8d5566b36c2d9ceee6",
+      "identical": true
+    },
+    {
+      "file": "brit-2x-reduced.wav",
+      "reference_sha256": "dbd015475a6c20f831650a1dff76378cc82c6a797c6f07af7bc918debe1a3ab6",
+      "current_sha256": "dbd015475a6c20f831650a1dff76378cc82c6a797c6f07af7bc918debe1a3ab6",
+      "identical": true
+    },
+    {
+      "file": "brit-4x-full.wav",
+      "reference_sha256": "76220b672027783ae30549f93fbe6f9ad0711d0d7b9bf34a9b258fbedc896f3e",
+      "current_sha256": "76220b672027783ae30549f93fbe6f9ad0711d0d7b9bf34a9b258fbedc896f3e",
+      "identical": true
+    },
+    {
+      "file": "brit-4x-reduced.wav",
+      "reference_sha256": "7c48cfb27d1d8724d484afc22d894204da5bc6ccfe1f229ca709f741b14bd222",
+      "current_sha256": "7c48cfb27d1d8724d484afc22d894204da5bc6ccfe1f229ca709f741b14bd222",
+      "identical": true
+    },
+    {
+      "file": "fsf-2x-full.wav",
+      "reference_sha256": "e57fbcb00e28fe144b86ad141a2b4326e0af1e6bf0502d248a51d4d710681170",
+      "current_sha256": "e57fbcb00e28fe144b86ad141a2b4326e0af1e6bf0502d248a51d4d710681170",
+      "identical": true
+    },
+    {
+      "file": "fsf-2x-reduced.wav",
+      "reference_sha256": "38d8ac54ad672993476704f9e72c013005091399d787acb71ac8cae87899d295",
+      "current_sha256": "38d8ac54ad672993476704f9e72c013005091399d787acb71ac8cae87899d295",
+      "identical": true
+    },
+    {
+      "file": "fsf-4x-full.wav",
+      "reference_sha256": "9ba89be3bd9640f9e6894cde72e3168006adceb3f70ba3bc0f680b423425cae2",
+      "current_sha256": "9ba89be3bd9640f9e6894cde72e3168006adceb3f70ba3bc0f680b423425cae2",
+      "identical": true
+    },
+    {
+      "file": "fsf-4x-reduced.wav",
+      "reference_sha256": "7a2e91c18291dbebcc5b66a04f3d00998482bc7c4e547d20032909c536a43e97",
+      "current_sha256": "7a2e91c18291dbebcc5b66a04f3d00998482bc7c4e547d20032909c536a43e97",
+      "identical": true
+    },
+    {
+      "file": "input.wav",
+      "reference_sha256": "6db9d033ff23238f00ab397b2afd5027d349be742cee47c76f6d7ce94be52dbf",
+      "current_sha256": "6db9d033ff23238f00ab397b2afd5027d349be742cee47c76f6d7ce94be52dbf",
+      "identical": true
+    },
+    {
+      "file": "ntype-2x-full.wav",
+      "reference_sha256": "4b91147a909dc837aa25b5a356d5fd5996432f0715a8bde0ea5b3c48eb8b6dbe",
+      "current_sha256": "4b91147a909dc837aa25b5a356d5fd5996432f0715a8bde0ea5b3c48eb8b6dbe",
+      "identical": true
+    },
+    {
+      "file": "ntype-2x-reduced.wav",
+      "reference_sha256": "5395e9e5d2afb7bfb90ab0ff6a5e064fd81087786f91cc3f6e8f0303aa891342",
+      "current_sha256": "5395e9e5d2afb7bfb90ab0ff6a5e064fd81087786f91cc3f6e8f0303aa891342",
+      "identical": true
+    },
+    {
+      "file": "ntype-4x-full.wav",
+      "reference_sha256": "6759bd8c5ea90b0861a5a14e401ad7f1793411b4f2c191378987172800a68f72",
+      "current_sha256": "6759bd8c5ea90b0861a5a14e401ad7f1793411b4f2c191378987172800a68f72",
+      "identical": true
+    },
+    {
+      "file": "ntype-4x-reduced.wav",
+      "reference_sha256": "0de6a2d1cc88318ad107be25106504d611dacad6ee1aa11368b064e145cdb7c2",
+      "current_sha256": "0de6a2d1cc88318ad107be25106504d611dacad6ee1aa11368b064e145cdb7c2",
+      "identical": true
+    }
+  ],
+  "description": "16 HQ/Circuit matched 2x/4x renders plus input fixture"
+}

@@ -54,9 +54,10 @@ private:
 
     CycleButton preampTypeBtn;
     CycleButton preampPadBtn;
+    CycleButton circuitEngineBtn;
     MeterPanel meterPanel;
     CycleButton meterSourceBtn;
-    SmallToggle hqToggle;
+    CycleButton oversamplingBtn;
     LookTable modelLooks;
     Theme::Look editorLook = Theme::current();
     int lastModel = -1;

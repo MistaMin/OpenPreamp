@@ -1,0 +1,29 @@
+{
+  "version": "1.0.2",
+  "architecture": "arm64",
+  "developer_ui": false,
+  "processor_ui_checks": 555,
+  "processor_ui_failures": 0,
+  "pipeline_tests": 7,
+  "pipeline_failures": 0,
+  "accepted_identification_fixtures": 40,
+  "hard_failures": 0,
+  "excluded_analysis_samples": 0,
+  "stage_profiles": 20,
+  "vst3_version": "1.0.2",
+  "vst3_signature": "local ad-hoc; strict verification passed after manifest generation",
+  "installed": false,
+  "released": false,
+  "runtime_model_promoted": false,
+  "engine_names": [
+    "Standard",
+    "Circuit Preview",
+    "HQ"
+  ],
+  "oversampling_button": "OS: Default/1x/2x/4x",
+  "naming_regression_checks": 357,
+  "naming_regression_failures": 0,
+  "native_adaa_checks": 58,
+  "native_adaa_failures": 0,
+  "native_adaa_report": "Native-ADAA/validation.json"
+}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CircuitSolver.h"
+#include "CircuitStageProbe.h"
 
 // Brit: balanced 500-series console mic preamp, simulated from a transcribed
 // netlist (kept privately, not distributed). Signal path: mic input with RF
@@ -78,6 +78,8 @@ public:
     }
 
     CircuitSolver& core() noexcept { return solver; }
+    auto stageProbes() const noexcept { return readCircuitStages(solver,probeNodes); }
+    const auto& stageConnections() const noexcept { return probeNodes; }
     int pBA = 0, pEA = 0, pO29 = 0, pO22 = 0, pO30 = 0, pO23 = 0, pO24 = 0, pP = 0, pN = 0, pIn = 0;   // probe nodes
     double outScale = 1.0;
     double vFull = 1.0;
@@ -216,6 +218,13 @@ private:
         s.addR(nOutN, 0, 10e3);
         s.addR(nOutP, nOutN, 600.0);   // load
         pP = nOutP; pN = nOutN; pIn = INP;
+        probeNodes = {{
+            {"input_coupling",nSp,nSn,nBA,nBB},
+            {"input_pair",nBA,nBB,nO29,nO22},
+            {"instrumentation",TP3,TP4,nO30,nO23},
+            {"difference",nO30,nO23,nO24,0},
+            {"line_driver",nO24,0,nOutP,nOutN},
+        }};
     }
 
     // Unity at the reference gain setting at 1 kHz.
@@ -241,6 +250,7 @@ private:
         restoreDc();
     }
 
+    std::array<CircuitStageNodes,5> probeNodes{};
     CircuitSolver solver;
     int nSp = 0, nSn = 0, nOutP = 0, nOutN = 0, rvA = 0, rvB = 0;
     double lastGain = 0.0;

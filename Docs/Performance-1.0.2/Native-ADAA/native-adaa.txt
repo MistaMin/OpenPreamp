@@ -1,0 +1,68 @@
+maximum primitive-average curve approximation error 6.57568221e-07
+PASS integrated lookup tracks analytic tanh interval averages
+PASS near-equal, zero-crossing, endpoint and extreme-jump averages remain bounded
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=44100 type=0 plain_alias_db=-13.6710 adaa_alias_db=-20.3997 improvement_db=6.7287
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=44100 type=1 plain_alias_db=-20.4761 adaa_alias_db=-39.7975 improvement_db=19.3214
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=44100 type=2 plain_alias_db=-16.1984 adaa_alias_db=-28.9021 improvement_db=12.7037
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=44100 type=4 plain_alias_db=-14.7491 adaa_alias_db=-20.8762 improvement_db=6.1271
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=48000 type=0 plain_alias_db=-13.7708 adaa_alias_db=-20.5125 improvement_db=6.7417
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=48000 type=1 plain_alias_db=-20.5305 adaa_alias_db=-39.4828 improvement_db=18.9523
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=48000 type=2 plain_alias_db=-16.1891 adaa_alias_db=-29.0071 improvement_db=12.8181
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+rate=48000 type=4 plain_alias_db=-14.8806 adaa_alias_db=-21.0106 improvement_db=6.1299
+PASS Circuit ADAA reduces high-frequency folded energy by at least 1 dB
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+PASS residual ADAA preserves quiet near-Nyquist gain and phase
+PASS native ADAA Circuit remains stable through extreme drive and recovery
+PASS native ADAA histories are independent of arbitrary buffer partitioning
+58 checks, 0 failures

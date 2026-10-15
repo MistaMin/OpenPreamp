@@ -7,14 +7,20 @@
 class SessionCuts {
 public:
     void prepare(double rate) {
-        sampleRate = rate; hp = hpTarget; lp = lpTarget; phase = 0;
+        sampleRate = rate; hp = hpTarget; lp = lpTarget; phase = 0; moving=false;
         slew = 1.0 - std::exp(-1.0 / (0.01 * rate)); reset(); updateCoefficients();
     }
     void reset() { for (auto& b : high) b.reset(); for (auto& b : low) b.reset(); }
-    void setFrequencies(double highPass, double lowPass) { hpTarget = highPass; lpTarget = lowPass; }
+    void setFrequencies(double highPass, double lowPass) {
+        moving=moving || std::abs(highPass-hpTarget)>0 || std::abs(lowPass-lpTarget)>0;
+        hpTarget=highPass;lpTarget=lowPass;
+    }
     void tick() {
+        if(!moving)return;
         hp += slew * (hpTarget - hp); lp += slew * (lpTarget - lp);
-        if (++phase == 16) { phase = 0; updateCoefficients(); }
+        const bool settled=std::abs(hp-hpTarget)<1e-7*hpTarget && std::abs(lp-lpTarget)<1e-7*lpTarget;
+        if(settled){hp=hpTarget;lp=lpTarget;moving=false;}
+        if (++phase == 16 || settled) { phase = 0; updateCoefficients(); }
     }
     float process(int channel, float x) {
         return low[size_t(channel)].process(high[size_t(channel)].process(x, hpCoeffs), lpCoeffs);
@@ -34,6 +40,7 @@ private:
     std::array<double,5> hpCoeffs{}, lpCoeffs{};
     double sampleRate = 48000, hp = 20, lp = 20000, hpTarget = 20, lpTarget = 20000, slew = 0;
     int phase = 0;
+    bool moving=false;
     std::array<double,5> coefficients(double frequency, bool highPass) const {
         const double w = 6.283185307179586 * std::clamp(frequency, 5.0, sampleRate * 0.475) / sampleRate;
         const double c = std::cos(w), alpha = std::sin(w) / std::sqrt(2.0), norm = 1.0 / (1.0+alpha);

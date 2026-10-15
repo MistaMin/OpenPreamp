@@ -1,0 +1,11 @@
+# OpenPreamp 1.0.2, stereo, Release recommended, single-thread wall time / audio duration; GUI excluded; scheduler/core not pinned
+# Light curve tables: on (candidate); input/output trims 0 dB, Unity PAD, cuts on at 20 Hz/20 kHz, mono maker off; warm-up 50 ms per repeat
+rate,block,model,mode,signal,median_cpu_percent,min_cpu_percent,max_cpu_percent,worst_block_us,deadline_overruns,measured_blocks,repeats
+48000,64,Brit,Circuit1x,silence,0.3418,0.3221,0.3798,71.333,0,1125,3
+48000,64,Brit,Circuit1x,driven-tone,0.4040,0.3797,0.4155,48.875,0,1125,3
+48000,64,N-Type,Circuit1x,silence,0.6121,0.5804,0.6409,51.125,0,1125,3
+48000,64,N-Type,Circuit1x,driven-tone,0.6818,0.6618,0.6890,49.875,0,1125,3
+48000,64,FSF,Circuit1x,silence,0.5935,0.5802,0.5979,52.666,0,1125,3
+48000,64,FSF,Circuit1x,driven-tone,0.6790,0.6611,0.6866,55.167,0,1125,3
+48000,64,A-Type,Circuit1x,silence,0.5858,0.5772,0.6077,38.375,0,1125,3
+48000,64,A-Type,Circuit1x,driven-tone,0.6893,0.6419,0.7459,58.500,0,1125,3
