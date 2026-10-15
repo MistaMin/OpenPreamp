@@ -1,6 +1,11 @@
 # OpenPreamp 1.0.2 measured-engine checkpoint — 2026-10-15
 
 VERSION is 1.0.2, development only. Read Docs/REDUCED_ENGINE_PLAN.md first.
+Measurement/charting workflow: Docs/MEASUREMENT_PIPELINE.md and
+tools/measure_audio.py. The default matrix covers all four preamps, three engines
+and Default/1x/2x/4x. Physical hardware requires imported, calibrated synchronous
+captures plus loopback; no hardware measurement is implied by plugin/synthetic
+verification. Generated raw WAV/CSV/PNG/SVG reports stay under build/measurements.
 Engine names are now Standard / Circuit Preview / HQ. Older Full/Reduced labels
 in reports mean HQ/Circuit. OS now offers Default/1x/2x/4x. Default is native
 Standard/Circuit with ADAA, and HQ 2x. Standard/Circuit ADAA is off at 2x/4x.

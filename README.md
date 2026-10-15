@@ -94,7 +94,14 @@ autosave to `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.csv`.
 Production builds bake those files into the binary and have no DEV tools or
 filesystem autosave. See [release process](Docs/RELEASE_PROCESS.md).
 
+## Measurement development
+
+Development measurement tools compare all four preamps across Standard/Circuit/HQ
+and Default/1x/2x/4x, with calibrated hardware import, repeated captures, CSV data
+and PNG/SVG plots. See the [measurement workflow](Docs/MEASUREMENT_PIPELINE.md).
+
 ## Licensing
+
 
 [MIT project license](LICENSE) ·
 [Official binary-use terms](Licenses/OpenPreamp-BINARY_LICENSE.txt) ·

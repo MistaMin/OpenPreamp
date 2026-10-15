@@ -24,9 +24,11 @@ static bool contained(juce::Component& c) {
 #include "openpreamp_stereo_tools.h"
 #include "openpreamp_render.h"
 #include "openpreamp_rate_checks.h"
+#include "openpreamp_measurement.h"
 int main(int argc,char** argv) {
     juce::ScopedJuceInitialiser_GUI gui;
     if(argc==3 && juce::String(argv[1])=="--render")return renderComparisons(juce::File(argv[2]));
+    if(argc==3 && juce::String(argv[1])=="--measure-batch")return renderMeasurementBatch(juce::File(argv[2]));
     OpenPreampProcessor p;
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);

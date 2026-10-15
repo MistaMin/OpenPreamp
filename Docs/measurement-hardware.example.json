@@ -1,0 +1,29 @@
+{
+  "device": "REPLACE: hardware manufacturer/model/serial or loopback routing",
+  "settings": {
+    "input_gain": "REPLACE",
+    "output_gain": "REPLACE",
+    "pad": "REPLACE",
+    "filters": "REPLACE",
+    "other_controls": "REPLACE: every DUT setting, including digital/oversampling mode"
+  },
+  "interface": {
+    "device": "REPLACE: model and serial",
+    "driver_version": "REPLACE",
+    "dac_channel": 1,
+    "adc_channel": 1,
+    "dac_gain_setting": "REPLACE",
+    "adc_gain_setting": "REPLACE",
+    "cables_and_load": "REPLACE",
+    "buffer_size": 64
+  },
+  "calibration": {
+    "date": "2026-10-15",
+    "dac_full_scale_dbu": 18.0,
+    "adc_full_scale_dbu": 18.0,
+    "known_noise_floor_dbfs_rms": -110.0,
+    "clock": "shared"
+  },
+  "capture_origin": "playback-synchronous",
+  "nominal_gain_db": 0.0
+}

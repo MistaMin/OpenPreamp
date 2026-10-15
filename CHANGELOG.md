@@ -2,6 +2,7 @@
 
 ## 1.0.2 - development (2026-10-15)
 
+- Add shared hardware/plugin PCM measurement fixtures, calibrated loopback import, a 48-configuration preamp/mode/oversampling capture matrix, repeated-power analysis and CSV/PNG/SVG comparison reports. See Docs/MEASUREMENT_PIPELINE.md.
 - Name the engines Standard (lighter), Circuit Preview (reduced) and HQ (full component model).
 - Add Default/1x/2x/4x oversampling. Circuit defaults to 1x with prepared residual ADAA; Standard and Circuit disable ADAA at 2x/4x. HQ retains its 2x default.
 - Append the new rate parameter while retaining existing IDs/order and the legacy 4x parameter; old sessions preserve their previous rates.
