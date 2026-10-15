@@ -70,7 +70,7 @@ def export_csv(path, rows):
         return
     keys = list(dict.fromkeys(k for row in rows for k in row))
     with Path(path).open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=keys)
+        writer = csv.DictWriter(f, fieldnames=keys, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow({k: ("" if isinstance(v, (float, np.floating)) and not np.isfinite(v) else v)
