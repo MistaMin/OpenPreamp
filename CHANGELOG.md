@@ -1,6 +1,6 @@
 # OpenPreamp version history
 
-## 1.0.2 - development (2026-10-15)
+## 1.0.2 - 2026-10-16
 
 - Add linear-frequency chirp spectrograms at two levels, common-scale mode/rate grids, clean and H1–H5/fold overlays, input/loopback references and complete compressed CSV maps with explicit FFT/window/sweep resolution.
 - Measure only explicit 1x/2x/4x rates; add coherent folded-harmonic energy, alias spectra, residual plots and raw alias CSVs.
@@ -11,7 +11,7 @@
 - Follow the HQ-to-Eco guide with a pinned, independently buildable circuit reference and read-only stage probes for all four models.
 - Add stage impulse/drive/memory captures, strict reference-validity checks, measured 1,025-knot residual/antiderivative extraction and capture regression tests.
 - Correct stale source voltage in offline DC capture setup; runtime solver behavior is retained.
-- Keep Full as the default. Existing Reduced previews have not passed complete sound acceptance; new measured candidates are identification data only.
+- Keep HQ (full component model) as the factory default. Existing Reduced previews have not passed complete sound acceptance; new measured candidates are identification data only.
 - See Docs/REDUCED_ENGINE_PLAN.md for the contract, evidence and remaining acceptance gates.
 
 ## 1.0.1 - development (2026-10-09)

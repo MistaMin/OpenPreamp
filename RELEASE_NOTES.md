@@ -1,36 +1,31 @@
-# OpenPreamp 1.0.0
+# OpenPreamp 1.0.2
 
-A preamp and metering tool from OpenGrid. Choose a lighter antialiased model or
-solve a component network at 2x / HQ 4x, then shape stereo or Mid/Side drive with
-independent trims, shared cuts and a Side-only mono maker.
+Full source release with Standard, Circuit Preview and HQ engines across Brit,
+N-Type, FSF and A-Type. HQ selects the full component model and remains the
+factory default. Circuit Preview provides reduced models with documented fidelity
+limits; measured stage-identification candidates are not promoted into the engine.
 
-## Included
+- Independent Default / 1x / 2x / 4x oversampling. Default selects 1x for
+  Standard/Circuit and 2x for HQ; legacy sessions retain their previous rates.
+- Native-rate ADAA for Standard/Circuit, disabled at 2x/4x. HQ uses no ADAA.
+  2x uses IIR resampling and 4x uses FIR resampling.
+- Published measurement pipeline and actual 48 kHz/PCM24 plugin report:
+  four models × three engines × three explicit rates, 72 offline captures,
+  92 PNG/SVG chart pairs, complete CSV data and linear sweep harmonic/alias maps.
+- Updated illustrated manual and screenshots, plus reproducible CPU, residual
+  ADAA, realtime and measurement checks. Windows build/installer source included.
 
-- Universal Mac VST3, Audio Unit, CLAP and LV2; macOS 11 or later.
-- Production interface with developer tools disabled, resizing down to 400 x 296.
-- Illustrated PDF manual covering every control, signal flow and circuit modeling.
-- MIT project/source license, GoodLookinUI license and complete third-party notices.
-- AAX binaries are intentionally excluded from downloads.
+Read [the measurement report](Docs/Measurements-1.0.2/REPORT.md) and
+[user manual](Docs/UserManual.md). The release measurement ZIP includes the
+complete gallery and gzip CSV spectrogram maps. Synthetic hardware plots are
+excluded; no physical hardware was measured. Short fixtures do not establish
+listening approval, detailed dynamics or hardware equivalence.
 
-## Processing and metering
+Signed, notarized universal macOS VST3, AU, CLAP and LV2 packages will be added
+to this release when ready. Source publication takes priority. AAX binaries,
+private references and optional SDKs are excluded from public distribution.
 
-Brit, N-Type, FSF and A-Type plus a clean Off model; independent L/R or M/S
-input/output trims; Link; -20 dB / Unity / +10 dB PAD; 12 dB/octave high/low cuts;
-6 dB/octave Side-only mono maker; independent VUs with direct-click Input/Output
-and Peak/RMS controls, peak bars, peak hold and resettable clip lamps.
-
-Circuit off uses the lighter session-rate model with ADAA. Circuit on uses the
-full component network at 2x with IIR resampling. HQ uses the same circuit at
-4x with FIR resampling. Surrounding linear tools remain at session rate.
-
-## Practical limits
-
-Mono and stereo only; no mono-to-stereo or surround layout. HQ's linear phase
-applies to its resampling filters, not the complete circuit/cuts signal path.
-Circuit/oversampling mode changes reset histories without a transition crossfade.
-Models contain estimated transformer parameters and simplified device models;
-they are not measurements or certified reproductions of individual hardware.
-Meters report sample peaks, not intersample true peaks. There is no limiter.
-
-AAX builds remain private and require their own Avid/PACE workflow before they
-could be used or distributed. Neither the AAX binary nor SDK is included here.
+Mono/stereo only. Meters show sample peaks, not true peaks. Mode changes reset
+histories without a transition crossfade. There is no limiter. Models contain
+estimated parameters and simplified devices. Circuit Preview has not passed
+all HQ sound-equivalence gates.

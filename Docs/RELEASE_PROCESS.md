@@ -23,7 +23,7 @@
    the accepted ticket and verify Gatekeeper assessment. Keychain identities and
    notary credentials are local; do not commit or export them.
 7. **Publish the reviewed files.** Push the MIT source to MistaMin/OpenPreamp;
-   tag v1.0.0 and publish the signed/notarized Mac DMG, manual PDF and archive
+   tag v1.0.2 and publish the signed/notarized Mac DMG, manual PDF and archive
    checksums. README screenshots and manual links must resolve. Inspect release
    assets again: no AAX, private SDK, Reference folder or signing credentials.
 
@@ -35,3 +35,9 @@ The project source is MIT. Official binary terms and third-party permissions are
 separate; the project MIT license does not cover JUCE or the optional AAX SDK.
 Public publishing does not establish that an independent builder has permission
 to redistribute dependencies under different terms.
+
+Source publication need not wait for binary packaging. Publish the full source
+release with the manual and measurement archive, then add validated, signed and
+notarized Mac packages to that same release when ready. Do not describe pending
+packages as already available. The measurement snapshot records the renderer used
+at capture time, independently of later release-binary hashes.

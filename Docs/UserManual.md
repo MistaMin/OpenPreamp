@@ -1,4 +1,4 @@
-# OpenPreamp 1.0.0
+# OpenPreamp 1.0.2
 
 ## User manual
 
@@ -6,7 +6,7 @@
 
 A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp combines component-network circuit simulation with a lighter antialiased model. It contains no parametric EQ, spectrum analyzer, separate harmonics engine, automatic loudness matching, or limiter.
 
-![OpenPreamp main interface](OpenPreamp-1.0.0-preview.png)
+![OpenPreamp main interface](OpenPreamp-1.0.2-preview.png)
 
 **Public Mac formats:** VST3, Audio Unit, CLAP and LV2. Universal Apple Silicon / Intel build, macOS 11 or later. AAX is built privately and is excluded from the public download.
 
@@ -25,7 +25,7 @@ Close your DAW before installing. Open the release disk image and copy the whole
 
 Restart the DAW and rescan plug-ins. Choose OpenPreamp on a mono or stereo audio track. Copy the complete bundle, not just its executable. Each host supports its own subset of formats; install the format it can load.
 
-Start with INPUT and OUTPUT at 0 dB and PAD at Unity. N-Type is the initial model. CIRCUIT starts on, HQ MODE starts off, and the circuit runs at 2x the session rate. CUTS starts on at 20 Hz high-pass and 20 kHz low-pass. MS MODE, LINK and MONO MAKER start off. Meters initially show Output in Peak mode.
+Start with INPUT and OUTPUT at 0 dB and PAD at Unity. N-Type is the initial model. MODELED starts on, ENGINE is HQ, and OS is Default (2x). CUTS starts on at 20 Hz high-pass and 20 kHz low-pass. MS MODE, LINK and MONO MAKER start off. Meters initially show Output in Peak mode.
 
 Turn INPUT up to drive the preamp harder. Turn OUTPUT down to compare the changed sound at a similar listening level. There is no automatic compensation between those controls. Double-click an input or output knob to return it to 0 dB.
 
@@ -35,7 +35,7 @@ The window opens at 1000 x 740 and resizes proportionally from 400 x 296 to 1500
 
 ## 2. Metering: what each reading means
 
-![Meter source, mode, peak and clip controls](OpenPreamp-1.0.0-meters.png)
+![Meter source, mode, peak and clip controls](OpenPreamp-1.0.2-meters.png)
 
 Each meter belongs to one processing stream. In ordinary stereo the streams are Left and Right. With MS MODE on, they are Mid and Side. Readings remain independent, even when gain controls are linked.
 
@@ -53,7 +53,7 @@ Each meter belongs to one processing stream. In ordinary stereo the streams are 
 
 ## 3. Input gain, output trim and Link
 
-![Independent channel input and output knobs](OpenPreamp-1.0.0-channels.png)
+![Independent channel input and output knobs](OpenPreamp-1.0.2-channels.png)
 
 | Control | Range or choices | Operation |
 |---|---|---|
@@ -71,29 +71,29 @@ Separate nonlinear circuit and ADAA histories are maintained for each channel. L
 
 ---
 
-## 4. Preamp model, PAD, Circuit, HQ and bypass
+## 4. Preamp model, engine, oversampling and bypass
 
-![Preamp model and quality controls](OpenPreamp-1.0.0-preamp.png)
+![Preamp model and quality controls](OpenPreamp-1.0.2-preamp.png)
 
-**MODEL:** opens a menu for Brit, N-Type, FSF, Off and A-Type. The selected model is shared by both streams. Model changes also select the saved faceplate, panel finish, knob style and accent colour.
+**MODEL:** selects Brit, N-Type, FSF, Off or A-Type for both streams.
 
-**PAD:** opens a menu for -20 dB, Unity and +10 dB. It adds the same input offset to both input knobs. It is a digital input trim ahead of the preamp, not a switched attenuator inside the modeled hardware network.
+**PAD:** selects -20 dB, Unity or +10 dB, shared between input trims.
 
-**CIRCUIT:** on selects the full component-network solver and 2x oversampling. Off selects the lighter, session-rate model with antiderivative antialiasing (ADAA). The same INPUT and OUTPUT controls work in both modes, but the two models are different approximations and need not sound identical.
+**MODELED:** off uses Standard, the lighter preamp models. On uses ENGINE.
 
-**HQ MODE:** with CIRCUIT on, raises the circuit to 4x oversampling and changes the resampling filters to linear-phase FIR. It uses the same component model; it does not add another preamp or a separate harmonics engine. With CIRCUIT off, model Off, or bypass, HQ has no effect on processing rate and appears inactive.
+**ENGINE:** HQ runs the full component network. Circuit Preview runs the reduced approximation; it has not passed all HQ sound-equivalence gates. The factory engine is HQ.
 
-**Small bypass key at the upper right of PREAMP:** skips the preamp, input gain/PAD, shared cuts and mono maker. Channel output trims and metering remain active. It is therefore a processing bypass, not a guaranteed unity-level comparison if OUTPUT is changed.
+**OS:** Default, 1x, 2x or 4x, independently of engine. Default selects 1x for Standard/Circuit and 2x for HQ. Standard/Circuit enable ADAA at 1x and disable it at 2x/4x. HQ uses no added ADAA. The rate label reports effective processing factor and rate when audio runs.
 
-**MODEL = Off:** skips coloured preamp processing while retaining input trims/PAD, cuts, mono maker and output trims. This is useful for isolating the surrounding linear processing. Circuit oversampling is then inactive.
+**Small bypass key:** skips preamp, input gain/PAD, cuts and mono maker; output trims and meters remain active.
 
-**Rate label:** shows the active factor and processing rate, for example 2x / 96.0 kHz in a 48 kHz session. It updates when audio processing runs. The session-rate processors remain at 48 kHz in that example.
+**MODEL Off:** skips colored preamp processing but retains trims/PAD, cuts, mono maker and output trims.
 
 ---
 
 ## 5. Input cuts and mono maker
 
-![Shared input cuts and Side-only mono maker](OpenPreamp-1.0.0-cuts.png)
+![Shared input cuts and Side-only mono maker](OpenPreamp-1.0.2-cuts.png)
 
 **HIGH PASS:** adjustable from 20 Hz to 20 kHz. Removes frequencies below its cutoff with a two-pole Butterworth IIR response: approximately -3 dB at cutoff and 12 dB per octave in the stopband. Its initial frequency is 20 Hz.
 
@@ -111,7 +111,7 @@ Reducing low-frequency Side narrows bass rather than hard-switching everything b
 
 ## 6. Mid/Side processing and signal flow
 
-![MS MODE enabled with Link greyed out](OpenPreamp-1.0.0-ms-switch.png)
+![MS MODE enabled with Link greyed out](OpenPreamp-1.0.2-ms-switch.png)
 
 **MS MODE off:** ordinary L/R processing, the default. **MS MODE on:** INPUT, OUTPUT and meters become Mid and Side; LINK is disabled. The host always receives L/R at the output.
 
@@ -133,7 +133,7 @@ Preparation builds the component network and finds its DC operating point. An au
 
 Resistors describe voltage/current relationships. Capacitors retain voltage and current history. Inductors retain flux and voltage history. Transistor junctions and saturating inductors are nonlinear, so the answer depends on the signal level and previous state. Newton iterations refine the solution from the previous sample. Difficult steps can use smaller input increments and additional iterations.
 
-This is why CIRCUIT costs more CPU than the lighter path: the entire network must be solved repeatedly. At a 48 kHz session it runs at 96 kHz in normal Circuit mode or 192 kHz in HQ. No internal decimation brings it back to a fixed 96 kHz rate.
+HQ costs more CPU because the component network is solved repeatedly. At 48 kHz, explicit 1x/2x/4x processes at 48/96/192 kHz. HQ defaults to 2x; Standard and Circuit default to 1x.
 
 Small-signal output normalization is calibrated around 1 kHz. It sets a reference gain; it does not flatten the frequency response, erase distortion or automatically match loudness as INPUT increases.
 
@@ -157,27 +157,27 @@ The five MODEL choices include Off; Off is not a fifth circuit. Every active mod
 
 ---
 
-## 9. Circuit off, Circuit on and HQ compared
+## 9. Standard, Circuit Preview and HQ compared
 
-| Setting | Model and rate | Antialiasing and resampling |
+| Engine | Default rate | Antialiasing and purpose |
 |---|---|---|
-| CIRCUIT off | Lighter model at session rate | First-order ADAA around its nonlinear stages; no circuit oversampling. |
-| CIRCUIT on, HQ off | Full component network at 2x session rate | Maximum-quality polyphase half-band IIR up/down filters. Minimum-latency design with nonlinear phase. |
-| CIRCUIT on, HQ on | Same component network at 4x session rate | Two stages of maximum-quality half-band equiripple FIR up/down filters, with linear-phase resampling. |
+| Standard | 1x | Lighter models; ADAA at 1x, off at 2x/4x. |
+| Circuit Preview | 1x | Reduced curves, filters and memory; residual ADAA at 1x, off at 2x/4x. |
+| HQ | 2x | Full component solve; no added ADAA. |
 
-ADAA averages a nonlinear stage's response over the interval between successive samples, using an antiderivative or numerical integration. That reduces unwanted aliases in the lighter models at ordinary session rates. It adds fractional phase/high-frequency rolloff and does not turn the lighter model into a full component solver. ADAA is not inserted into the full stateful circuit solver.
+All engines support explicit 1x/2x/4x. Standard has its own voicing. Circuit targets a cheaper HQ approximation but is not an accepted equivalent. Compare levels and program material; CPU and alias plots alone do not establish sound fidelity.
 
-HQ supplies more samples per second to the same circuit and changes the resampling filter type. It can reduce aliasing and changes numerical/resampling behavior. It is not a new circuit topology, and it cannot make estimated device models more accurate. Four times the session rate means twice as many circuit samples as the normal 2x path; actual CPU depends on the model, level and host.
+Circuit applies first-order ADAA to the nonlinear residual while preserving the quiet identity path. Prepared primitives avoid per-sample circuit solves. Native antialiasing reduces some folded energy; it does not eliminate all aliases or recreate the full circuit.
 
-The first oversampling stage targets -90 dB stopband up / -75 dB down; the second FIR stage targets -80 dB up / -65 dB down. Linear-phase HQ describes these FIR resampling filters, not the entire plugin: cuts, coupling networks, transformers and ADAA can still affect phase.
+2x uses half-band polyphase IIR resampling; 4x uses two stages of half-band equiripple FIR resampling. These choices apply to every engine. Linear phase describes the 4x resampling filters, not the whole plugin.
 
-All paths are padded to a fixed host-reported latency derived from the rounded-up HQ filter delay. Circuit/HQ switching does not change that report while audio runs. Mode changes reset resampling histories and do not have a transition crossfade; they can produce a brief transient. Filters, trims, mono maker and M/S matrices remain outside oversampling.
+All paths retain fixed latency derived from the rounded-up 4x filter delay. Mode changes reset histories without a transition crossfade. Cuts, trims, mono maker and M/S run at session rate. Old saved sessions retain previous rates; legacy 4x automation affects Default, while explicit OS overrides it. Existing parameter IDs/order are retained and OS is appended.
 
 ---
 
 ## 10. Working examples
 
-**Gentle colour:** choose a model, leave CIRCUIT on and HQ off, use Unity PAD, and raise INPUT a little. Reduce OUTPUT to compare at a similar level. Switch the meters to Input to inspect incoming level, then Output to inspect the processed level.
+**Gentle colour:** choose a model, enable MODELED, select HQ and leave OS at Default, use Unity PAD, and raise INPUT a little. Reduce OUTPUT to compare at a similar level. Switch the meters to Input to inspect incoming level, then Output to inspect the processed level.
 
 **More drive without a louder comparison:** increase INPUT or use +10 dB PAD, then lower OUTPUT. Distortion depends on the signal, model and mode. The clip light cannot tell you how much modeled analogue saturation is occurring inside the circuit.
 
@@ -187,7 +187,7 @@ All paths are padded to a fixed host-reported latency derived from the rounded-u
 
 **Inspect only the cuts:** choose MODEL Off, keep CUTS on, disable mono maker, and put all gains at 0 dB with Unity PAD. Use a magnitude response plot to assess level and a phase plot to assess phase rotation. Turning CUTS off provides the clean reference apart from latency.
 
-**Compare processing modes:** level-match OUTPUT while comparing Circuit off, Circuit on and HQ. They may differ in sound and bandwidth. Leave headroom in the downstream chain: this plugin has no output limiter.
+**Compare processing modes:** level-match OUTPUT while comparing Standard, Circuit Preview and HQ. They may differ in sound and bandwidth. Leave headroom in the downstream chain: this plugin has no output limiter.
 
 ---
 
@@ -202,11 +202,11 @@ All paths are padded to a fixed host-reported latency derived from the rounded-u
 
 The host decides the bus format. A mono recording on a stereo track can still reach the plugin as two channels. Mono tracks retain session-rate cuts and gain; Circuit/HQ rate behavior is the same as stereo, using one active stream.
 
-Parameters are saved by the host and can be automated. This includes model, PAD, gains, bypass, Circuit, HQ, meter source/mode, M/S, Link, cuts and mono maker. The meter choices change display behavior only. There is no separate preset browser inside the plugin.
+Parameters are saved by the host and can be automated. This includes model, PAD, gains, bypass, MODELED, ENGINE, OS, legacy 4x, meter source/mode, M/S, Link, cuts and mono maker. The meter choices change display behavior only. There is no separate preset browser inside the plugin.
 
 Older pre-0.3 states copy their former stereo gain into the new right gain and leave the newly introduced cuts off. Later states missing Link or mono maker restore those features off. The 1.0 public build has no DEV editor or filesystem autosave; design CSVs are baked into the binary.
 
-**Missing plugin:** confirm your host supports the installed format, copy the whole bundle, restart and rescan. **Grey control:** check mono track format, LINK, MS MODE, bypass, model Off, CUTS or MONO MAKER state. **High CPU:** compare the lighter ADAA path, 2x Circuit and HQ; higher session rates increase circuit work. **No low-bass or top-end bypass:** active 20 Hz / 20 kHz cuts still filter; disable CUTS for the reference.
+**Missing plugin:** confirm your host supports the installed format, copy the whole bundle, restart and rescan. **Grey control:** check mono track format, LINK, MS MODE, bypass, model Off, CUTS or MONO MAKER state. **High CPU:** compare Standard, Circuit Preview and HQ at explicit rates; higher session rates increase circuit work. **No low-bass or top-end bypass:** active 20 Hz / 20 kHz cuts still filter; disable CUTS for the reference.
 
 ---
 
@@ -216,8 +216,24 @@ OpenPreamp's project source is MIT licensed; the included LICENSE contains the c
 
 The official binary-use terms are in BINARY_LICENSE.txt. THIRD_PARTY_NOTICES.txt identifies the included components, and the complete third-party license texts and VST usage/trademark notices are in Licenses/third-party. These files accompany the public package and each plugin's own license folder. Keep the notices with redistributed copies and consult the applicable dependency licenses when building a new binary.
 
-The public 1.0.0 Mac package contains VST3, AU, LV2 and CLAP, this manual, release notes and licenses. AAX binaries and the Avid SDK are excluded. AAX builds are private development artifacts; creating an AAX binary is not proof that it can load in Pro Tools without the required Avid/PACE signing.
+The public 1.0.2 Mac package contains VST3, AU, LV2 and CLAP, this manual, release notes and licenses. AAX binaries and the Avid SDK are excluded. AAX builds are private development artifacts; creating an AAX binary is not proof that it can load in Pro Tools without the required Avid/PACE signing.
 
 Source and release downloads: https://github.com/MistaMin/OpenPreamp
 
 More circuit detail: CIRCUIT_EXPLAINED.md in the source repository. ADAA reference: https://www.research.ed.ac.uk/files/34115216/bilbao_pdf.pdf
+
+---
+
+## 13. Audio measurement report
+
+The 1.0.2 development report compares Brit, N-Type, FSF and A-Type across Standard/Circuit/HQ and explicit 1x/2x/4x: 36 configurations and 72 independent offline captures. All use the same 48 kHz, PCM24 fixture, fixed 64-sample buffer and documented settings. Default is omitted from measurements.
+
+Charts cover gain/linearity, harmonics and THD+N, burst dynamics, phase/group delay, coherent folded-harmonic energy and linear-frequency sweep maps at -18/-6 dBFS. The linear maps include clean and predicted H1-H5/fold views, common absolute color limits, FFT/window/ENBW/sweep-drift captions and full-resolution CSV data. They are diagnostic maps; use steady tones for quantitative harmonic levels.
+
+The report contains actual plugin results and input-reference maps. There are no synthetic hardware plots or physical hardware measurements. Circuit remains a preview; these quick fixtures are development evidence, not a complete sound, listening or real-host acceptance test.
+
+Read the published report and download the complete chart/CSV archive from the repository and 1.0.2 release assets:
+
+https://github.com/MistaMin/OpenPreamp/blob/main/Docs/Measurements-1.0.2/REPORT.md
+
+Reproduction and calibrated hardware-import instructions are in Docs/MEASUREMENT_PIPELINE.md.

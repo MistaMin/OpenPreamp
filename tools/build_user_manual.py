@@ -13,6 +13,7 @@ from reportlab.graphics.shapes import Drawing, Rect, String, Line, Polygon
 from reportlab.graphics import renderPDF, renderSVG
 
 ROOT=Path(__file__).resolve().parents[1]
+VERSION=(ROOT/'VERSION').read_text().strip()
 DOC=ROOT/'Docs'
 OUT=ROOT/'output/pdf/OpenPreamp-User-Manual.pdf'
 NAVY=colors.HexColor('#101a30'); RED=colors.HexColor('#a32323'); GREY=colors.HexColor('#526078')
@@ -40,15 +41,15 @@ def diagram(name, rows):
 def assets():
     source=PILImage.open('/private/tmp/openpreamp-100-preview.png')
     for name,box in [('meters',(16,68,492,278)),('channels',(16,306,492,524)),('preamp',(628,540,984,704)),('cuts',(16,540,598,704))]:
-        source.crop(box).save(DOC/f'OpenPreamp-1.0.0-{name}.png')
+        source.crop(box).save(DOC/f'OpenPreamp-{VERSION}-{name}.png')
     for suffix in ['preview','ms','linked','rms','small']:
         path=Path(f'/private/tmp/openpreamp-100-{suffix}.png')
-        if path.exists():(DOC/f'OpenPreamp-1.0.0-{suffix}.png').write_bytes(path.read_bytes())
-    PILImage.open(DOC/'OpenPreamp-1.0.0-ms.png').crop((395,6,615,45)).save(DOC/'OpenPreamp-1.0.0-ms-switch.png')
+        if path.exists():(DOC/f'OpenPreamp-{VERSION}-{suffix}.png').write_bytes(path.read_bytes())
+    PILImage.open(DOC/f'OpenPreamp-{VERSION}-ms.png').crop((395,6,615,45)).save(DOC/f'OpenPreamp-{VERSION}-ms-switch.png')
     diagram('OpenPreamp-SignalFlow',[
         ('1  Session rate: input tools',['DAW L/R input','Optional M/S|encoder','Optional Side HP|mono maker','Shared HP / LP|+ input gain / PAD']),
-        ('2  Choose the nonlinear path',['CIRCUIT ON|2x or HQ 4x','Upsampling|IIR or FIR','Full component|network solve','Downsample to|session rate']),
-        ('   Alternative path',['CIRCUIT OFF','Light preamp|with ADAA','At session rate','To output tools']),
+        ('2  Choose model and rate',['Standard / Circuit|or full HQ','OS: 1x / 2x / 4x|IIR 2x / FIR 4x','Nonlinear|processing','Return to|session rate']),
+        ('   Native antialiasing',['Standard or|Circuit at 1x','ADAA enabled','ADAA off|at 2x / 4x','HQ: no ADAA']),
         ('3  Session rate: output tools',['Fixed latency|padding','Channel output|trims / meters','Optional M/S|decoder','DAW L/R output'])])
     diagram('OpenPreamp-Modeling',[
         ('Preparation',['Build network','Find DC|operating point','Calibrate reference|gain near 1 kHz']),
@@ -75,13 +76,13 @@ def inline(text):
 def furniture(c,doc):
     c.saveState();w,h=doc.pagesize
     c.setFillColor(NAVY);c.rect(0,h-34,w,34,fill=1,stroke=0)
-    c.setFillColor(colors.white);c.setFont('Helvetica-Bold',10);c.drawString(43,h-22,'OpenPreamp 1.0.0  /  USER MANUAL')
+    c.setFillColor(colors.white);c.setFont('Helvetica-Bold',10);c.drawString(43,h-22,f'OpenPreamp {VERSION}  /  USER MANUAL')
     c.setStrokeColor(colors.HexColor('#d5dbe4'));c.line(43,35,w-43,35)
     c.setFillColor(GREY);c.setFont('Helvetica',8);c.drawString(43,23,'OpenGrid  /  Marcos Deida');c.drawRightString(w-43,23,str(doc.page));c.restoreState()
 
 def build():
     assets();OUT.parent.mkdir(parents=True,exist_ok=True)
-    doc=SimpleDocTemplate(str(OUT),pagesize=(595.28,841.89),rightMargin=43,leftMargin=43,topMargin=53,bottomMargin=48,title='OpenPreamp 1.0.0 User Manual',author='Marcos Deida / OpenGrid')
+    doc=SimpleDocTemplate(str(OUT),pagesize=(595.28,841.89),rightMargin=43,leftMargin=43,topMargin=53,bottomMargin=48,title=f'OpenPreamp {VERSION} User Manual',author='Marcos Deida / OpenGrid')
     story=[];lines=(DOC/'UserManual.md').read_text().splitlines();i=0
     while i<len(lines):
         line=lines[i].strip()
@@ -100,7 +101,7 @@ def build():
                 row=[v.strip() for v in lines[i].strip().strip('|').split('|')]
                 if not all(re.match(r'^:?-+:?$',v) for v in row):rows.append(row)
                 i+=1
-            n=len(rows[0]);widths=([110,125,doc.width-235] if n==3 else [160,doc.width-160])
+            n=len(rows[0]);widths=([110,125,doc.width-235] if n==3 else [160,doc.width-160] if n==2 else [doc.width/n]*n)
             table=Table([[Paragraph(inline(v),styles['CellManual']) for v in row] for row in rows],colWidths=widths,repeatRows=1,hAlign='LEFT')
             table.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e8edf4')),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('LINEBELOW',(0,0),(-1,-1),.3,colors.HexColor('#d6dce5'))]))
             story += [table,Spacer(1,14)];continue

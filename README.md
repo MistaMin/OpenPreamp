@@ -2,14 +2,14 @@
 
 **Circuit colour. Independent meters. Stereo and Mid/Side control.**
 
-![OpenPreamp 1.0.0](Docs/OpenPreamp-1.0.0-preview.png)
+![OpenPreamp 1.0.2](Docs/OpenPreamp-1.0.2-preview.png)
 
 OpenPreamp is a preamp and metering tool from **OpenGrid / Marcos Deida**,
 extracted from HybridEQ. Four preamp models, two independent processing streams,
 and a compact resizable interface - without a parametric EQ or separate
 harmonics engine.
 
-[Download 1.0.0](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.0.0) ·
+[OpenPreamp 1.0.2 release](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.0.2) ·
 [Illustrated PDF manual](output/pdf/OpenPreamp-User-Manual.pdf) ·
 [Online manual](Docs/UserManual.md) · [Version history](CHANGELOG.md)
 
@@ -17,11 +17,12 @@ harmonics engine.
 
 - **Brit, N-Type, FSF and A-Type**, plus a clean Off path. Model changes switch
   the saved plates, knob styles and colours.
-- **Circuit on:** solve the component network at **2x** session rate using
-  minimum-latency IIR resampling. **HQ:** the same circuit at **4x**, using
-  linear-phase FIR resampling.
-- **Circuit off:** lighter session-rate models with antiderivative antialiasing
-  (**ADAA**). HQ does not affect this path.
+- **Standard:** lighter preamp models. **Circuit Preview:** reduced circuit models.
+  **HQ:** full component networks; the factory default engine.
+- Explicit **1x / 2x / 4x** oversampling for every engine. Default selects 1x
+  for Standard/Circuit and 2x for HQ. 2x uses IIR; 4x uses FIR resampling.
+- **ADAA** runs at 1x for Standard and Circuit, and turns off at 2x/4x.
+  HQ does not use ADAA. Legacy sessions retain their previous rate settings.
 - Independent **input and output trims**, shared **PAD**, and **Link** for L/R.
 - **MS MODE** encodes before the preamp and decodes after downsampling. Link
   greys out while Mid and Side remain independently adjustable.
@@ -31,7 +32,13 @@ harmonics engine.
   directly on click, peak bars, peak hold and resettable clip lamps.
 - Proportional resizing from **400 x 296** to **1500 x 1110**; default 1000 x 740.
 
-![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.0.0-ms.png)
+![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.0.2-ms.png)
+
+## Model appearances
+
+![Brit](Docs/OpenPreamp-1.0.2-brit.png)
+![FSF](Docs/OpenPreamp-1.0.2-fsf.png)
+![A-Type](Docs/OpenPreamp-1.0.2-atype.png)
 
 ## Install
 
@@ -60,9 +67,9 @@ knob drives a fixed-unity internal gain network externally.
 
 ![Signal flow and sample-rate boundaries](Docs/OpenPreamp-SignalFlow.png)
 
-HQ changes the sample rate and resampling filters, not the circuit topology.
-Its linear phase describes the FIR resampling, not the entire plugin. The
-lighter ADAA path is a different approximation. Models use estimated parameters
+HQ selects the full component model. Oversampling is a separate control;
+linear phase describes 4x FIR resampling, not the entire plugin. Circuit Preview
+uses reduced approximations and has not passed all HQ sound-equivalence gates. Models use estimated parameters
 and simplified devices; they are not measured clones of specific hardware.
 
 See the [user manual](Docs/UserManual.md) and
@@ -84,7 +91,7 @@ cmake --build build --config Release --target OpenPreamp_VST3 OpenPreampSmoke Op
 
 On macOS, also build `OpenPreamp_AU`, `OpenPreamp_LV2` and `OpenPreamp_CLAP`.
 On Linux, VST3/LV2/CLAP targets are available; the workflow builds downloadable
-CI artifacts. The published 1.0.0 package is for Mac. Optional `OpenPreamp_AAX`
+CI artifacts. Mac universal packages are added to the release after signing. Optional `OpenPreamp_AAX`
 builds stay private. Legacy HybridEQ targets remain in the source tree; its
 installer and release scripts do not package OpenPreamp.
 
@@ -98,8 +105,15 @@ filesystem autosave. See [release process](Docs/RELEASE_PROCESS.md).
 
 Development measurement tools compare all four preamps across Standard/Circuit/HQ
 and 1x/2x/4x, with calibrated hardware import, repeated captures, aliasing tests,
-linear sweep harmonic maps, CSV data
-and PNG/SVG plots. See the [measurement workflow](Docs/MEASUREMENT_PIPELINE.md).
+linear sweep harmonic maps, CSV data and PNG/SVG plots.
+
+[Read the 1.0.2 measurement report](Docs/Measurements-1.0.2/REPORT.md) ·
+[Download all charts and raw CSV maps](https://github.com/MistaMin/OpenPreamp/releases/download/v1.0.2/OpenPreamp-1.0.2-Audio-Measurements.zip) ·
+[Reproduce the measurements](Docs/MEASUREMENT_PIPELINE.md).
+
+The report contains 92 chart pairs from 72 actual offline captures at 48 kHz/PCM24.
+No physical hardware or synthetic hardware overlays are presented. Short fixtures
+are development diagnostics; Circuit Preview retains its documented fidelity limits.
 
 ## Licensing
 

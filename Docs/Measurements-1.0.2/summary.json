@@ -1,0 +1,5179 @@
+{
+  "schema": 1,
+  "created_utc": "2026-10-16T03:00:49.916464+00:00",
+  "analysis": {
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2",
+    "analyzer_sha256": "7464361758abc79035facfc6c6ec6cb734f38858f7799f4db0803039131736a4",
+    "command": [
+      "tools/measure_audio.py",
+      "analyze",
+      "--suite",
+      "build/measurements/48k-linear-suite",
+      "--manifests",
+      "build/measurements/48k-linear-matrix/captures.json",
+      "--out",
+      "build/measurements/48k-linear-report"
+    ],
+    "sweep_analyzer_sha256": "84e420d8f9fbaf5927bf3695aad628485ccff3bd09b925485a6dc0c2500c0a98"
+  },
+  "plan": {
+    "schema": 1,
+    "created_utc": "2026-10-16T02:52:32.233739+00:00",
+    "sample_rate": 48000,
+    "bit_depth": 24,
+    "quick": true,
+    "analysis_band_hz": [
+      20,
+      20000
+    ],
+    "tone_level_convention": "sine peak dBFS; full-scale sine = 0 dBFS",
+    "noise_level_convention": "RMS relative to 1 digital full scale; unweighted 20 Hz\u201320 kHz",
+    "thdn_denominator": "fundamental RMS (THD+N_F)",
+    "stimulus_sha256": "d010d08095f9d10e2fdadf61503f536e919f512c11c6a55a492d6fbd14c8ce6a",
+    "frames": 470528,
+    "segments": [
+      {
+        "kind": "guard",
+        "start": 0,
+        "stop": 2400
+      },
+      {
+        "kind": "pilot",
+        "start": 2400,
+        "stop": 5280
+      },
+      {
+        "kind": "guard",
+        "start": 5280,
+        "stop": 14880
+      },
+      {
+        "kind": "noise",
+        "start": 14880,
+        "stop": 20640
+      },
+      {
+        "kind": "sweep",
+        "start": 20640,
+        "stop": 59040,
+        "level_dbfs": -36,
+        "duration_s": 0.6,
+        "frequency_start_hz": 20,
+        "frequency_stop_hz": 20000
+      },
+      {
+        "kind": "guard",
+        "start": 59040,
+        "stop": 61440
+      },
+      {
+        "kind": "tone",
+        "start": 61440,
+        "stop": 69120,
+        "frequency_hz": 50,
+        "level_dbfs": -48,
+        "purpose": "level",
+        "analyze_start": 63360,
+        "analyze_stop": 69120
+      },
+      {
+        "kind": "tone",
+        "start": 69120,
+        "stop": 76800,
+        "frequency_hz": 50,
+        "level_dbfs": -30,
+        "purpose": "level",
+        "analyze_start": 71040,
+        "analyze_stop": 76800
+      },
+      {
+        "kind": "tone",
+        "start": 76800,
+        "stop": 84480,
+        "frequency_hz": 50,
+        "level_dbfs": -18,
+        "purpose": "level",
+        "analyze_start": 78720,
+        "analyze_stop": 84480
+      },
+      {
+        "kind": "tone",
+        "start": 84480,
+        "stop": 92160,
+        "frequency_hz": 50,
+        "level_dbfs": -6,
+        "purpose": "level",
+        "analyze_start": 86400,
+        "analyze_stop": 92160
+      },
+      {
+        "kind": "tone",
+        "start": 92160,
+        "stop": 96960,
+        "frequency_hz": 1000,
+        "level_dbfs": -48,
+        "purpose": "level",
+        "analyze_start": 94080,
+        "analyze_stop": 96960
+      },
+      {
+        "kind": "tone",
+        "start": 96960,
+        "stop": 101760,
+        "frequency_hz": 1000,
+        "level_dbfs": -30,
+        "purpose": "level",
+        "analyze_start": 98880,
+        "analyze_stop": 101760
+      },
+      {
+        "kind": "tone",
+        "start": 101760,
+        "stop": 106560,
+        "frequency_hz": 1000,
+        "level_dbfs": -18,
+        "purpose": "level",
+        "analyze_start": 103680,
+        "analyze_stop": 106560
+      },
+      {
+        "kind": "tone",
+        "start": 106560,
+        "stop": 111360,
+        "frequency_hz": 1000,
+        "level_dbfs": -6,
+        "purpose": "level",
+        "analyze_start": 108480,
+        "analyze_stop": 111360
+      },
+      {
+        "kind": "tone",
+        "start": 111360,
+        "stop": 116160,
+        "frequency_hz": 10000,
+        "level_dbfs": -48,
+        "purpose": "level",
+        "analyze_start": 113280,
+        "analyze_stop": 116160
+      },
+      {
+        "kind": "tone",
+        "start": 116160,
+        "stop": 120960,
+        "frequency_hz": 10000,
+        "level_dbfs": -30,
+        "purpose": "level",
+        "analyze_start": 118080,
+        "analyze_stop": 120960
+      },
+      {
+        "kind": "tone",
+        "start": 120960,
+        "stop": 125760,
+        "frequency_hz": 10000,
+        "level_dbfs": -18,
+        "purpose": "level",
+        "analyze_start": 122880,
+        "analyze_stop": 125760
+      },
+      {
+        "kind": "tone",
+        "start": 125760,
+        "stop": 130560,
+        "frequency_hz": 10000,
+        "level_dbfs": -6,
+        "purpose": "level",
+        "analyze_start": 127680,
+        "analyze_stop": 130560
+      },
+      {
+        "kind": "tone",
+        "start": 130560,
+        "stop": 138240,
+        "frequency_hz": 50.0,
+        "level_dbfs": -18,
+        "purpose": "frequency",
+        "analyze_start": 132480,
+        "analyze_stop": 138240
+      },
+      {
+        "kind": "tone",
+        "start": 138240,
+        "stop": 143040,
+        "frequency_hz": 100.0,
+        "level_dbfs": -18,
+        "purpose": "frequency",
+        "analyze_start": 140160,
+        "analyze_stop": 143040
+      },
+      {
+        "kind": "tone",
+        "start": 143040,
+        "stop": 147840,
+        "frequency_hz": 1000.0,
+        "level_dbfs": -18,
+        "purpose": "frequency",
+        "analyze_start": 144960,
+        "analyze_stop": 147840
+      },
+      {
+        "kind": "tone",
+        "start": 147840,
+        "stop": 152640,
+        "frequency_hz": 5000.0,
+        "level_dbfs": -18,
+        "purpose": "frequency",
+        "analyze_start": 149760,
+        "analyze_stop": 152640
+      },
+      {
+        "kind": "tone",
+        "start": 152640,
+        "stop": 157440,
+        "frequency_hz": 10000.0,
+        "level_dbfs": -18,
+        "purpose": "frequency",
+        "analyze_start": 154560,
+        "analyze_stop": 157440
+      },
+      {
+        "kind": "tone",
+        "start": 157440,
+        "stop": 162240,
+        "frequency_hz": 18000.0,
+        "level_dbfs": -18,
+        "purpose": "frequency",
+        "analyze_start": 159360,
+        "analyze_stop": 162240
+      },
+      {
+        "kind": "alias",
+        "start": 162240,
+        "stop": 168256,
+        "frequency_hz": 5003.90625,
+        "requested_frequency_hz": 5000,
+        "level_dbfs": -18,
+        "fft_bin": 427,
+        "max_harmonic": 31,
+        "analyze_start": 164160,
+        "analyze_stop": 168256
+      },
+      {
+        "kind": "alias",
+        "start": 168256,
+        "stop": 174272,
+        "frequency_hz": 5003.90625,
+        "requested_frequency_hz": 5000,
+        "level_dbfs": -6,
+        "fft_bin": 427,
+        "max_harmonic": 31,
+        "analyze_start": 170176,
+        "analyze_stop": 174272
+      },
+      {
+        "kind": "alias",
+        "start": 174272,
+        "stop": 180288,
+        "frequency_hz": 9011.71875,
+        "requested_frequency_hz": 9000,
+        "level_dbfs": -18,
+        "fft_bin": 769,
+        "max_harmonic": 31,
+        "analyze_start": 176192,
+        "analyze_stop": 180288
+      },
+      {
+        "kind": "alias",
+        "start": 180288,
+        "stop": 186304,
+        "frequency_hz": 9011.71875,
+        "requested_frequency_hz": 9000,
+        "level_dbfs": -6,
+        "fft_bin": 769,
+        "max_harmonic": 31,
+        "analyze_start": 182208,
+        "analyze_stop": 186304
+      },
+      {
+        "kind": "alias",
+        "start": 186304,
+        "stop": 192320,
+        "frequency_hz": 12996.09375,
+        "requested_frequency_hz": 13000,
+        "level_dbfs": -18,
+        "fft_bin": 1109,
+        "max_harmonic": 31,
+        "analyze_start": 188224,
+        "analyze_stop": 192320
+      },
+      {
+        "kind": "alias",
+        "start": 192320,
+        "stop": 198336,
+        "frequency_hz": 12996.09375,
+        "requested_frequency_hz": 13000,
+        "level_dbfs": -6,
+        "fft_bin": 1109,
+        "max_harmonic": 31,
+        "analyze_start": 194240,
+        "analyze_stop": 198336
+      },
+      {
+        "kind": "alias",
+        "start": 198336,
+        "stop": 204352,
+        "frequency_hz": 17003.90625,
+        "requested_frequency_hz": 17000,
+        "level_dbfs": -18,
+        "fft_bin": 1451,
+        "max_harmonic": 31,
+        "analyze_start": 200256,
+        "analyze_stop": 204352
+      },
+      {
+        "kind": "alias",
+        "start": 204352,
+        "stop": 210368,
+        "frequency_hz": 17003.90625,
+        "requested_frequency_hz": 17000,
+        "level_dbfs": -6,
+        "fft_bin": 1451,
+        "max_harmonic": 31,
+        "analyze_start": 206272,
+        "analyze_stop": 210368
+      },
+      {
+        "kind": "guard",
+        "start": 210368,
+        "stop": 219968
+      },
+      {
+        "kind": "linear_sweep",
+        "start": 219968,
+        "stop": 315968,
+        "level_dbfs": -18,
+        "duration_s": 2,
+        "frequency_start_hz": 20,
+        "frequency_stop_hz": 20000,
+        "sweep_hz_per_s": 9990.0,
+        "fade_seconds": 0.02,
+        "fft_size": 512,
+        "hop_samples": 256,
+        "window": "periodic 4-term Blackman-Harris",
+        "display_min_dbfs": -140,
+        "display_max_dbfs": 0,
+        "prediction_max_harmonic": 5
+      },
+      {
+        "kind": "guard",
+        "start": 315968,
+        "stop": 325568
+      },
+      {
+        "kind": "linear_sweep",
+        "start": 325568,
+        "stop": 421568,
+        "level_dbfs": -6,
+        "duration_s": 2,
+        "frequency_start_hz": 20,
+        "frequency_stop_hz": 20000,
+        "sweep_hz_per_s": 9990.0,
+        "fade_seconds": 0.02,
+        "fft_size": 512,
+        "hop_samples": 256,
+        "window": "periodic 4-term Blackman-Harris",
+        "display_min_dbfs": -140,
+        "display_max_dbfs": 0,
+        "prediction_max_harmonic": 5
+      },
+      {
+        "kind": "guard",
+        "start": 421568,
+        "stop": 426368
+      },
+      {
+        "kind": "dynamics",
+        "start": 426368,
+        "stop": 455168,
+        "frequency_hz": 1000,
+        "low_dbfs": -36,
+        "high_dbfs": -6,
+        "attack_sample": 7200,
+        "release_sample": 16800,
+        "envelope_window_ms": 4
+      },
+      {
+        "kind": "guard",
+        "start": 455168,
+        "stop": 464768
+      },
+      {
+        "kind": "noise",
+        "start": 464768,
+        "stop": 470528
+      }
+    ]
+  },
+  "captures": [
+    {
+      "id": "Brit-Standard-1x",
+      "label": "Standard 1x",
+      "model": "Brit",
+      "mode": "Standard",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.403462+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-Standard-1x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-Standard-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "e1f02c2577ceb28156b09dec34e6e884c4af0834fbf70ed6e5ec1d220078e529",
+        "e1f02c2577ceb28156b09dec34e6e884c4af0834fbf70ed6e5ec1d220078e529"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-Standard-2x",
+      "label": "Standard 2x",
+      "model": "Brit",
+      "mode": "Standard",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.570220+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-Standard-2x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-Standard-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "e5d79b80fa997f8ec9823457cf87bd300c8303013712af13748da773eb6df59d",
+        "e5d79b80fa997f8ec9823457cf87bd300c8303013712af13748da773eb6df59d"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-Standard-4x",
+      "label": "Standard 4x",
+      "model": "Brit",
+      "mode": "Standard",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.573925+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-Standard-4x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-Standard-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "0791c624db660ce17525d5a994800aabcbbfba0bd34e2d35c415a1c7182addc7",
+        "0791c624db660ce17525d5a994800aabcbbfba0bd34e2d35c415a1c7182addc7"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-Circuit-1x",
+      "label": "Circuit 1x",
+      "model": "Brit",
+      "mode": "Circuit",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.577741+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-Circuit-1x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-Circuit-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "2fbd03b9f602db9837b2f1b37194b0f2046390d12e09a432a4d22c11fb799451",
+        "2fbd03b9f602db9837b2f1b37194b0f2046390d12e09a432a4d22c11fb799451"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-Circuit-2x",
+      "label": "Circuit 2x",
+      "model": "Brit",
+      "mode": "Circuit",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.581365+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-Circuit-2x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-Circuit-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "f0a320b30914f94f0ca16232c8251a25c2417eec02b45f268262b33126e45982",
+        "f0a320b30914f94f0ca16232c8251a25c2417eec02b45f268262b33126e45982"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-Circuit-4x",
+      "label": "Circuit 4x",
+      "model": "Brit",
+      "mode": "Circuit",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.585059+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-Circuit-4x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-Circuit-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "f8d74ed2b78345b733664c6714ff6ded0f1d86dee3bbf091dfbbe39fb8c864ad",
+        "f8d74ed2b78345b733664c6714ff6ded0f1d86dee3bbf091dfbbe39fb8c864ad"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-HQ-1x",
+      "label": "HQ 1x",
+      "model": "Brit",
+      "mode": "HQ",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.588582+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-HQ-1x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-HQ-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "8cd49bcedddf2ed8fd1b3c447649d9ad4664036ead4cdd614a7e9c3e7091ab94",
+        "8cd49bcedddf2ed8fd1b3c447649d9ad4664036ead4cdd614a7e9c3e7091ab94"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-HQ-2x",
+      "label": "HQ 2x",
+      "model": "Brit",
+      "mode": "HQ",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.592072+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-HQ-2x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-HQ-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "5d30ead286c7721a4fce03c19ecc63e46185baffd2fc7ee5e7324de489eddde4",
+        "5d30ead286c7721a4fce03c19ecc63e46185baffd2fc7ee5e7324de489eddde4"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Brit-HQ-4x",
+      "label": "HQ 4x",
+      "model": "Brit",
+      "mode": "HQ",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.595645+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/Brit-HQ-4x-1.wav",
+        "build/measurements/48k-linear-matrix/Brit-HQ-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 0,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "4461c2ecd06a94194793d4a86f27a71a95779a5ab6ccfee443c8c7d045ee96d4",
+        "4461c2ecd06a94194793d4a86f27a71a95779a5ab6ccfee443c8c7d045ee96d4"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 0.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-Standard-1x",
+      "label": "Standard 1x",
+      "model": "N-Type",
+      "mode": "Standard",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.598916+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-Standard-1x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-Standard-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "2815f42324e418c7822e6623b5e6620e6d7c55895adc0df17b5d7455afa23574",
+        "2815f42324e418c7822e6623b5e6620e6d7c55895adc0df17b5d7455afa23574"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-Standard-2x",
+      "label": "Standard 2x",
+      "model": "N-Type",
+      "mode": "Standard",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.602319+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-Standard-2x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-Standard-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "71b07cb516b369e3e7b4ded2749820c10bca95c8ed5fdff5e98eb881f74d31c9",
+        "71b07cb516b369e3e7b4ded2749820c10bca95c8ed5fdff5e98eb881f74d31c9"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-Standard-4x",
+      "label": "Standard 4x",
+      "model": "N-Type",
+      "mode": "Standard",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.606002+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-Standard-4x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-Standard-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "5280d2ad7590087d5bd8be2cb5dc3b413ac9629ccaf7536c822034556e48463c",
+        "5280d2ad7590087d5bd8be2cb5dc3b413ac9629ccaf7536c822034556e48463c"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-Circuit-1x",
+      "label": "Circuit 1x",
+      "model": "N-Type",
+      "mode": "Circuit",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.609685+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-Circuit-1x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-Circuit-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "7f125710ed2a90205dbfa10c7d8981a79d9f183f360c7d2a49d3ac14fee69cc3",
+        "7f125710ed2a90205dbfa10c7d8981a79d9f183f360c7d2a49d3ac14fee69cc3"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-Circuit-2x",
+      "label": "Circuit 2x",
+      "model": "N-Type",
+      "mode": "Circuit",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.613141+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-Circuit-2x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-Circuit-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "62936c36b2acd5093c7fcc633c7a33dcfed0625d8801be48d7b68e18a1e5181d",
+        "62936c36b2acd5093c7fcc633c7a33dcfed0625d8801be48d7b68e18a1e5181d"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-Circuit-4x",
+      "label": "Circuit 4x",
+      "model": "N-Type",
+      "mode": "Circuit",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.616387+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-Circuit-4x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-Circuit-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "fd80ad3c43da5b9fc4c5f036bc7fe7010efcb0974aa07a251f09f9d8b57b4f88",
+        "fd80ad3c43da5b9fc4c5f036bc7fe7010efcb0974aa07a251f09f9d8b57b4f88"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-HQ-1x",
+      "label": "HQ 1x",
+      "model": "N-Type",
+      "mode": "HQ",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.619876+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-HQ-1x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-HQ-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "95745c791e054ae8d13265aeef2280fe7856078552bb183a97c710d089bde64f",
+        "95745c791e054ae8d13265aeef2280fe7856078552bb183a97c710d089bde64f"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-HQ-2x",
+      "label": "HQ 2x",
+      "model": "N-Type",
+      "mode": "HQ",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.623538+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-HQ-2x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-HQ-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "2dfd6cc0ba8bab694f7a6094cae797dcfa0fa54abaa94af4d8056daaa424097b",
+        "2dfd6cc0ba8bab694f7a6094cae797dcfa0fa54abaa94af4d8056daaa424097b"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "N-Type-HQ-4x",
+      "label": "HQ 4x",
+      "model": "N-Type",
+      "mode": "HQ",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.627232+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/N-Type-HQ-4x-1.wav",
+        "build/measurements/48k-linear-matrix/N-Type-HQ-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 1,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "94fa6ef33d126e741be701316b30483658f919450adc51ca825b010a98c6883f",
+        "94fa6ef33d126e741be701316b30483658f919450adc51ca825b010a98c6883f"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 1.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-Standard-1x",
+      "label": "Standard 1x",
+      "model": "FSF",
+      "mode": "Standard",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.630606+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-Standard-1x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-Standard-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "bff911d9ab133ea4106dd7ad88b74f194f7af7dccd5ea3fffbdb87d4a456e5f2",
+        "bff911d9ab133ea4106dd7ad88b74f194f7af7dccd5ea3fffbdb87d4a456e5f2"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-Standard-2x",
+      "label": "Standard 2x",
+      "model": "FSF",
+      "mode": "Standard",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.633921+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-Standard-2x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-Standard-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "3318b302459ab7372059d13c6113c75df6654646c6a29de60e41bcbc7111b7cd",
+        "3318b302459ab7372059d13c6113c75df6654646c6a29de60e41bcbc7111b7cd"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-Standard-4x",
+      "label": "Standard 4x",
+      "model": "FSF",
+      "mode": "Standard",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.637333+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-Standard-4x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-Standard-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "4fb959f9f9f6c72d4ce36df421171899edb474a2a583595c83c7ccd2a4b526cc",
+        "4fb959f9f9f6c72d4ce36df421171899edb474a2a583595c83c7ccd2a4b526cc"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-Circuit-1x",
+      "label": "Circuit 1x",
+      "model": "FSF",
+      "mode": "Circuit",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.640883+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-Circuit-1x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-Circuit-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "f8ccb92a9763aed2f75a10a6cdcd3e0ae8042821e95507bd20967dc85177b21a",
+        "f8ccb92a9763aed2f75a10a6cdcd3e0ae8042821e95507bd20967dc85177b21a"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-Circuit-2x",
+      "label": "Circuit 2x",
+      "model": "FSF",
+      "mode": "Circuit",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.644216+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-Circuit-2x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-Circuit-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "27be489bd8be5767824a323caccf79cab35da6ebc06466c6afd0cf4ae6ef2c75",
+        "27be489bd8be5767824a323caccf79cab35da6ebc06466c6afd0cf4ae6ef2c75"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-Circuit-4x",
+      "label": "Circuit 4x",
+      "model": "FSF",
+      "mode": "Circuit",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.647601+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-Circuit-4x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-Circuit-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "380b2e84da199587b839676f981847c3abac860cf488fd6f34ec632f26227d24",
+        "380b2e84da199587b839676f981847c3abac860cf488fd6f34ec632f26227d24"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-HQ-1x",
+      "label": "HQ 1x",
+      "model": "FSF",
+      "mode": "HQ",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.651091+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-HQ-1x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-HQ-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "f2bc6950387e1956cedcc06768b5fa9284560f3983800b27b62a620d3974065a",
+        "f2bc6950387e1956cedcc06768b5fa9284560f3983800b27b62a620d3974065a"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-HQ-2x",
+      "label": "HQ 2x",
+      "model": "FSF",
+      "mode": "HQ",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.654367+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-HQ-2x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-HQ-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "5c4347d500d9548ae467174be44750248676c98f17b635778ebc5cfe4d51a2d5",
+        "5c4347d500d9548ae467174be44750248676c98f17b635778ebc5cfe4d51a2d5"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSF-HQ-4x",
+      "label": "HQ 4x",
+      "model": "FSF",
+      "mode": "HQ",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.657742+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/FSF-HQ-4x-1.wav",
+        "build/measurements/48k-linear-matrix/FSF-HQ-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 2,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "1baa96915c8415bb62c672233af17518b995784a4a9d6d615b0e1e1fe2998e4b",
+        "1baa96915c8415bb62c672233af17518b995784a4a9d6d615b0e1e1fe2998e4b"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 2.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-Standard-1x",
+      "label": "Standard 1x",
+      "model": "A-Type",
+      "mode": "Standard",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.661293+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-Standard-1x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-Standard-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "21b36eed8d90521c30aa5e97727b6d41be5bca579239134d1ea4eacdc796e013",
+        "21b36eed8d90521c30aa5e97727b6d41be5bca579239134d1ea4eacdc796e013"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-Standard-2x",
+      "label": "Standard 2x",
+      "model": "A-Type",
+      "mode": "Standard",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.664720+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-Standard-2x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-Standard-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "09f60dac6ce2eeafaee3706e54b5f2587f31fb55373d808614d65566f47218ea",
+        "09f60dac6ce2eeafaee3706e54b5f2587f31fb55373d808614d65566f47218ea"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-Standard-4x",
+      "label": "Standard 4x",
+      "model": "A-Type",
+      "mode": "Standard",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.668265+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-Standard-4x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-Standard-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 0,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "8de002f6b04c3eeee2ac1e6022e8cadb789d1cb4e0c87dde9c600e4f1e372d59",
+        "8de002f6b04c3eeee2ac1e6022e8cadb789d1cb4e0c87dde9c600e4f1e372d59"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 0.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-Circuit-1x",
+      "label": "Circuit 1x",
+      "model": "A-Type",
+      "mode": "Circuit",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.671564+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-Circuit-1x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-Circuit-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "1996341bbaab5977a49bb2edecadb57d99d2ca9e69090db68f091ff8290a5972",
+        "1996341bbaab5977a49bb2edecadb57d99d2ca9e69090db68f091ff8290a5972"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": true,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-Circuit-2x",
+      "label": "Circuit 2x",
+      "model": "A-Type",
+      "mode": "Circuit",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.675101+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-Circuit-2x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-Circuit-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "87ea9c4456f510ff613376df4b58b93f02437b3dec80e45a64323ffb55d48f59",
+        "87ea9c4456f510ff613376df4b58b93f02437b3dec80e45a64323ffb55d48f59"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-Circuit-4x",
+      "label": "Circuit 4x",
+      "model": "A-Type",
+      "mode": "Circuit",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.678663+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-Circuit-4x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-Circuit-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 1,
+          "circuitEngine": 1,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "e68b731b4e5f2787852732df0d8cacb2103d818134a3193d7d80fc92693dbf11",
+        "e68b731b4e5f2787852732df0d8cacb2103d818134a3193d7d80fc92693dbf11"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 1.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-HQ-1x",
+      "label": "HQ 1x",
+      "model": "A-Type",
+      "mode": "HQ",
+      "oversampling": "1x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.682003+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-HQ-1x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-HQ-1x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 1,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "1cd29a8950a13cec3308452bfc1c8c7ec73084200aa02b1e16bbe03ac9963906",
+        "1cd29a8950a13cec3308452bfc1c8c7ec73084200aa02b1e16bbe03ac9963906"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 1,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-HQ-2x",
+      "label": "HQ 2x",
+      "model": "A-Type",
+      "mode": "HQ",
+      "oversampling": "2x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.685447+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-HQ-2x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-HQ-2x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 2,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "def4f131c8680c6de80e9e675bd1b536a6ee0fbf66bb342bbe2f294115d38da3",
+        "def4f131c8680c6de80e9e675bd1b536a6ee0fbf66bb342bbe2f294115d38da3"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 2,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 2.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "A-Type-HQ-4x",
+      "label": "HQ 4x",
+      "model": "A-Type",
+      "mode": "HQ",
+      "oversampling": "4x",
+      "kind": "plugin",
+      "created_utc": "2026-10-16T02:52:32.688884+00:00",
+      "files": [
+        "build/measurements/48k-linear-matrix/A-Type-HQ-4x-1.wav",
+        "build/measurements/48k-linear-matrix/A-Type-HQ-4x-2.wav"
+      ],
+      "settings": {
+        "nominal_gain_db": 0,
+        "parameters": {
+          "preampType": 4,
+          "preampCircuit": 1,
+          "circuitEngine": 0,
+          "preampOversampling": 3,
+          "hqMode": 0,
+          "cutsEnabled": 0,
+          "monoMakerEnabled": 0,
+          "midSide": 0,
+          "preampPad": 1,
+          "preampGain": 0,
+          "preampGainR": 0,
+          "outputGain": 0,
+          "outputGainR": 0
+        }
+      },
+      "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+      "file_sha256": [
+        "c415cfc4f413f4c2ce80e8c654957b35d7c05b3ab473345cb335635a1f8f8719",
+        "c415cfc4f413f4c2ce80e8c654957b35d7c05b3ab473345cb335635a1f8f8719"
+      ],
+      "render_metadata": [
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        },
+        {
+          "plugin_version": "1.0.2",
+          "sample_rate": 48000.0,
+          "bit_depth": 24,
+          "block_size": 64,
+          "offline": true,
+          "reported_latency_samples": 60,
+          "effective_factor": 4,
+          "adaa": false,
+          "parameters": {
+            "preampType": 4.0,
+            "preampPad": 1.0,
+            "preampGain": 1.788139343261719e-07,
+            "preampBypass": 0.0,
+            "preampCircuit": 1.0,
+            "outputGain": 3.576278686523438e-07,
+            "hqMode": 0.0,
+            "meterSource": 1.0,
+            "preampGainR": 1.788139343261719e-07,
+            "outputGainR": 3.576278686523438e-07,
+            "midSide": 0.0,
+            "highPass": 20.0,
+            "lowPass": 20000.0,
+            "cutsEnabled": 0.0,
+            "channelLink": 0.0,
+            "monoMakerEnabled": 0.0,
+            "monoMakerFrequency": 20.0,
+            "meterMode": 0.0,
+            "circuitEngine": 0.0,
+            "preampOversampling": 3.0
+          }
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "Brit-Standard-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -300.0,
+      "noise_power_std": 0.0,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Standard-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8139843208026594,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Standard-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8139843208026594,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.030685778213033643,
+      "phase_1khz_deg": -7.500000000000007,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-Standard-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -300.0,
+      "noise_power_std": 0.0,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Standard-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6232247025465932,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Standard-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6232247025465932,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.0022953458327634735,
+      "phase_1khz_deg": -0.016747673459680992,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-Standard-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -287.17474980572416,
+      "noise_power_std": 2.2130661105755578e-29,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Standard-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8963452338157784,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Standard-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8963452338157784,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.012477302896428455,
+      "phase_1khz_deg": -0.0002693871628775703,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-Circuit-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -146.89435983797975,
+      "noise_power_std": 1.2202790879233672e-16,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Circuit-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.9959659790230028,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Circuit-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.9959659790230028,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.18514396205289074,
+      "phase_1khz_deg": 0.228329893545905,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-Circuit-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -143.93466949984088,
+      "noise_power_std": 2.009090366177277e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Circuit-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6282230932723933,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Circuit-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6282230932723933,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.17648556793815118,
+      "phase_1khz_deg": 0.20941430989943552,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-Circuit-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -143.92063167687246,
+      "noise_power_std": 2.0130657873285274e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Circuit-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8959026194770608,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-Circuit-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8959026194770608,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.16645425448150775,
+      "phase_1khz_deg": 0.22603851925753835,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-HQ-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -146.05425858864717,
+      "noise_power_std": 1.6802249533113521e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-HQ-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.987177489885117,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-HQ-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.987177489885117,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.18120131877023482,
+      "phase_1khz_deg": 0.23113354095051675,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-HQ-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -145.61205754872498,
+      "noise_power_std": 1.3727228195859987e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-HQ-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6282716439417887,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-HQ-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6282716439417887,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.1725516242183005,
+      "phase_1khz_deg": 0.21488214402849087,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "Brit-HQ-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -145.6081395852055,
+      "noise_power_std": 1.3775669272293684e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-HQ-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8959401671975835,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/Brit-HQ-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8959401671975835,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.1625152568358459,
+      "phase_1khz_deg": 0.23150288921862217,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-Standard-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -143.7733534349012,
+      "noise_power_std": 3.0967273557554158e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Standard-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 62,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7171650075902514,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Standard-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 62,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7171650075902514,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.02998915868046481,
+      "phase_1khz_deg": -14.828093984940123,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-Standard-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -143.76394528899928,
+      "noise_power_std": 3.1763941437093596e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Standard-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6230453299895208,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Standard-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6230453299895208,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.10115333786505687,
+      "phase_1khz_deg": 0.1551353813846697,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-Standard-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -143.94524572636752,
+      "noise_power_std": 3.3610968448544582e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Standard-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8963114458362686,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Standard-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8963114458362686,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.09147186344467428,
+      "phase_1khz_deg": 0.17165700811231838,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-Circuit-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -124.12332354547105,
+      "noise_power_std": 4.3487982023318155e-13,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Circuit-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7457184267818866,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Circuit-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7457184267818866,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.04191790344688684,
+      "phase_1khz_deg": 176.54035715985472,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-Circuit-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -128.83140349846033,
+      "noise_power_std": 1.2366405844297194e-13,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Circuit-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6946674486797711,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Circuit-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6946674486797711,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.033234411224313476,
+      "phase_1khz_deg": 176.51526592348873,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-Circuit-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -128.85285760244298,
+      "noise_power_std": 1.2481924751683047e-13,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Circuit-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7483410683338914,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-Circuit-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7483410683338914,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.02306145765603418,
+      "phase_1khz_deg": 176.5336352533777,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-HQ-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -115.46412295379261,
+      "noise_power_std": 3.2782062176880387e-12,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-HQ-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8481915338211811,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-HQ-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8481915338211811,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.02922231926301322,
+      "phase_1khz_deg": 176.56435064163244,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-HQ-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -115.49269876696796,
+      "noise_power_std": 3.257086318736923e-12,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-HQ-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.698495303118875,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-HQ-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.698495303118875,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.0204490207904513,
+      "phase_1khz_deg": 176.55322041462063,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "N-Type-HQ-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -115.54375364520473,
+      "noise_power_std": 3.219018621591097e-12,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-HQ-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7488587195683709,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/N-Type-HQ-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7488587195683709,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.010251898682611227,
+      "phase_1khz_deg": 176.57166193889506,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-Standard-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -300.0,
+      "noise_power_std": 0.0,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Standard-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8139607964056705,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Standard-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8139607964056705,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.03502111050229928,
+      "phase_1khz_deg": -7.500000000000006,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-Standard-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -300.0,
+      "noise_power_std": 0.0,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Standard-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6233711597633347,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Standard-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6233711597633347,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.006642156525472842,
+      "phase_1khz_deg": -0.016738233258237215,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-Standard-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -287.17474980572416,
+      "noise_power_std": 2.2130661105755578e-29,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Standard-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8961605575622845,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Standard-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8961605575622845,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.016849044086669096,
+      "phase_1khz_deg": -0.0002674252733463537,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-Circuit-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -139.24801913539523,
+      "noise_power_std": 1.0868018586865563e-14,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Circuit-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8871903201102587,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Circuit-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8871903201102587,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.1464864335556726,
+      "phase_1khz_deg": -2.2654662230895664,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-Circuit-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -138.99299299684841,
+      "noise_power_std": 1.1691741828241458e-14,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Circuit-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7221669063179964,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Circuit-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7221669063179964,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.13784965012577288,
+      "phase_1khz_deg": -2.2795618534999558,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-Circuit-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -138.9982205101922,
+      "noise_power_std": 1.1674099399375744e-14,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Circuit-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8253909305695267,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-Circuit-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8253909305695267,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.1277984853287677,
+      "phase_1khz_deg": -2.262139931412077,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-HQ-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -140.49429629177158,
+      "noise_power_std": 8.45250544034751e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-HQ-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8824755267891893,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-HQ-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8824755267891893,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.14364806182750556,
+      "phase_1khz_deg": -2.2600958536520146,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-HQ-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -140.36360277344795,
+      "noise_power_std": 8.144273134569718e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-HQ-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7222016582554341,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-HQ-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7222016582554341,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.13500348509529658,
+      "phase_1khz_deg": -2.2741111170651984,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "FSF-HQ-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -140.36598670629792,
+      "noise_power_std": 8.14162236218538e-15,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-HQ-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8253643850191753,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/FSF-HQ-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8253643850191753,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.12493962259530633,
+      "phase_1khz_deg": -2.2566723695721387,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-Standard-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -300.0,
+      "noise_power_std": 0.0,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Standard-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7078959770219757,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Standard-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.7078959770219757,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.017778976995479923,
+      "phase_1khz_deg": -3.7500000000000044,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-Standard-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -300.0,
+      "noise_power_std": 0.0,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Standard-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6233137199129904,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Standard-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6233137199129904,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.007952280294006187,
+      "phase_1khz_deg": -0.016739021779415327,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-Standard-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -287.17474980572416,
+      "noise_power_std": 2.2130661105755578e-29,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Standard-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.89630592364984,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Standard-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.89630592364984,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": -0.018188757975686087,
+      "phase_1khz_deg": -0.00026747655772144384,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-Circuit-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -149.89449225232366,
+      "noise_power_std": 9.736948590881222e-17,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Circuit-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.9939500293479633,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Circuit-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.9939500293479633,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.057484817298401936,
+      "phase_1khz_deg": 0.7177939405935779,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-Circuit-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -149.91070984063595,
+      "noise_power_std": 9.692924542611743e-17,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Circuit-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.628288583695856,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Circuit-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.628288583695856,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.04872939672135601,
+      "phase_1khz_deg": 0.702094231964234,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-Circuit-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -149.91290535411733,
+      "noise_power_std": 9.618120632942378e-17,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Circuit-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8954763354706885,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-Circuit-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.8954763354706885,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.03856546663598692,
+      "phase_1khz_deg": 0.7188566843138333,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-HQ-1x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -149.55819638976942,
+      "noise_power_std": 1.6189811356427108e-16,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-HQ-1x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.9826243795690468,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-HQ-1x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.9826243795690468,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.06940530013602597,
+      "phase_1khz_deg": 0.720639282479478,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-HQ-2x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -149.55819638976942,
+      "noise_power_std": 1.6189811356427108e-16,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-HQ-2x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6283466083942482,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-HQ-2x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 61,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.6283466083942482,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.06064622603675218,
+      "phase_1khz_deg": 0.7049595956535095,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    },
+    {
+      "id": "A-Type-HQ-4x",
+      "repeats": 2,
+      "noise_floor_dbfs_rms": -149.55718882288267,
+      "noise_power_std": 1.6164836573176221e-16,
+      "alignment": [
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-HQ-4x-1.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.895512133209397,
+          "clipped_samples": 0
+        },
+        {
+          "path": "build/measurements/48k-linear-matrix/A-Type-HQ-4x-2.wav",
+          "delay_removed_samples": 60,
+          "pilot_detected_samples": 60,
+          "transport_delay_samples": 60,
+          "pilot_correlation": 0.895512133209397,
+          "clipped_samples": 0
+        }
+      ],
+      "clipped_samples": 0,
+      "small_signal_gain_db": 0.05049280099255782,
+      "phase_1khz_deg": 0.7217280151904141,
+      "ratio": null,
+      "threshold_dbfs": null,
+      "makeup_gain_db": null
+    }
+  ],
+  "publication": {
+    "capture_wavs_included": false,
+    "note": "Original renderer and capture hashes retained. These captures predate release packaging. All analyzed CSV bins are in the release archive."
+  }
+}
