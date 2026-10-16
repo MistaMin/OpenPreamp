@@ -48,7 +48,7 @@ static void runStereoToolsChecks() {
             "Peak/RMS switches both needle measurement and numeric dBFS readout");
         meter.setPeakMode(false);out.peak[0]=1.1f;meter.step(in,out,1.0f/30);
         check(meter.clipped(),"RMS mode retains peak-based clip indication");
-        OpenPreampProcessor p;
+        OpenPreampProcessor p;prepare(p); // Capture the actual prepared HQ/2x rate, not pre-audio placeholders.
         for(int mode : {0,1}) {
             set(p,"meterMode",float(mode));std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int matching=0;
             for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren())
@@ -62,23 +62,30 @@ static void runStereoToolsChecks() {
         }
     }
     {
-        OpenPreampProcessor p;std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int buttons=0;
+        OpenPreampProcessor p;prepare(p);std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int buttons=0;
         for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren())if(auto* choice=dynamic_cast<CycleButton*>(child)) {
-            juce::String label;juce::TextButton* key=nullptr;
+            juce::String label;juce::TextButton* key=nullptr;juce::TextButton* peak=nullptr;juce::TextButton* rms=nullptr;
             for(auto* control : choice->getChildren()) {
                 if(auto* title=dynamic_cast<juce::Label*>(control))label=title->getText();
-                if(auto* button=dynamic_cast<juce::TextButton*>(control))key=button;
+                if(auto* button=dynamic_cast<juce::TextButton*>(control);button && button->isVisible()) {
+                    key=button;
+                    if(button->getComponentID()=="meterMode-0")peak=button;
+                    if(button->getComponentID()=="meterMode-1")rms=button;
+                }
             }
-            if(key && (label=="MODE" || label=="VU")) {
-                const char* id=label=="MODE" ? "meterMode" : "meterSource";
-                const float original=p.apvts.getRawParameterValue(id)->load();
-                key->onClick();const float toggled=p.apvts.getRawParameterValue(id)->load();
-                key->onClick();const float restored=p.apvts.getRawParameterValue(id)->load();
-                check(std::abs(toggled-(1-original))<1e-6f && std::abs(restored-original)<1e-6f,"Two-choice meter key changes host parameter directly on each click");
-                ++buttons;
+            if(peak && rms) {
+                peak->onClick();const float peakValue=p.apvts.getRawParameterValue("meterMode")->load();
+                rms->onClick();const float rmsValue=p.apvts.getRawParameterValue("meterMode")->load();
+                rms->onClick();const float reselected=p.apvts.getRawParameterValue("meterMode")->load();peak->onClick();
+                check(peakValue==0 && rmsValue==1 && reselected==1,"Each meter exposes Peak/RMS keys that select rather than toggle");++buttons;
+            } else if(key && label=="SOURCE") {
+                const float original=p.apvts.getRawParameterValue("meterSource")->load();
+                key->onClick();const float toggled=p.apvts.getRawParameterValue("meterSource")->load();
+                key->onClick();const float restored=p.apvts.getRawParameterValue("meterSource")->load();
+                check(std::abs(toggled-(1-original))<1e-6f && std::abs(restored-original)<1e-6f,"Each SOURCE key toggles the existing shared Input/Output parameter");++buttons;
             }
         }
-        check(buttons==4,"Both VUs expose direct-click MODE and source keys");
+        check(buttons==4,"Both meters expose direct Peak/RMS selection and an Input/Output source key");
         editor->setSize(400,296);
         const auto image=editor->createComponentSnapshot(editor->getLocalBounds());
         juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-100-small.png"));

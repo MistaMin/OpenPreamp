@@ -28,6 +28,20 @@ static int runControlChecks() {
     check(dynamic_cast<juce::AudioParameterChoice*>(p.apvts.getParameter("circuitEngine"))->getCurrentChoiceName()=="Circuit","engine key is named Circuit");
     rate->selectChoice(3);engine->selectChoice(0);engine->selectChoice(1);
     check(p.apvts.getRawParameterValue("preampOversampling")->load()==3,"user-selected rate survives later engine changes");
+    std::map<juce::String,juce::TextButton*> choices;
+    std::function<void(juce::Component&)> findChoices=[&](juce::Component& c){
+        if(auto* key=dynamic_cast<juce::TextButton*>(&c)) if(key->isVisible() && key->getComponentID().isNotEmpty())choices[key->getComponentID()]=key;
+        for(auto* child:c.getChildren())findChoices(*child);
+    };findChoices(*editor);
+    check(choices.count("meterMode-0") && choices.count("meterMode-1") && choices["meterMode-0"]->getButtonText()=="Peak" && choices["meterMode-1"]->getButtonText()=="RMS","both Peak and RMS are visible direct choices");
+    check(choices.count("circuitEngine-0") && choices.count("circuitEngine-1") && choices.count("preampOversampling-1") && choices.count("preampOversampling-2") && choices.count("preampOversampling-3"),"Circuit/HQ and all explicit rates have direct keys");
+    if(choices.count("meterMode-1")) {choices["meterMode-1"]->onClick();check(p.apvts.getRawParameterValue("meterMode")->load()==1,"direct RMS key updates the existing shared host parameter");choices["meterMode-0"]->onClick();}
+    if(choices.count("preampOversampling-2") && choices.count("circuitEngine-0")) {
+        choices["preampOversampling-2"]->onClick();choices["circuitEngine-0"]->onClick();
+        check(p.apvts.getRawParameterValue("preampOversampling")->load()==2 && p.apvts.getRawParameterValue("circuitEngine")->load()==0,"direct rate and engine keys preserve a manual selection");
+        check(choices["preampOversampling-2"]->getToggleState() && choices["circuitEngine-0"]->getToggleState(),"selected rate and engine keys reflect their parameter states");
+    }
+    rate->selectChoice(3);engine->selectChoice(1); // Restore the rate used by the state-restore fixture below.
     OpenPreampProcessor automatic;
     set(automatic,"circuitEngine",1);automatic.chooseInitialRate();
     check(automatic.apvts.getRawParameterValue("preampOversampling")->load()==1,"initial Circuit rate is 1x before audio preparation");

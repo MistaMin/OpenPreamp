@@ -69,6 +69,7 @@ public:
         repaint();
     }
 
+    void setHardwareStyle(bool enabled) { hardware=enabled; title.setFont(juce::FontOptions(enabled?10.5f:design.fontSize,juce::Font::bold)); repaint(); }
     void resized() override
     {
         auto b = getLocalBounds();
@@ -85,22 +86,24 @@ public:
 
         juce::Colour backdrop;   // plate behind this knob: lets the toolkit draw dark marks on light plates and light marks on dark ones
         if (auto* panel = dynamic_cast<SectionPanel*>(getParentComponent())) backdrop = panel->getBackdrop();
-        goodlookinui::juce_adapter::drawKnob(g, knobBounds, isShowing() ? motion.position : valueToProportionOfLength(getValue()), design, isActive, backdrop);
+        const auto position=isShowing() ? motion.position : valueToProportionOfLength(getValue());
+        if(hardware) PreampChrome::knob(g,knobBounds,position,getAccent(),isActive && isEnabled());
+        else goodlookinui::juce_adapter::drawKnob(g, knobBounds, position, design, isActive, backdrop);
 
-        if(getWidth()>=110) {
+        if(getWidth()>=(hardware?90:110)) {
             g.setColour(hasPlateText?plateMid:Theme::textMid);g.setFont(juce::FontOptions(8.0f));
             const int y=juce::roundToInt(knobBounds.getBottom()-13);
             g.drawText(formatValue(float(getMinimum())),6,y,35,12,juce::Justification::centred);
             g.drawText(formatValue(float(getMaximum())),getWidth()-41,y,35,12,juce::Justification::centred);
         }
         // Exact values sit in a recessed readout beneath the physical control.
-        auto readout=valueArea.toFloat().withSizeKeepingCentre(68.0f,15.0f);
+        auto readout=valueArea.toFloat().withSizeKeepingCentre(hardware?84.0f:68.0f,15.0f);
         g.setColour(juce::Colour(0xff20292c));g.fillRoundedRectangle(readout,2);
         g.setColour(juce::Colour(0xff465255));g.drawRoundedRectangle(readout,2,0.6f);
         // Value readout below the knob
         g.setColour(isActive ? Theme::knobText : Theme::knobTextInactive);
-        g.setFont(juce::FontOptions(design.fontSize, juce::Font::bold));
-        g.drawText(formattedValue(), valueArea, juce::Justification::centred);
+        g.setFont(juce::FontOptions(hardware?10.5f:design.fontSize, juce::Font::bold));
+        g.drawText(hardware ? (valueType==KnobValueType::Frequency ? (getValue()>=1000 ? juce::String(getValue()/1000,1)+" kHz" : juce::String(juce::roundToInt(getValue()))+" Hz") : formattedValue()+(valueType==KnobValueType::Gain ? " dB" : "")) : formattedValue(), valueArea, juce::Justification::centred);
     }
 
     std::function<void()> onSelect;   // developer mode: clicking a knob selects it in the inspector
@@ -123,7 +126,7 @@ public:
     void applyDesign(const goodlookinui::Item& item) {
         design = item;
         title.setText(item.label, juce::dontSendNotification);
-        title.setFont(juce::FontOptions(item.fontSize, juce::Font::bold));
+        title.setFont(juce::FontOptions(hardware?10.5f:item.fontSize, juce::Font::bold));
         repaint();
     }
     const goodlookinui::Item& getDesign() const { return design; }
@@ -166,6 +169,7 @@ private:
 
     KnobValueType valueType;
     juce::Colour accentColour;
+    bool hardware=false;
     bool isActive = true;
     bool hasPlateText = false;
     juce::Colour plateText, plateMid;

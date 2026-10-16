@@ -2,6 +2,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Theme.h"
+#include "PreampChrome.h"
 #include <memory>
 #include <algorithm>
 #include <functional>
@@ -11,8 +12,11 @@
 // Compact look for cycle buttons: small bold text, subtle chrome.
 class CycleButtonLNF final : public juce::LookAndFeel_V4 {
 public:
+    bool hardware=false;
     void drawButtonBackground(juce::Graphics& g,juce::Button& b,const juce::Colour& base,bool over,bool down) override {
-        goodlookinui::juce_adapter::drawKey(g,b.getLocalBounds().toFloat().reduced(2),over?base.brighter(0.06f):base,down);
+        if(hardware) PreampChrome::key(g,b.getLocalBounds().toFloat().reduced(2),b.getComponentID().isEmpty() || b.getToggleState(),b.isEnabled(),over,down);
+        else goodlookinui::juce_adapter::drawKey(g,b.getLocalBounds().toFloat().reduced(2),over?base.brighter(0.06f):base,down);
+        if(hardware && b.hasKeyboardFocus(true)){g.setColour(PreampChrome::ink);g.drawRoundedRectangle(b.getLocalBounds().toFloat().reduced(1),3,1);}
     }
     juce::Font getTextButtonFont(juce::TextButton&, int) override
     {
@@ -63,6 +67,12 @@ public:
     void resized() override
     {
         auto b = getLocalBounds();
+        if(segmented) {
+            if(showSegmentTitle) title.setBounds(b.removeFromLeft(title.getText()=="OS" ? 22 : 42));
+            const int count=int(choiceKeys.size());
+            for(int i=0;i<count;++i) choiceKeys[size_t(i)]->setBounds(b.getX()+i*b.getWidth()/count,b.getY(),(i+1)*b.getWidth()/count-i*b.getWidth()/count,b.getHeight());
+            return;
+        }
         if (isHorizontal) {
             title.setBounds(b.removeFromLeft(42));
             button.setBounds(b.reduced(0, 1));
@@ -83,7 +93,21 @@ public:
             if (!param || index<0 || index>=param->choices.size()) { jassertfalse; return; }
         }
         menuOrder=std::move(order);
+        if(segmented)setSegmented(true,showSegmentTitle);
     }
+    // Direct choices still use the original parameter and host gestures.
+    void setSegmented(bool enabled, bool showTitle=true) {
+        segmented=enabled;showSegmentTitle=showTitle;button.setVisible(!enabled);
+        title.setVisible(!enabled || showTitle);choiceKeys.clear();
+        if(enabled) for(auto index : menuOrder) {
+            auto key=std::make_unique<juce::TextButton>(param->choices[index]);
+            key->setComponentID(paramID+"-"+juce::String(index));
+            key->setLookAndFeel(lnf.get());key->setTooltip(button.getTooltip());
+            key->onClick=[this,index]{selectChoice(index);};addAndMakeVisible(*key);choiceKeys.push_back(std::move(key));
+        }
+        updateText();refreshTheme();resized();
+    }
+    void setHardwareStyle(bool enabled) { lnf->hardware=enabled; refreshTheme(); }
     const std::vector<int>& getMenuOrder() const { return menuOrder; }
     bool selectChoice(int index) {
         if (!param || !isEnabled() || std::find(menuOrder.begin(),menuOrder.end(),index)==menuOrder.end()) return false;
@@ -128,12 +152,19 @@ public:
                              ? (hasPlateText ? (isHorizontal ? plateMid : plateText)
                                              : (isHorizontal ? Theme::textMid : Theme::textDark))
                              : Theme::buttonTextInactive);
+        for(auto& key:choiceKeys) {
+            key->setEnabled(isActive && isEnabled());
+            key->setColour(juce::TextButton::buttonColourId,Theme::buttonTop);
+            key->setColour(juce::TextButton::textColourOffId,PreampChrome::keyText(false,isActive));
+            key->setColour(juce::TextButton::textColourOnId,PreampChrome::keyText(true,isActive));
+            key->repaint();
+        }
         button.repaint();
     }
 
     bool getActive() const { return isActive; }
 
-    void setButtonTooltip(const juce::String& tip) { button.setTooltip(tip); }
+    void setButtonTooltip(const juce::String& tip) { button.setTooltip(tip);for(auto& key:choiceKeys)key->setTooltip(tip); }
 
     // Overrides the text shown on the key without touching the parameter. Used for the Oversample key,
     // whose displayed factor is the engine's effective one (the user's choice raised by the headroom
@@ -173,6 +204,11 @@ private:
         if (param == nullptr)
             return;
         button.setButtonText(textOverride.isNotEmpty() ? textOverride : param->getCurrentChoiceName());
+        for(size_t i=0;i<choiceKeys.size();++i) {
+            const auto index=menuOrder[i];
+            const bool selected=param->getIndex()==index || (param->getIndex()==0 && paramID=="preampOversampling" && textOverride==param->choices[index]);
+            choiceKeys[i]->setToggleState(selected,juce::dontSendNotification);
+        }
     }
 
     juce::AudioProcessorValueTreeState& apvts;
@@ -184,7 +220,9 @@ private:
     bool hasPlateText = false;
     juce::Colour plateText, plateMid;
     bool isHorizontal = false;
-    std::unique_ptr<juce::LookAndFeel> lnf;
+    bool segmented=false,showSegmentTitle=true;
+    std::unique_ptr<CycleButtonLNF> lnf;
     juce::Label title;
     juce::TextButton button;
+    std::vector<std::unique_ptr<juce::TextButton>> choiceKeys;
 };

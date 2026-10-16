@@ -1,6 +1,7 @@
 #pragma once
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "Theme.h"
+#include "PreampChrome.h"
 #include <vector>
 #include <GoodLookinUI.h>
 
@@ -61,10 +62,14 @@ public:
         for(int i=0;i<4;++i) out[i]=plate[i];
         return true;
     }
+    void setHardwareStyle(bool enabled) { hardware=enabled; repaint(); }
+    void setCompensation(bool enabled) { if(compensated!=enabled){compensated=enabled;repaint();} }
     void paint(juce::Graphics& g) override
     {
         auto b=getLocalBounds().toFloat().reduced(1);
-        goodlookinui::juce_adapter::drawPanel(g,b,hasPlate?plate[0]:Theme::panelTop,hasPlate?plate[1]:Theme::panelBottom,hasPlate?plateFinish:Theme::panelFinish);
+        if(hardware) PreampChrome::panel(g,b);
+        else goodlookinui::juce_adapter::drawPanel(g,b,hasPlate?plate[0]:Theme::panelTop,hasPlate?plate[1]:Theme::panelBottom,hasPlate?plateFinish:Theme::panelFinish);
+        if(hardware && compensated) PreampChrome::link(g,{float(getWidth())*.5f,128.f},true);
         g.setColour(accent.withAlpha(0.85f));g.fillRect(10.0f,10.0f,3.0f,15.0f);
         g.setColour(hasPlate?plate[2]:Theme::textDark);g.setFont(juce::FontOptions(11.5f,juce::Font::bold));
         g.drawText(title,18,8,getWidth()-58,20,juce::Justification::centredLeft);
@@ -122,6 +127,7 @@ private:
     juce::String title, subtitle;
     juce::Colour accent=Theme::preampCol;
     juce::Colour plate[4];
+    bool hardware=false, compensated=false;
     bool hasPlate=false;
     int plateFinish=0;
     juce::Component* bypassButton = nullptr;

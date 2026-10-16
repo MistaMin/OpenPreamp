@@ -1,5 +1,13 @@
 # OpenPreamp version history
 
+## 1.1.0 - development (2026-10-16)
+
+- Refresh the GUI with a navy hardware faceplate, tactile vector-drawn knobs, cream VU faces with signed scale markings and clearer gain/frequency readouts with units.
+- Add direct Peak/RMS, Circuit/HQ and 1x/2x/4x selectors using existing parameter identities and host gestures. Preserve Off-first presentation and initial N-Type/HQ/2x settings.
+- Show an illuminated compensation link between each active input/output pair; retain independent L/R linking and centered header controls.
+- Preserve per-model knob colours, proportional resizing, mouse-wheel editing, saved-state compatibility and all audio processing.
+- Keep the tube preamp engineering plan deferred; no tube model is included.
+
 ## 1.0.3 - 2026-10-16
 
 - Preserve explicit same-value host rate selections across later engine changes.

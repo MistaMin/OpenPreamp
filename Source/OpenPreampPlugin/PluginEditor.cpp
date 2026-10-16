@@ -4,7 +4,7 @@
 
 OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     : AudioProcessorEditor(&p), proc(p),
-      rightMeter(p), rightMeterSourceBtn(p.apvts, "meterSource", "VU", true),
+      rightMeter(p), rightMeterSourceBtn(p.apvts, "meterSource", "SOURCE", true),
       meterModeBtn(p.apvts, "meterMode", "MODE", true), rightMeterModeBtn(p.apvts, "meterMode", "MODE", true),
       midSideToggle(p.apvts, "midSide", "MS MODE", Theme::preampCol),
       cutsToggle(p.apvts, "cutsEnabled", "CUTS", Theme::preampCol),
@@ -15,7 +15,7 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
       preampPadBtn(p.apvts, "preampPad", "PAD"),
       circuitEngineBtn(p.apvts,"circuitEngine","ENGINE",true),
       meterPanel(p),
-      meterSourceBtn(p.apvts, "meterSource", "VU", true),
+      meterSourceBtn(p.apvts, "meterSource", "SOURCE", true),
       oversamplingBtn(p.apvts, "preampOversampling", "OS", true),
       preampBypassBtn(p.apvts, "preampBypass", Theme::preampCol),
       preampCircuitToggle(p.apvts, "preampCircuit", "MODELED", Theme::preampCol)
@@ -27,6 +27,14 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     oversamplingBtn.onChoiceSelected=[this](int){proc.markRateChosen();};
     circuitEngineBtn.onChoiceSelected=[this](int){proc.chooseInitialRate();};
     preampCircuitToggle.onClick=[this]{proc.chooseInitialRate();};
+    circuitEngineBtn.setMenuOrder({1,0});
+    circuitEngineBtn.setSegmented(true);oversamplingBtn.setSegmented(true);
+    meterModeBtn.setSegmented(true,false);rightMeterModeBtn.setSegmented(true,false);
+    for(auto* key : {&preampPadBtn,&preampTypeBtn,&circuitEngineBtn,&oversamplingBtn,&meterModeBtn,&rightMeterModeBtn,&meterSourceBtn,&rightMeterSourceBtn}) key->setHardwareStyle(true);
+    for(auto* toggle : {&midSideToggle,&linkToggle,&gainCompensationToggle,&cutsToggle,&monoMakerToggle,&preampCircuitToggle}) toggle->setHardwareStyle(true);
+    for(auto* panel : {&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel}) panel->setHardwareStyle(true);
+    meterPanel.setHardwareStyle(true);rightMeter.setHardwareStyle(true);
+    for(auto* knob : {&preampGainDial,&outputGainDial,&rightGainDial,&rightOutputDial,&highPassDial,&lowPassDial,&monoMakerDial}) knob->setHardwareStyle(true);
     modelLooks.fromCsv(openPreampModelLooks);
     preampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
     rightPreampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
@@ -118,21 +126,25 @@ void OpenPreampEditor::applyModelLook()
     if (!look) return;
     const auto* face = goodlookinui::findFaceplate(look->faceplate);
     if (face) editorLook = Theme::Look::from(*face);
+    editorLook.bgTop=juce::Colour(0xff102333);editorLook.bgBottom=juce::Colour(0xff06121c);
+    editorLook.titleBar=juce::Colour(0xff0b1b29);editorLook.text=PreampChrome::ink;
+    editorLook.textMid=PreampChrome::muted;editorLook.border=PreampChrome::rim;
+    editorLook.accent=PreampChrome::accent;
     const auto* plate = goodlookinui::findFaceplate(look->plate);
     if (!plate) plate = face;
     const auto colour = juce::Colour::fromString("ff" + juce::String(look->colour.substr(1)));
     for (auto* panel : {&preampPanel, &rightPreampPanel, &cutsPanel, &controlsPanel, &monoMakerPanel}) {
         panel->setAccentColour(colour);
         if (plate) panel->setPlate(juce::Colour(plate->panelTop), juce::Colour(plate->panelBottom),
-                                  juce::Colour(plate->text), juce::Colour(plate->textMid), plate->finish);
+                                  PreampChrome::ink, PreampChrome::muted, plate->finish);
     }
     for (auto* knob : {&preampGainDial, &outputGainDial, &rightGainDial, &rightOutputDial, &highPassDial, &lowPassDial, &monoMakerDial}) {
         auto design = knob->getDesign(); design.style = look->style; design.colour = look->colour;
         knob->applyDesign(design);
-        if (plate) { const juce::Colour text(plate->text), mid(plate->textMid); knob->setPlateText(&text, &mid); }
+        if (plate) { const juce::Colour text(PreampChrome::ink), mid(PreampChrome::muted); knob->setPlateText(&text, &mid); }
     }
     if (plate) {
-        const juce::Colour text(plate->text), mid(plate->textMid);
+        const juce::Colour text(PreampChrome::ink), mid(PreampChrome::muted);
         preampPadBtn.setPlateText(&text, &mid); preampTypeBtn.setPlateText(&text, &mid); circuitEngineBtn.setPlateText(&text,&mid);oversamplingBtn.setPlateText(&text,&mid);
         rateLabel.setColour(juce::Label::textColourId, mid);
     }
@@ -150,7 +162,7 @@ void OpenPreampEditor::paint(juce::Graphics& g)
     g.fillAll();
     g.setColour(editorLook.titleBar);g.fillRect(0,0,1000,52);
     g.setColour(editorLook.accent);g.fillRect(22,14,3,24);
-    g.setColour(editorLook.text);g.setFont(juce::FontOptions(22.0f,juce::Font::bold));
+    g.setColour(editorLook.text);g.setFont(juce::FontOptions("Georgia",28.0f,juce::Font::bold));
     g.drawText("OpenPreamp",36,10,240,32,juce::Justification::centredLeft);
     g.setColour(editorLook.textMid);g.setFont(juce::FontOptions(9.5f));
     g.drawText(juce::String(JucePlugin_VersionString)+"  /  OPENGRID",800,14,176,24,juce::Justification::centredRight);
@@ -168,7 +180,7 @@ void OpenPreampEditor::resized()
     canvas.setTransform(juce::AffineTransform::scale(float(getHeight())/740.0f));
     meterPanel.setBounds(16,68,476,210);rightMeter.setBounds(508,68,476,210);
     meterSourceBtn.setBounds(382,75,92,27);rightMeterSourceBtn.setBounds(874,75,92,27);
-    meterModeBtn.setBounds(284,75,82,27);rightMeterModeBtn.setBounds(776,75,82,27);
+    meterModeBtn.setBounds(246,75,128,27);rightMeterModeBtn.setBounds(738,75,128,27);
     preampPanel.setBounds(16,306,476,218);rightPreampPanel.setBounds(508,306,476,218);
     if(!layoutReady) {
         preampGainDial.setBounds(60,54,148,154);outputGainDial.setBounds(286,54,132,154);
@@ -179,14 +191,14 @@ void OpenPreampEditor::resized()
     cutsToggle.setBounds(270,80,70,30);
     monoMakerDial.setBounds(12,54,98,102);monoMakerToggle.setBounds(116,80,66,30);
     preampPadBtn.setBounds(14,56,100,60);preampTypeBtn.setBounds(120,56,112,60);
-    preampCircuitToggle.setBounds(244,56,96,26);oversamplingBtn.setBounds(244,96,96,26);
+    preampCircuitToggle.setBounds(244,76,96,27);oversamplingBtn.setBounds(180,118,160,28);
     constexpr int keyGap=10, menuWidth=110+80+164+2*keyGap;
     auto headerMenu=juce::Rectangle<int>((1000-menuWidth)/2,14,menuWidth,24);
     midSideToggle.setBounds(headerMenu.removeFromLeft(110));headerMenu.removeFromLeft(keyGap);
     linkToggle.setBounds(headerMenu.removeFromLeft(80));headerMenu.removeFromLeft(keyGap);
     gainCompensationToggle.setBounds(headerMenu);
-    circuitEngineBtn.setBounds(14,128,146,26);
-    rateLabel.setBounds(172,132,168,20);
+    circuitEngineBtn.setBounds(14,118,160,28);
+    rateLabel.setBounds(14,146,326,16);
 #if GOODLOOKINUI_ENABLE_EDITOR
     developerButton.setBounds(246,14,56,24);
 #endif
@@ -220,12 +232,15 @@ void OpenPreampEditor::timerCallback()
     rightMeter.setCaption(ms ? "SIDE LEVEL" : "RIGHT LEVEL");
     preampPanel.setTitle(ms ? "MID" : "LEFT");
     rightPreampPanel.setTitle(ms ? "SIDE" : "RIGHT");
+    const bool compensated=proc.apvts.getRawParameterValue("gainCompensation")->load()>0.5f;
+    preampPanel.setCompensation(compensated);
     const bool stereo = proc.getTotalNumInputChannels() == 2;
     const bool linked = !ms && proc.apvts.getRawParameterValue("channelLink")->load() > 0.5f;
     linkToggle.setVisible(true); linkToggle.setEnabled(stereo && !ms); linkToggle.setActive(stereo && !ms);
     rightGainDial.setEnabled(stereo && !linked); rightOutputDial.setEnabled(stereo && !linked);
     rightGainDial.setActive(stereo && !linked && !proc.apvts.getRawParameterValue("preampBypass")->load());
     rightOutputDial.setActive(stereo && !linked);
+    rightPreampPanel.setCompensation(compensated && stereo && !linked);
     monoMakerToggle.setEnabled(stereo); monoMakerToggle.setActive(stereo);
     monoMakerDial.setEnabled(stereo);
     monoMakerDial.setActive(stereo && monoMakerToggle.getToggleState() && !proc.apvts.getRawParameterValue("preampBypass")->load());

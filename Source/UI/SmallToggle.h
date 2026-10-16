@@ -2,6 +2,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Theme.h"
+#include "PreampChrome.h"
 #include <memory>
 #include <GoodLookinUI.h>
 
@@ -31,6 +32,7 @@ public:
 
     void setAccent(juce::Colour colour) { accentColour = colour; repaint(); }
 
+    void setHardwareStyle(bool enabled) { hardware=enabled; repaint(); }
     bool getActive() const { return isActive; }
 
     void paintButton(juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override
@@ -39,6 +41,13 @@ public:
         float h = juce::jmin(b.getHeight(), 30.0f);
         auto r = juce::Rectangle<float>(b.getWidth() - 4.0f, h).withCentre(b.getCentre());
 
+        if(hardware) {
+            PreampChrome::key(g,r,getToggleState(),isActive && isEnabled(),shouldDrawButtonAsHighlighted,shouldDrawButtonAsDown,true);
+            g.setColour(PreampChrome::keyText(getToggleState(),isActive && isEnabled(),true));
+            // Unselected switches use ivory hardware keys.
+            if(!getToggleState()){PreampChrome::key(g,r,true,isActive && isEnabled(),shouldDrawButtonAsHighlighted,shouldDrawButtonAsDown);g.setColour(PreampChrome::keyText(true,isActive && isEnabled()));}
+            g.setFont(juce::FontOptions(9.5f,juce::Font::bold));g.drawText(label,r,juce::Justification::centred);return;
+        }
         juce::Colour top, bottom;
         if (getToggleState()) {
             juce::Colour base = isActive ? accentColour : Theme::buttonInactiveTop;
@@ -78,6 +87,7 @@ public:
 private:
     juce::String label;
     juce::Colour accentColour;
+    bool hardware=false;
     bool isActive = true;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> attachment;
 };

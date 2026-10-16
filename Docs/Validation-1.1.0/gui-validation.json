@@ -1,0 +1,100 @@
+{
+  "version": "1.1.0",
+  "scope": "GUI update; no tube model; DSP and processor source identical to 1.0.3",
+  "base_source_commit": "e86efdc0d187127d12c5d37bda69e655039d544b",
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "build_type": "Release",
+  "developer_mode": false,
+  "minimum_macos": "11.0",
+  "tests": {
+    "focused_controls": {
+      "arm64": "37 checks, 0 failures",
+      "x86_64": "37 checks, 0 failures"
+    },
+    "processor_ui_smoke": {
+      "arm64": "555 checks, 0 failures"
+    },
+    "realtime_callbacks": {
+      "arm64": "960 callbacks; no C++ heap allocations/frees",
+      "x86_64": "960 callbacks; no C++ heap allocations/frees"
+    }
+  },
+  "formats": {
+    "version": "1.1.0",
+    "checks": [
+      "VST3: universal + version/license payload verified",
+      "AU: universal + version/license payload verified",
+      "CLAP: universal + version/license payload verified",
+      "LV2: universal + version/license payload verified",
+      "VST3: generated factory manifest version verified",
+      "CLAP: library loads, factory initializes, descriptor/version verified",
+      "LV2: library loads and descriptor/binary reference verified"
+    ],
+    "aax_distribution": false
+  },
+  "source_sha256": {
+    "VERSION": "1575e1af4a95f12f70b4ee6a6adce8160953d93ea17dc2611b90883ccc3ad3b8",
+    "Source/OpenPreampPlugin/PluginEditor.cpp": "edb53352da71cf69ed0e5dada38e10851f08652c8fe22519d9f153491b59d63d",
+    "Source/UI/PreampChrome.h": "551c4d77be69f2dc405daa4e54bc5a7aa95f594749adae179e4798702d7a680f",
+    "Source/UI/CycleButton.h": "db5e0a19443912be42d836d3c6204504081a3afa4a76c1dd8cec56035081ab75",
+    "Source/UI/MeterPanel.h": "78c10ae273c5a44b329acb1cc8aa10fd8f1f97495f5aedf75e8791fc54a76988",
+    "Source/UI/RotaryKnob.h": "e36b6eafd05ecbfa3088dc22e460a81444d9aa7261d2ab5836d812b9f7a473a6",
+    "Source/UI/SectionPanel.h": "4396861b3f6c07c14039896ac1150892133158ef268509a8f8932e8a5e656e4e",
+    "Source/UI/SmallToggle.h": "9343cddce9547bd40f8f7775460c2ed1778437ccc7c729e5c0efecb33b2aae2f",
+    "tests/openpreamp_control_checks.h": "467524cb88a54f2d881c81db3669a39bf5e0bca6613a063b8b3c21920825637e",
+    "tests/openpreamp_stereo_tools.h": "1bfd618a4c7542a48016524f3be619cc637d7bcfc4e9956133fa9c18c503c1fe"
+  },
+  "test_executable_sha256": {
+    "native_smoke": "c91ea1f021c9a151fc152b036fb9c8abd81edb6e3c574e13f0ae5c0fe4b2ffd3",
+    "universal_controls": "9645255e9634d32918b0c2b6658f2be349b09eea1faaceb03fcdd729cdb99c1d",
+    "universal_realtime": "c63d5576661f8faec8d500533281e0436c66be219228a30914b31f3455a1884a"
+  },
+  "visual_review": {
+    "actual_editor_snapshots": true,
+    "models": [
+      "Brit",
+      "N-Type",
+      "FSF",
+      "A-Type",
+      "Off"
+    ],
+    "modes": [
+      "L/R",
+      "M/S",
+      "linked",
+      "RMS",
+      "gain compensation"
+    ],
+    "resize_containment": "400x296, 500x370, 750x555, 1000x740, 1500x1110",
+    "manual_pages_reviewed": 15,
+    "manual_sha256": "55a991e52c200c648d39606f171ef4598af621dffea26c5d97a50bc892fd0a3e"
+  },
+  "screenshots_sha256": {
+    "OpenPreamp-1.1.0-atype.png": "4502fdb1e01688f228df52541fb0a045780c15a7d265a900471135b47b4d7f04",
+    "OpenPreamp-1.1.0-brit.png": "d0a127b75bbe011dbcb2c74fab608e5c09bfe133113030e7c694f96c152ed5cb",
+    "OpenPreamp-1.1.0-channels.png": "0a9cece52345b73fef465060e9d8602541785327dee8f4db979db3aa581a2bda",
+    "OpenPreamp-1.1.0-compensation.png": "adac6b299dca28f3f2dbd6a3189a9a30565772083cc656823e225888d77401d7",
+    "OpenPreamp-1.1.0-controls.png": "cc73b8c35b40e67a4214dc401a664a64a374d165a4c345344adb9ee5d0e61b7e",
+    "OpenPreamp-1.1.0-cuts.png": "80f784d0113f321cbbc2b7950483c3424fc7c55d708a6b12cf0f7d761ecc8f4b",
+    "OpenPreamp-1.1.0-fsf.png": "e84458ff7de89399d8614bfc1393c0fbd19dd5ea5638827fab9bac299f2c4ba9",
+    "OpenPreamp-1.1.0-linked.png": "77dde356f4810f0e06a3b60d3e1ed8ad61d10a6a986739c399851c5a1ec78d7b",
+    "OpenPreamp-1.1.0-meters.png": "69e821107b005b2aa355c155db4874eaa0ec5bb93299a1a649bdaf4986dafa03",
+    "OpenPreamp-1.1.0-ms-switch.png": "2731fa7e6948ba173d86b3d748f72eb7000057c508d51d73487190b2ef2c0157",
+    "OpenPreamp-1.1.0-ms.png": "1f1e9971f8975325408bebe53bc09fa08629f580e1469c22a4c84218887129dc",
+    "OpenPreamp-1.1.0-ntype.png": "07d5c4b87eb2426b46d4bb75989522d55b4b65bcd78cf45ca57fc6fd47bb86a7",
+    "OpenPreamp-1.1.0-preamp.png": "7ee56de663065065265078ea866d6361eef0ca4bc5f8ab2d7ec37c557408354f",
+    "OpenPreamp-1.1.0-preview.png": "b887d5ce43a2f7506de13e62ab3e355ca0da204ab0c0f71a394f1cbcf3c7f86b",
+    "OpenPreamp-1.1.0-rms.png": "b88433a93e9a5a31d4956f490f9fcc2df7c3b9988bc3b989d367e683f20b3247",
+    "OpenPreamp-1.1.0-small.png": "bc20315d40a401ccc5f13f223600ee182c506f291c1f01c23767cb7ed7ca775e",
+    "OpenPreamp-1.1.0-top-controls.png": "02e3ad28df21233017ffed0524536f961e2823366a833b3b2a76c349179b43e9"
+  },
+  "audio_measurement_snapshot": "1.0.3 retained without relabeling; no new audio captures claimed",
+  "publication": "Source update; latest packaged release remains 1.0.3; no 1.1.0 installer notarization claimed",
+  "limitations": [
+    "No new live DAW or listening acceptance run.",
+    "x86_64 checks run through Rosetta on Apple Silicon."
+  ]
+}
