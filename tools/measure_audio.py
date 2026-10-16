@@ -143,6 +143,17 @@ def generate(out, rate=48000, bits=24, quick=False):
                    frequency_hz=frequency, requested_frequency_hz=requested, level_dbfs=level,
                    fft_bin=bin_index, max_harmonic=31, analyze_start=position + warm,
                    analyze_stop=position + warm + n)
+    from sweep_spectrogram import chirp
+    for level in (-18, -6):
+        silence(.2 if quick else 1)
+        duration = 2 if quick else 8
+        fft_size = 512 if quick else 1024
+        append("linear_sweep", chirp(rate, duration, 20, 20000, level),
+               level_dbfs=level, duration_s=duration, frequency_start_hz=20,
+               frequency_stop_hz=20000, sweep_hz_per_s=(20000 - 20) / duration,
+               fade_seconds=.02, fft_size=fft_size, hop_samples=fft_size // 2,
+               window="periodic 4-term Blackman-Harris", display_min_dbfs=-140, display_max_dbfs=0,
+               prediction_max_harmonic=5)
     silence(.1)
     durations = [.15, .2, .25] if quick else [.5, 1, 2]
     counts = [round(d * rate) for d in durations]
@@ -432,6 +443,7 @@ def measure_record(record, plan, x, baseline=None):
     rate = plan["sample_rate"]
     tones, individual, spectra, phase, dynamics, noise, noise_windows = [], [], [], [], [], [], []
     aliasing, alias_spectra, alias_markers = [], [], []
+    linear_sweeps = []
     for s in plan["segments"]:
         if s["kind"] == "noise":
             for repeat, y in enumerate(captures):
@@ -439,6 +451,9 @@ def measure_record(record, plan, x, baseline=None):
                 noise.append(power)
                 noise_windows.append(dict(repeat=repeat + 1, start_sample=s["start"], stop_sample=s["stop"],
                                           power=power, noise_floor_dbfs_rms=float(db(math.sqrt(power)))))
+        elif s["kind"] == "linear_sweep":
+            from sweep_spectrogram import spectrogram
+            linear_sweeps.append(spectrogram([y[s["start"]:s["stop"]] for y in captures], rate, s))
         elif s["kind"] == "alias":
             row, spectrum, markers = alias_metrics([y[s["analyze_start"]:s["analyze_stop"]] for y in captures],
                                                    rate, s["fft_bin"], s["max_harmonic"])
@@ -522,7 +537,7 @@ def measure_record(record, plan, x, baseline=None):
                    makeup_gain_db=record["settings"].get("makeup_gain_db"))
     return dict(record=record, tones=tones, individual=individual, spectra=spectra, phase=phase, dynamics=dynamics,
                 alignment=alignment, summary=summary, noise_windows=noise_windows,
-                aliasing=aliasing, alias_spectra=alias_spectra, alias_markers=alias_markers)
+                aliasing=aliasing, alias_spectra=alias_spectra, alias_markers=alias_markers, linear_sweeps=linear_sweeps)
 
 
 def analyze(args):
@@ -554,6 +569,13 @@ def analyze(args):
         result = measure_record(record, plan, x, baseline)
         measured[record["id"]] = result
         print(f"Analyzed {record['id']}", flush=True)
+    from sweep_spectrogram import spectrogram, export_maps
+    linear_reference = [spectrogram([x[s["start"]:s["stop"]]], plan["sample_rate"], s)
+                        for s in plan["segments"] if s["kind"] == "linear_sweep"]
+    if linear_reference:
+        index, trajectories = export_maps(measured, linear_reference, plan["sample_rate"], out)
+        export_csv(out / "linear-sweep-index.csv", index)
+        export_csv(out / "linear-sweep-trajectories.csv", trajectories)
     for name in ("tones", "individual", "spectra", "phase", "dynamics", "noise_windows", "aliasing", "alias_spectra", "alias_markers"):
         export_csv(out / f"{name}.csv", [dict(capture_id=r["record"]["id"], model=r["record"]["model"],
                                            mode=r["record"]["mode"], oversampling=r["record"]["oversampling"], **row)
@@ -563,6 +585,9 @@ def analyze(args):
     import importlib.metadata
     provenance = dict(python=sys.version, numpy=np.__version__, matplotlib=importlib.metadata.version("matplotlib"),
                       analyzer_sha256=sha(__file__), command=sys.argv)
+    if linear_reference:
+        import sweep_spectrogram
+        provenance["sweep_analyzer_sha256"] = sha(sweep_spectrogram.__file__)
     save_json(out / "summary.json", dict(schema=SCHEMA, created_utc=stamp(), analysis=provenance, plan=plan, captures=records, results=summaries))
     export_csv(out / "noise.csv", [dict(capture_id=r["id"], noise_floor_dbfs_rms=r["noise_floor_dbfs_rms"],
                                         repeats=r["repeats"], clipped_samples=r["clipped_samples"]) for r in summaries])
@@ -575,10 +600,10 @@ def analyze(args):
                                    block_size=meta.get("block_size", "n/a"), repeats=len(record["files"]),
                                    nominal_gain_db=record["settings"]["nominal_gain_db"], **meta.get("parameters", {})))
     export_csv(out / "configurations.csv", configurations)
-    plot_results(measured, plan, out, load(args.targets) if args.targets else {})
+    plot_results(measured, plan, out, load(args.targets) if args.targets else {}, linear_reference)
 
 
-def plot_results(measured, plan, out, targets):
+def plot_results(measured, plan, out, targets, linear_reference=None):
     for key, value in targets.items():
         if key not in ("gain_error_db", "thdn_percent", "phase_difference_deg") or not isinstance(value, (float, int)) or not math.isfinite(value) or value < 0:
             raise ValueError(f"invalid measurement target: {key}")
@@ -589,6 +614,9 @@ def plot_results(measured, plan, out, targets):
     colors = dict(Standard="#2378b5", Circuit="#e48619", HQ="#299552", Hardware="#aa3377", Loopback="#777777")
     styles = {"1x": "-", "2x": "--", "4x": ":", "n/a": "-"}
     charts, differences = [], []
+    if linear_reference:
+        from sweep_spectrogram import plot_maps
+        charts.extend(plot_maps(measured, linear_reference, plan, out))
     conditions = (f"{plan['sample_rate']/1000:g} kHz | PCM{plan['bit_depth']} | unweighted 20 Hz–20 kHz | "
                   f"THD+N / fundamental | {'QUICK diagnostic' if plan['quick'] else 'full fixture'}")
     repeats = sorted({r["summary"]["repeats"] for r in measured.values()})
@@ -786,7 +814,7 @@ def plot_results(measured, plan, out, targets):
     if not any(r["record"]["kind"] == "hardware" for r in measured.values()):
         html.append("<p><strong>Plugin captures only. No physical hardware was measured in this report.</strong> Import calibrated hardware and loopback captures to add hardware overlays and phase-difference plots.</p>")
     import html as html_module
-    ordered = sorted(charts, key=lambda item: not item[0].startswith("all-preamps-"))
+    ordered = sorted(charts, key=lambda item: 0 if item[0].startswith("linear-sweep-") else 1 if item[0].startswith("all-preamps-") else 2)
     html.append("<nav>" + " · ".join(f"<a href='#{name}'>{html_module.escape(name)}</a>" for name, _ in ordered) + "</nav>")
     for filename, note in ordered:
         html.append(f"<figure id='{filename}'><h2>{html_module.escape(filename)}</h2><a href='{filename}.svg'><img src='{filename}.png' alt='{html_module.escape(filename)}' loading='lazy'></a><figcaption>{html_module.escape(note)}</figcaption></figure>")

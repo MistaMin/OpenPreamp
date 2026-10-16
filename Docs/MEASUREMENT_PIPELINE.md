@@ -37,7 +37,7 @@ host feeds both channels equally and records channel 1. Export a chosen hardware
 return channel as mono PCM without normalization, sample-rate conversion or added
 dither. Repeat the workflow for another channel if needed.
 
-`generate --quick` produces a 5.403-second diagnostic at 48 kHz, with fewer levels,
+`generate --quick` produces a 9.803-second diagnostic at 48 kHz, with fewer levels,
 frequencies and shorter settling. It exercises the pipeline; it is not a final
 fidelity/long-recovery measurement. The full fixture uses 13 levels, 31 frequency
 points, longer settling and a 5-second sweep. At least two independent captures
@@ -141,6 +141,40 @@ the DUT to interpret small results. Noise-floor plots include the loopback and
   spurs and transients). Neither metric is THD+N. Hardware traces include ADC
   filtering/aliasing and converter noise; these cannot be attributed solely to
   the analog DUT. Use the loopback evidence before interpreting small differences.
+- **Linear sweep harmonic/alias maps:** a separate, continuous 20 Hz → 20 kHz
+  linear-frequency chirp at each of −18 and −6 dBFS. Duration is 2 seconds per
+  level in quick mode, 8 seconds full, with 20 ms edge fades and a silent guard
+  before each sweep. It is distinct from the quiet logarithmic phase sweep.
+  Input frequency is the linear horizontal axis, and output frequency extends
+  from DC to the session Nyquist frequency (24/48 kHz). Each preamp has a matched
+  3×3 Standard/Circuit/HQ × 1x/2x/4x grid, with clean and annotated versions.
+  Separate input-reference and imported loopback maps expose analyzer/converter
+  artifacts. Predicted H1–H5 trajectories are solid before Nyquist and dashed
+  after folding: `abs(((h*f + Fs/2) modulo Fs) − Fs/2)`. Lines predict positions;
+  they do not assert that a harmonic is present or uniquely attributable.
+
+  The STFT uses a periodic four-term Blackman–Harris window, with coefficients
+  0.35875, 0.48829, 0.14128, 0.01168 and alternating signs. Quick/full FFT sizes
+  are 512/1,024 samples, 50% overlap, with no extra zero-padding or time/frequency
+  smoothing. Repeats are averaged in squared magnitude. Single-sided FFT bins
+  are scaled by coherent window gain, then displayed as dBFS peak per bin.
+  DC/Nyquist use their unmirrored scaling. Every panel uses the same −140…0 dBFS
+  color limits; raw bins below the display floor are retained. Hardware maps use
+  recorded ADC levels without gain normalization, complex de-embedding or noise
+  subtraction. Converter calibration and the loopback maps remain essential.
+
+  Captions state rate/PCM width, level, sweep slope/duration, window, FFT/hop,
+  bin spacing, equivalent noise bandwidth (ENBW), repeat count, and chirp drift
+  per window for H1 and H5. At 48 kHz quick mode, spacing is 93.75 Hz, window
+  length 10.67 ms and ENBW about 187.9 Hz. The 9,990 Hz/s sweep moves H1 by
+  106.56 Hz and H5 by 532.8 Hz within that window. Bin spacing is **not** the
+  effective resolving power of a chirped harmonic. Frequency-dependent DUT delay,
+  transients, spectral leakage, fades and overlapping tracks can affect brightness.
+  Fades/edge frames are retained with an `interior_frame` flag in raw data.
+  These are diagnostic maps, not isolated harmonic-amplitude or THD estimates;
+  use the steady-tone results for quantitative distortion. This makes the test
+  conditions explicit for the kind of harmonic sweep available in
+  [Plugindoctor](https://www.ddmf.eu/plugindoctor/).
 - **Dynamics:** continuous 1 kHz tone at −36 → −6 → −36 dBFS, with gain-reduction
   vs time. A centered 4 ms lock-in window smooths the envelope. Events faster than
   that are unresolved; the plot is not an automatic sub-millisecond attack-time
@@ -180,6 +214,11 @@ Without targets the report makes no acceptance claim.
 `tones.csv`, `individual.csv`, `spectra.csv`, `phase.csv`, `dynamics.csv`,
 `noise.csv` and `noise_windows.csv` preserve analyzed raw series for replotting.
 `aliasing.csv`, `alias_spectra.csv` and `alias_markers.csv` retain the alias tests.
+`linear-sweep-index.csv` points to per-capture full-resolution `CSV.gz` maps,
+including the input reference. Each row gives capture, level, time, input/output
+frequency, averaged peak-bin power, dBFS and edge-validity flag. The gzip files
+are ordinary CSV after decompression. `linear-sweep-trajectories.csv` exports the
+predicted harmonic/fold paths. No map downsampling is applied to raw exports.
 The latter retains each silence window/repeat, exposing tails versus initial
 noise separately. `configurations.csv` records actual mode/rate/ADAA settings.
 `summary.json` stores the
@@ -192,13 +231,16 @@ Run verification with:
 
 ```sh
 python3 -m unittest discover -s tests -p test_measure_audio.py
-python3 tests/verify_measurement_report.py build/measurements/synthetic-verification-fresh
+python3 -m unittest discover -s tests -p test_sweep_spectrogram.py
 ```
 
 Tests cover integer PCM formats, known harmonic amplitudes/THD+N, bandwidth,
 unavailable harmonics, polarity/delay, noise-power averaging, immutable fixtures,
 calibration requirements and loopback de-embedding that retains DUT delay, plus
 analytic folded-harmonic levels at 48/96 kHz and exclusion of real in-band harmonics.
+Sweep-map tests verify chirp cycle count, peak-bin units, power averaging without
+phase cancellation, Nyquist coverage, predicted multiple folds, a generated cubic
+alias ridge, time/frequency coordinates and full gzip CSV export.
 No synthetic test constitutes a physical hardware measurement. Optional SMPTE/
 CCIF IMD, live interface capture and automated compressor parameter sweeps are
 not included; imported per-ratio fixtures share the existing static/burst analysis.

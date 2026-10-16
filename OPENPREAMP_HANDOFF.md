@@ -4,6 +4,10 @@ VERSION is 1.0.2, development only. Read Docs/REDUCED_ENGINE_PLAN.md first.
 Measurement/charting workflow: Docs/MEASUREMENT_PIPELINE.md and
 tools/measure_audio.py. The default matrix covers all four preamps, three engines
 and explicit 1x/2x/4x (36 configurations), including coherent aliasing tests.
+Linear chirp maps now show harmonics and folded trajectories at −18/−6 dBFS,
+with matched absolute color scales, clean/annotated grids and CSV.gz map data.
+Their STFT resolution/leakage limits are explicit; steady tones retain the
+quantitative harmonic measurements.
 Physical hardware requires imported, calibrated synchronous
 captures plus loopback; no hardware measurement is implied by plugin/synthetic
 verification. Generated raw WAV/CSV/PNG/SVG reports stay under build/measurements.

@@ -4,7 +4,10 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import sys
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 spec = importlib.util.spec_from_file_location("measure_audio", Path(__file__).resolve().parents[1] / "tools/measure_audio.py")
 m = importlib.util.module_from_spec(spec)

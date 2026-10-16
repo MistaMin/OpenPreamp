@@ -9,6 +9,8 @@ from pathlib import Path
 import sys
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+
 spec = importlib.util.spec_from_file_location("measure_audio", Path(__file__).resolve().parents[1] / "tools/measure_audio.py")
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
@@ -51,7 +53,7 @@ def main(root):
     m.save_json(root / "targets.json", dict(gain_error_db=3, thdn_percent=2, phase_difference_deg=.05))
     m.analyze(argparse.Namespace(suite=root / "suite", manifests=[root / "hardware.json", root / "plugin.json"], out=root / "report", targets=root / "targets.json"))
     report = root / "report"
-    assert len(list(report.glob("*.png"))) == len(list(report.glob("*.svg"))) == 19
+    assert len(list(report.glob("*.png"))) == len(list(report.glob("*.svg"))) == 27
     assert (report / "phase-difference.csv").exists()
     assert (report / "target-checks.csv").exists()
     with (report / "target-checks.csv").open() as f:
@@ -61,7 +63,8 @@ def main(root):
     assert (report / "index.html").exists()
     assert "SYNTHETIC" in (report / "brit-phase-difference.svg").read_text()
     assert (report / "aliasing.csv").exists()
-    print("PASS synthetic import, loopback correction, 19 PNG/SVG chart pairs, aliasing, phase difference and CSV/HTML export")
+    assert (report / "linear-sweep-index.csv").exists()
+    print("PASS synthetic import, loopback correction, 27 PNG/SVG chart pairs, linear sweep maps, aliasing, phase difference and CSV/HTML export")
 
 
 if __name__ == "__main__":

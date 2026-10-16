@@ -97,7 +97,8 @@ filesystem autosave. See [release process](Docs/RELEASE_PROCESS.md).
 ## Measurement development
 
 Development measurement tools compare all four preamps across Standard/Circuit/HQ
-and 1x/2x/4x, with calibrated hardware import, repeated captures, aliasing tests, CSV data
+and 1x/2x/4x, with calibrated hardware import, repeated captures, aliasing tests,
+linear sweep harmonic maps, CSV data
 and PNG/SVG plots. See the [measurement workflow](Docs/MEASUREMENT_PIPELINE.md).
 
 ## Licensing

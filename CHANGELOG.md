@@ -2,6 +2,7 @@
 
 ## 1.0.2 - development (2026-10-15)
 
+- Add linear-frequency chirp spectrograms at two levels, common-scale mode/rate grids, clean and H1–H5/fold overlays, input/loopback references and complete compressed CSV maps with explicit FFT/window/sweep resolution.
 - Measure only explicit 1x/2x/4x rates; add coherent folded-harmonic energy, alias spectra, residual plots and raw alias CSVs.
 - Add shared hardware/plugin PCM measurement fixtures, calibrated loopback import, a 36-configuration preamp/mode/oversampling capture matrix, repeated-power analysis and CSV/PNG/SVG comparison reports. See Docs/MEASUREMENT_PIPELINE.md.
 - Name the engines Standard (lighter), Circuit Preview (reduced) and HQ (full component model).
