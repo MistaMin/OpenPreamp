@@ -1,0 +1,28 @@
+PASS numerical ADAA agrees with analytic tanh primitive
+PASS ADAA is finite for repeated, near-equal, zero-crossing and large inputs
+PASS reset removes stale sample history
+rate=44100 model=0 alias reduction=31.19 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+rate=44100 model=1 alias reduction=26.21 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+rate=44100 model=2 alias reduction=29.83 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+rate=44100 model=4 alias reduction=5.91 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+rate=48000 model=0 alias reduction=31.19 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+rate=48000 model=1 alias reduction=26.20 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+rate=48000 model=2 alias reduction=29.83 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+rate=48000 model=4 alias reduction=5.91 dB (relative to fundamental)
+PASS table curves do not increase measured alias ratio by more than 0.2 dB
+PASS ADAA reduces actual preamp alias energy by more than 1 dB
+0 failures

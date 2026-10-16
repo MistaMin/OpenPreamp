@@ -202,7 +202,7 @@ def capture_matrix(args):
                 ident = f"{model}-{mode}-{os}"
                 params = dict(preampType=MODELS[model], preampCircuit=int(mode != "Standard"),
                               circuitEngine=int(mode == "Circuit"), preampOversampling=RATE_PARAMETERS[os],
-                              hqMode=0, cutsEnabled=0, monoMakerEnabled=0, midSide=0,
+                              hqMode=0, gainCompensation=0, cutsEnabled=0, monoMakerEnabled=0, midSide=0,
                               preampPad=1, preampGain=0, preampGainR=0, outputGain=0, outputGainR=0)
                 files = []
                 for repeat in range(args.repeats):

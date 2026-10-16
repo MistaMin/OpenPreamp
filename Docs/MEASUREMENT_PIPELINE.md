@@ -9,12 +9,10 @@ recordings; plugin output and synthetic verification are never hardware evidence
 The default matrix is **Brit, N-Type, FSF, A-Type × Standard, Circuit, HQ ×
 1x, 2x, 4x**: 36 explicitly logged configurations per rate. Reports group
 charts by preamp; mode uses color and oversampling uses line style. Hardware for
-the same model is overlaid when imported. Circuit remains a preview with known
-HQ fidelity differences. No pass target is assumed between these engines.
+the same model is overlaid when imported. Circuit uses reduced models with known HQ fidelity differences. No pass target is assumed between these engines.
 Five overview charts also overlay the four preamps in a grid of every selected
 mode and oversampling combination (transfer, distortion, phase, dynamics and aliasing).
-The plugin's Default option remains available in the product; measurements use
-explicit factors only. Analysis also omits redundant Default rows in old manifests.
+The plugin menu offers only explicit 1x/2x/4x factors. Analysis also omits redundant Default rows in old manifests.
 
 ## Run plugin comparisons
 
@@ -42,10 +40,10 @@ frequencies and shorter settling. It exercises the pipeline; it is not a final
 fidelity/long-recovery measurement. The full fixture uses 13 levels, 31 frequency
 points, longer settling and a 5-second sweep. At least two independent captures
 are required; three is the default. The host resets the processor for each repeat,
-retains latency in the WAV and flushes the output tail. All 20 parameters, effective
+retains latency in the WAV and flushes the output tail. All 21 parameters, effective
 rate factor, ADAA state, version, offline flag, latency and buffer size are logged.
 Input cuts, mono maker, M/S, trims and legacy 4x are explicitly disabled or set to
-unity. Internal calculations remain floating point; the capture is quantized to
+unity; gain compensation is disabled. Internal calculations remain floating point; the capture is quantized to
 the same PCM format as the hardware fixture. Clipped samples are counted.
 
 Use `matrix --models Brit --modes Standard Circuit --oversampling 1x 2x` for a

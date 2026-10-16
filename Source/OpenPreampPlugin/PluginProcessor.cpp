@@ -79,12 +79,12 @@ OpenPreampProcessor::OpenPreampProcessor()
     static constexpr const char* ids[] = {"preampType","preampPad","preampGain","preampBypass","preampCircuit","outputGain","hqMode","meterSource","preampGainR","outputGainR","midSide","highPass","lowPass","cutsEnabled","channelLink","monoMakerEnabled","monoMakerFrequency","meterMode","circuitEngine","preampOversampling","gainCompensation"};
     static_assert(std::size(ids)==ParameterCount);
     for(size_t i=0;i<parameterValues.size();++i)parameterValues[i]=apvts.getRawParameterValue(ids[i]);
-    apvts.addParameterListener("preampOversampling",this);
+    apvts.getParameter("preampOversampling")->addListener(this);
 }
 
-OpenPreampProcessor::~OpenPreampProcessor() { apvts.removeParameterListener("preampOversampling",this); }
+OpenPreampProcessor::~OpenPreampProcessor() { apvts.getParameter("preampOversampling")->removeListener(this); }
 
-void OpenPreampProcessor::parameterChanged(const juce::String&, float) {
+void OpenPreampProcessor::parameterValueChanged(int, float) {
     if(!settingInitialRate.load(std::memory_order_relaxed)) markRateChosen();
 }
 

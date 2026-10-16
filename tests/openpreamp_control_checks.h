@@ -35,6 +35,10 @@ static int runControlChecks() {
     check(automatic.apvts.getRawParameterValue("preampOversampling")->load()==2,"initial HQ rate is 2x before a user rate choice");
     set(automatic,"preampCircuit",0);automatic.chooseInitialRate();
     check(automatic.apvts.getRawParameterValue("preampOversampling")->load()==1,"initial Standard rate is 1x");
+    OpenPreampProcessor hostChoice;hostChoice.chooseInitialRate();
+    set(hostChoice,"preampOversampling",2); // Explicitly reselect the current rate.
+    set(hostChoice,"circuitEngine",1);hostChoice.chooseInitialRate();
+    check(hostChoice.apvts.getRawParameterValue("preampOversampling")->load()==2,"same-value host rate selection prevents subsequent automatic rate changes");
     check(knobs.count("preampGain") && knobs.count("outputGain") && knobs.count("preampGainR") && knobs.count("outputGainR"),"gain knobs retain their parameter identities");
     if(!knobs.count("preampGain") || !knobs.count("outputGain"))return 1;
     auto* input=knobs["preampGain"];auto* output=knobs["outputGain"];

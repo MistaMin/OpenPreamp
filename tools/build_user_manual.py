@@ -15,6 +15,7 @@ from reportlab.graphics import renderPDF, renderSVG
 ROOT=Path(__file__).resolve().parents[1]
 VERSION=(ROOT/'VERSION').read_text().strip()
 DOC=ROOT/'Docs'
+SCREENSHOTS=Path(os.environ.get('OPENPREAMP_SCREENSHOT_DIR','/private/tmp'))
 OUT=ROOT/'output/pdf/OpenPreamp-User-Manual.pdf'
 NAVY=colors.HexColor('#101a30'); RED=colors.HexColor('#a32323'); GREY=colors.HexColor('#526078')
 
@@ -39,13 +40,21 @@ def diagram(name, rows):
     subprocess.run(['pdftoppm','-r','144','-singlefile','-png',str(temp/(name+'.pdf')),str(DOC/name)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 
 def assets():
-    source=PILImage.open('/private/tmp/openpreamp-100-preview.png')
+    source=PILImage.open(SCREENSHOTS/'openpreamp-100-preview.png')
     for name,box in [('meters',(16,68,492,278)),('channels',(16,306,492,524)),('preamp',(628,540,984,704)),('cuts',(16,540,598,704))]:
         source.crop(box).save(DOC/f'OpenPreamp-{VERSION}-{name}.png')
     for suffix in ['preview','ms','linked','rms','small']:
-        path=Path(f'/private/tmp/openpreamp-100-{suffix}.png')
+        path=SCREENSHOTS/f'openpreamp-100-{suffix}.png'
         if path.exists():(DOC/f'OpenPreamp-{VERSION}-{suffix}.png').write_bytes(path.read_bytes())
-    PILImage.open(DOC/f'OpenPreamp-{VERSION}-ms.png').crop((395,6,615,45)).save(DOC/f'OpenPreamp-{VERSION}-ms-switch.png')
+    PILImage.open(DOC/f'OpenPreamp-{VERSION}-ms.png').crop((303,6,523,45)).save(DOC/f'OpenPreamp-{VERSION}-ms-switch.png')
+    for name,index in [('brit',0),('ntype',1),('fsf',2),('atype',4)]:
+        path=SCREENSHOTS/f'openpreamp-100-model-{index}.png'
+        if path.exists():(DOC/f'OpenPreamp-{VERSION}-{name}.png').write_bytes(path.read_bytes())
+    controls=SCREENSHOTS/'openpreamp-controls.png'
+    if controls.exists():
+        control_image=PILImage.open(controls)
+        control_image.crop((303,6,697,45)).save(DOC/f'OpenPreamp-{VERSION}-top-controls.png')
+        control_image.crop((16,306,492,524)).save(DOC/f'OpenPreamp-{VERSION}-compensation.png')
     diagram('OpenPreamp-SignalFlow',[
         ('1  Session rate: input tools',['DAW L/R input','Optional M/S|encoder','Optional Side HP|mono maker','Shared HP / LP|+ input gain / PAD']),
         ('2  Choose model and rate',['Standard / Circuit|or full HQ','OS: 1x / 2x / 4x|IIR 2x / FIR 4x','Nonlinear|processing','Return to|session rate']),

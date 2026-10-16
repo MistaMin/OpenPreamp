@@ -2,28 +2,31 @@
 
 **Circuit colour. Independent meters. Stereo and Mid/Side control.**
 
-![OpenPreamp 1.0.2](Docs/OpenPreamp-1.0.2-preview.png)
+![OpenPreamp 1.0.3](Docs/OpenPreamp-1.0.3-preview.png)
 
 OpenPreamp is a preamp and metering tool from **OpenGrid / Marcos Deida**,
 extracted from HybridEQ. Four preamp models, two independent processing streams,
 and a compact resizable interface - without a parametric EQ or separate
 harmonics engine.
 
-[OpenPreamp 1.0.2 release](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.0.2) ·
+[OpenPreamp 1.0.3 release](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.0.3) ·
 [Illustrated PDF manual](output/pdf/OpenPreamp-User-Manual.pdf) ·
 [Online manual](Docs/UserManual.md) · [Version history](CHANGELOG.md)
 
 ## Shape the drive, choose the model
 
-- **Brit, N-Type, FSF and A-Type**, plus a clean Off path. Model changes switch
+- **Off first in the model menu**, then Brit, N-Type, FSF and A-Type. New
+  instances select N-Type. Model changes switch
   the saved plates, knob styles and colours.
-- **Standard:** lighter preamp models. **Circuit Preview:** reduced circuit models.
+- **Standard:** lighter preamp models. **Circuit:** reduced circuit models.
   **HQ:** full component networks; the factory default engine.
-- Explicit **1x / 2x / 4x** oversampling for every engine. Default selects 1x
-  for Standard/Circuit and 2x for HQ. 2x uses IIR; 4x uses FIR resampling.
+- Explicit **1x / 2x / 4x** oversampling for every engine. Initial rates are 1x
+  for Standard/Circuit and 2x for HQ; a manual rate choice is then retained. 2x uses IIR; 4x uses FIR resampling.
 - **ADAA** runs at 1x for Standard and Circuit, and turns off at 2x/4x.
   HQ does not use ADAA. Legacy sessions retain their previous rate settings.
-- Independent **input and output trims**, shared **PAD**, and **Link** for L/R.
+- Independent **input and output trims**, shared **PAD**, and **L/R LINK**.
+- **GAIN COMPENSATION** moves input/output inversely, independently of L/R Link.
+  Wheel-edit hovered or clicked gain/frequency knobs. The top controls are centered.
 - **MS MODE** encodes before the preamp and decodes after downsampling. Link
   greys out while Mid and Side remain independently adjustable.
 - Shared **12 dB/octave high/low cuts** and a **6 dB/octave Side-only mono maker**.
@@ -32,13 +35,13 @@ harmonics engine.
   directly on click, peak bars, peak hold and resettable clip lamps.
 - Proportional resizing from **400 x 296** to **1500 x 1110**; default 1000 x 740.
 
-![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.0.2-ms.png)
+![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.0.3-ms.png)
 
 ## Model appearances
 
-![Brit](Docs/OpenPreamp-1.0.2-brit.png)
-![FSF](Docs/OpenPreamp-1.0.2-fsf.png)
-![A-Type](Docs/OpenPreamp-1.0.2-atype.png)
+![Brit](Docs/OpenPreamp-1.0.3-brit.png)
+![FSF](Docs/OpenPreamp-1.0.3-fsf.png)
+![A-Type](Docs/OpenPreamp-1.0.3-atype.png)
 
 ## Install
 
@@ -75,7 +78,7 @@ knob drives a fixed-unity internal gain network externally.
 ![Signal flow and sample-rate boundaries](Docs/OpenPreamp-SignalFlow.png)
 
 HQ selects the full component model. Oversampling is a separate control;
-linear phase describes 4x FIR resampling, not the entire plugin. Circuit Preview
+linear phase describes 4x FIR resampling, not the entire plugin. Circuit
 uses reduced approximations and has not passed all HQ sound-equivalence gates. Models use estimated parameters
 and simplified devices; they are not measured clones of specific hardware.
 
@@ -108,26 +111,19 @@ autosave to `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.csv`.
 Production builds bake those files into the binary and have no DEV tools or
 filesystem autosave. See [release process](Docs/RELEASE_PROCESS.md).
 
-## Source control updates
-
-Current source adds inverse **GAIN COMPENSATION**, hovered/clicked-knob wheel
-editing, a centered header, Off-first model ordering and explicit-rate menus.
-See [control changes and validation](Docs/CONTROL_UPDATES.md). These updates are
-listed as Unreleased; the 1.0.2 download retains its published interface.
-
 ## Measurement development
 
 Development measurement tools compare all four preamps across Standard/Circuit/HQ
 and 1x/2x/4x, with calibrated hardware import, repeated captures, aliasing tests,
 linear sweep harmonic maps, CSV data and PNG/SVG plots.
 
-[Read the 1.0.2 measurement report](Docs/Measurements-1.0.2/REPORT.md) ·
-[Download all charts and raw CSV maps](https://github.com/MistaMin/OpenPreamp/releases/download/v1.0.2/OpenPreamp-1.0.2-Audio-Measurements.zip) ·
+[Read the 1.0.3 measurement report](Docs/Measurements-1.0.3/REPORT.md) ·
+[Download all charts and raw CSV maps](https://github.com/MistaMin/OpenPreamp/releases/download/v1.0.3/OpenPreamp-1.0.3-Audio-Measurements.zip) ·
 [Reproduce the measurements](Docs/MEASUREMENT_PIPELINE.md).
 
 The report contains 92 chart pairs from 72 actual offline captures at 48 kHz/PCM24.
 No physical hardware or synthetic hardware overlays are presented. Short fixtures
-are development diagnostics; Circuit Preview retains its documented fidelity limits.
+are development diagnostics; Circuit retains its documented fidelity limits.
 
 ## Licensing
 

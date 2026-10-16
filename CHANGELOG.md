@@ -1,6 +1,10 @@
 # OpenPreamp version history
 
-## Unreleased
+## 1.0.3 - 2026-10-16
+
+- Preserve explicit same-value host rate selections across later engine changes.
+
+- Release updated universal Mac plugins in a signed/notarized system-wide PKG and DMG, with fresh screenshots, illustrated manual and a new 48 kHz measurement matrix.
 
 - Put Off first in the model menu while keeping N-Type as the initial selection and retaining saved model indices.
 - Rename Circuit Preview to Circuit. Show only explicit 1x/2x/4x rates, choose initial engine rates automatically, and preserve subsequent user rate choices.

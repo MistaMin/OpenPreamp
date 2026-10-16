@@ -1,20 +1,39 @@
 {
-  "status": "unreleased source; published 1.0.2 installer unchanged",
-  "architecture": "arm64",
-  "tests": {
-    "focused_controls": "31 checks, 0 failures",
+  "version": "1.0.3",
+  "status": "production Release build; developer mode OFF",
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "tests_per_architecture": {
+    "focused_controls": "32 checks, 0 failures",
     "processor_ui_smoke": "555 checks, 0 failures",
-    "realtime_callbacks": "960 audio callbacks, 0 with C++ heap allocations or frees"
+    "adaa": "0 failures",
+    "native_adaa": "58 checks, 0 failures",
+    "reduced_kernels": "336 checks, 0 failures",
+    "realtime_callbacks": "960 audio callbacks, 0 with C++ heap allocations or frees",
+    "audio_unit": "Fresh release AU factory instantiates and renders finite stereo at 48 kHz/128 samples"
   },
   "source_sha256": {
     "Source/OpenPreampPlugin/PluginEditor.cpp": "a1ef18762738e418ccc67102aba7e66f9a3ebe3c0948f1821be8d2d5fa0f5400",
     "Source/OpenPreampPlugin/PluginEditor.h": "5b6035d53d19a559062dd3a6275c986aeefb68b0e7a0281305c76675dc6ce321",
-    "Source/OpenPreampPlugin/PluginProcessor.cpp": "d3666eef77d460f291db274020da60adde4455f8c49800f319d3dbaeb9fcd56d",
-    "Source/OpenPreampPlugin/PluginProcessor.h": "4b1306eeabd7d23aefb9c736b7790a13a1e43882b86c943bf5872a9cc5c947af",
+    "Source/OpenPreampPlugin/PluginProcessor.cpp": "960d0cfbb2cf391caeb9c66bc535b910bf250c70a20849dd5e0dd0263d808e49",
+    "Source/OpenPreampPlugin/PluginProcessor.h": "2aca6afe5d7e00502d84ccc18651f4ec246606ee9f7143fa1663a4e8bf9857f0",
     "Source/UI/CycleButton.h": "9ca1216a9a9cad6e9d2e2f5ea0633bd3b3da09f8ae28fd03de81bddc389f0f9b",
-    "Source/UI/RotaryKnob.h": "100b7306075d28709f8943329cff49c3e650b8c88732647bce3c2d9b62c7585a"
+    "Source/UI/RotaryKnob.h": "100b7306075d28709f8943329cff49c3e650b8c88732647bce3c2d9b62c7585a",
+    "tests/openpreamp_control_checks.h": "8bdcdc5159f1c0d5f25d65d7cc9e9a85c88c08e4125ca29528a2f7bc715b984b"
   },
-  "local_vst3_built": true,
-  "local_vst3_signature": "ad hoc; not a notarized release package",
-  "screenshot": "OpenPreamp-controls-unreleased.png"
+  "public_formats": [
+    "VST3",
+    "AU",
+    "CLAP",
+    "LV2"
+  ],
+  "plugin_signature": "Developer ID Application; hardened runtime and timestamp; strict verification passed",
+  "screenshot": "OpenPreamp-1.0.3-controls.png",
+  "evidence_directory": "Validation-1.0.3",
+  "limitations": [
+    "Automated and visual checks; no new DAW listening sign-off or physical hardware capture.",
+    "Installer payload and fixture checks do not perform a live install or alter installed comparison plugins."
+  ]
 }

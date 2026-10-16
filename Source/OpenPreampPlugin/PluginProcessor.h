@@ -10,7 +10,7 @@
 
 class OpenPreampProcessor;
 
-class OpenPreampProcessor : public juce::AudioProcessor, private juce::AudioProcessorValueTreeState::Listener {
+class OpenPreampProcessor : public juce::AudioProcessor, private juce::AudioProcessorParameter::Listener {
 public:
     OpenPreampProcessor();
     ~OpenPreampProcessor() override;
@@ -57,7 +57,8 @@ private:
     std::array<std::atomic<float>*,ParameterCount> parameterValues{};
     float value(ParameterIndex index) const noexcept { return parameterValues[size_t(index)]->load(std::memory_order_relaxed); }
     void updateParameters();
-    void parameterChanged(const juce::String&, float) override;
+    void parameterValueChanged(int, float) override;
+    void parameterGestureChanged(int, bool) override {}
     std::atomic<bool> rateChosen{false}, settingInitialRate{false};
     std::unique_ptr<dsp::ReducedCircuitBank> reducedBank;
     std::array<dsp::ReducedCircuitKernel,2> reducedKernels;

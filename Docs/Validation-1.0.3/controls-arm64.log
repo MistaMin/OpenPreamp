@@ -1,0 +1,33 @@
+PASS new instance selects N-Type, not Off
+PASS new HQ instance starts at explicit 2x
+PASS model order starts with Off; oversampling menu contains only 1x/2x/4x
+PASS Off can be selected and switched back without remapping model IDs
+PASS retired legacy rate cannot be chosen from the UI
+PASS Circuit initially selects explicit 1x
+PASS engine key is named Circuit
+PASS user-selected rate survives later engine changes
+PASS initial Circuit rate is 1x before audio preparation
+PASS initial HQ rate is 2x before a user rate choice
+PASS initial Standard rate is 1x
+PASS same-value host rate selection prevents subsequent automatic rate changes
+PASS gain knobs retain their parameter identities
+PASS wheel raises input without compensation when Gain Compensation is off
+PASS Gain Compensation inversely adjusts output on an input wheel edit
+PASS Gain Compensation also compensates an output wheel edit
+PASS linked gains stop at the peer limit without losing their dB sum
+PASS linked knob change reaches the saved host parameter
+PASS programmatic/host changes do not create feedback edits
+PASS Gain Compensation and explicit rate survive state restore
+PASS all three filter/mono-maker frequency knobs are available
+PASS wheel raises the hovered filter frequency
+PASS wheel lowers the hovered filter frequency
+PASS wheel raises the hovered filter frequency
+PASS wheel lowers the hovered filter frequency
+PASS wheel raises the hovered filter frequency
+PASS wheel lowers the hovered filter frequency
+PASS background wheel edits the clicked gain with inverse compensation
+PASS right-channel compensation remains independent of the left
+PASS older sessions restore Gain Compensation off
+PASS updated header controls fit the editor
+PASS updated controls remain contained at minimum size
+32 checks, 0 failures

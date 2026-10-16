@@ -1,0 +1,17 @@
+{
+  "version": "1.0.3",
+  "live_install_performed": false,
+  "default_cleanup_button": "Move to Trash",
+  "requires_user_response": true,
+  "unattended_cleanup": false,
+  "checks": [
+    "System-volume-only installation; home install and bundle relocation disabled; no AAX",
+    "VST3: exact signed bundle preserved at /Library/Audio/Plug-Ins/VST3/OpenPreamp.vst3",
+    "AU: exact signed bundle preserved at /Library/Audio/Plug-Ins/Components/OpenPreamp.component",
+    "CLAP: exact signed bundle preserved at /Library/Audio/Plug-Ins/CLAP/OpenPreamp.clap",
+    "LV2: exact signed bundle preserved at /Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2",
+    "arm64: 10 consent/version/identity/symlink cleanup checks passed",
+    "x86_64: 10 consent/version/identity/symlink cleanup checks passed",
+    "Manual, licenses, user review command and exact postinstall script present"
+  ]
+}

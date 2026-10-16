@@ -14,9 +14,18 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--archive', type=Path, required=True)
     args = parser.parse_args()
+    version = (Path(__file__).resolve().parents[1] / "VERSION").read_text().strip()
     source, out = args.source.resolve(), args.out.resolve()
     summary = json.loads((source / 'summary.json').read_text())
     captures = summary['captures']
+    if any(len(c.get('render_metadata', [])) != 2 or
+           any(m.get('plugin_version') != version or m.get('block_size') != 64 or
+               m.get('parameters', {}).get('gainCompensation') != 0
+               for m in c.get('render_metadata', [])) for c in captures):
+        raise ValueError('Release report needs two current-version captures with gain compensation disabled')
+    plan = summary['plan']
+    if plan['sample_rate'] != 48000 or plan['bit_depth'] != 24 or not plan['quick']:
+        raise ValueError('This report template requires the 48 kHz PCM24 quick suite')
     expected = {(model, mode, rate) for model in ('Brit', 'N-Type', 'FSF', 'A-Type')
                 for mode in ('Standard', 'Circuit', 'HQ') for rate in ('1x', '2x', '4x')}
     actual = {(c['model'], c['mode'], c['oversampling']) for c in captures}
@@ -43,7 +52,7 @@ def main():
         if destination.suffix in ('.csv', '.svg', '.html'):
             destination.write_text('\n'.join(line.rstrip() for line in destination.read_text().splitlines()) + '\n')
     (out / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
-    report = '''# OpenPreamp 1.0.2 audio measurements
+    report = f'''# OpenPreamp {version} audio measurements
 
 Actual plugin diagnostics: **4 preamps × Standard/Circuit/HQ × explicit 1x/2x/4x**.
 36 configurations, two offline captures each; 48 kHz, PCM24, 64-sample buffers,
@@ -51,7 +60,7 @@ identical 9.803-second quick fixture. No Default traces or synthetic hardware pl
 Settings, effective oversampling, ADAA policy, latency, capture hashes and analysis
 versions are recorded in [summary.json](summary.json) and [configurations.csv](configurations.csv).
 
-[Download every chart and raw CSV, including full spectrogram bins](https://github.com/MistaMin/OpenPreamp/releases/download/v1.0.2/OpenPreamp-1.0.2-Audio-Measurements.zip).
+[Download every chart and raw CSV, including full spectrogram bins](https://github.com/MistaMin/OpenPreamp/releases/download/v{version}/OpenPreamp-{version}-Audio-Measurements.zip).
 Download this directory and open [index.html](index.html) for the complete chart gallery.
 The GitHub directory includes 92 PNG/SVG chart pairs and ordinary CSV tables;
 large gzip CSV maps are distributed in the release archive. Original capture WAVs
@@ -61,7 +70,7 @@ are not bundled; their hashes and renderer provenance remain in the manifest.
 
 Standard and Circuit use ADAA at 1x and disable it at 2x/4x; HQ uses the full
 component model without ADAA. 2x uses IIR resampling; 4x uses FIR resampling.
-All plots use explicit rates. Circuit remains labeled Preview: the reduced models
+All plots use explicit rates. Circuit uses reduced models that
 have not passed every HQ sound-equivalence gate. A full product release does not
 establish hardware equivalence or promote measured stage candidates into the engine.
 
@@ -101,9 +110,9 @@ not represented as having produced these captures.
     args.archive.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(args.archive, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
         for path in sorted(out.iterdir()):
-            if path.is_file(): archive.write(path, 'OpenPreamp-1.0.2-Audio-Measurements/' + path.name)
+            if path.is_file(): archive.write(path, f'OpenPreamp-{version}-Audio-Measurements/' + path.name)
         for path in sorted(source.glob('*.csv.gz')):
-            archive.write(path, 'OpenPreamp-1.0.2-Audio-Measurements/' + path.name)
+            archive.write(path, f'OpenPreamp-{version}-Audio-Measurements/' + path.name)
     digest = hashlib.sha256(args.archive.read_bytes()).hexdigest()
     print(f'{len(pngs)} chart pairs, {len(captures)} plugin configurations; archive SHA256 {digest}')
 

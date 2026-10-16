@@ -1,4 +1,4 @@
-# OpenPreamp 1.0.2
+# OpenPreamp 1.0.3
 
 ## User manual
 
@@ -6,7 +6,7 @@
 
 A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp combines component-network circuit simulation with a lighter antialiased model. It contains no parametric EQ, spectrum analyzer, separate harmonics engine, automatic loudness matching, or limiter.
 
-![OpenPreamp main interface](OpenPreamp-1.0.2-preview.png)
+![OpenPreamp main interface](OpenPreamp-1.0.3-preview.png)
 
 **Public Mac formats:** VST3, Audio Unit, CLAP and LV2. Universal Apple Silicon / Intel build, macOS 11 or later. AAX is built privately and is excluded from the public download.
 
@@ -14,7 +14,7 @@ A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp 
 
 ## 1. Installation and your first session
 
-Close your DAW. Open the release disk image, double-click OpenPreamp-1.0.2-Installer.pkg and follow Installer. Administrator authorization is required. The package installs all four formats for every user in the main Library, and creates the format folders if needed.
+Close your DAW. Open the release disk image, double-click OpenPreamp-1.0.3-Installer.pkg and follow Installer. Administrator authorization is required. The package installs all four formats for every user in the main Library, and creates the format folders if needed.
 
 | Format | Bundle | System installation folder |
 |---|---|---|
@@ -27,9 +27,9 @@ After installation, a dialog lists matching older or current OpenPreamp copies i
 
 Unattended installs retain user copies. To review them later, open Check User Copies.command in /Library/Application Support/OpenGrid/OpenPreamp. The manual and licenses are installed there too. Restart your DAW, rescan plugins, and choose OpenPreamp on a mono or stereo track. Each host supports its own subset of formats.
 
-Start with INPUT and OUTPUT at 0 dB and PAD at Unity. N-Type is the initial model. MODELED starts on, ENGINE is HQ, and OS is Default (2x). CUTS starts on at 20 Hz high-pass and 20 kHz low-pass. MS MODE, LINK and MONO MAKER start off. Meters initially show Output in Peak mode.
+Start with INPUT and OUTPUT at 0 dB and PAD at Unity. N-Type is the initial model. MODELED starts on, ENGINE is HQ, and OS starts at 2x. CUTS starts on at 20 Hz high-pass and 20 kHz low-pass. MS MODE, L/R LINK and MONO MAKER start off. Meters initially show Output in Peak mode.
 
-Turn INPUT up to drive the preamp harder. Turn OUTPUT down to compare the changed sound at a similar listening level. There is no automatic compensation between those controls. Double-click an input or output knob to return it to 0 dB.
+Turn INPUT up to drive the preamp harder. Turn OUTPUT down to compare the changed sound at a similar listening level. Enable GAIN COMPENSATION to pair those edits inversely; it starts off. Double-click an input or output knob to return it to 0 dB.
 
 The window opens at 1000 x 740 and resizes proportionally from 400 x 296 to 1500 x 1110. Drag the lower-right resize handle. Small sizes trade label readability for screen space.
 
@@ -37,7 +37,7 @@ The window opens at 1000 x 740 and resizes proportionally from 400 x 296 to 1500
 
 ## 2. Metering: what each reading means
 
-![Meter source, mode, peak and clip controls](OpenPreamp-1.0.2-meters.png)
+![Meter source, mode, peak and clip controls](OpenPreamp-1.0.3-meters.png)
 
 Each meter belongs to one processing stream. In ordinary stereo the streams are Left and Right. With MS MODE on, they are Mid and Side. Readings remain independent, even when gain controls are linked.
 
@@ -53,9 +53,9 @@ Each meter belongs to one processing stream. In ordinary stereo the streams are 
 
 ---
 
-## 3. Input gain, output trim and Link
+## 3. Gain, linking and compensation
 
-![Independent channel input and output knobs](OpenPreamp-1.0.2-channels.png)
+![Independent channel input and output knobs](OpenPreamp-1.0.3-channels.png)
 
 | Control | Range or choices | Operation |
 |---|---|---|
@@ -63,9 +63,9 @@ Each meter belongs to one processing stream. In ordinary stereo the streams are 
 | OUTPUT, left | -24 to +24 dB | Trims Left, or Mid, after downsampling and before M/S decoding. |
 | INPUT, right | -12 to +24 dB | Drives Right, or Side in M/S mode. |
 | OUTPUT, right | -24 to +24 dB | Trims Right, or Side, after downsampling. |
-| LINK | Off / On | In L/R, both right gains follow the left gains and the right knobs are greyed out and disabled. |
+| L/R LINK | Off / On | In L/R, both right gains follow the left gains and the right knobs are greyed out and disabled. |
 
-Unlinking restores the independent right knob values; linking does not overwrite them. LINK starts off. When MS MODE is on, LINK remains visible but becomes grey and disabled. Its stored setting is ignored until normal L/R returns.
+Unlinking restores the independent right knob values; linking does not overwrite them. L/R LINK starts off. When MS MODE is on, L/R LINK remains visible but becomes grey and disabled. Its stored setting is ignored until normal L/R returns.
 
 INPUT and PAD are external input trims. They drive a circuit whose internal gain network is held at unity; INPUT is not an adjustable feedback resistor in the circuit solver. Gain changes use 10 ms ramps at the session sample rate. OUTPUT and the M/S matrix also run at session rate.
 
@@ -73,19 +73,33 @@ Separate nonlinear circuit and ADAA histories are maintained for each channel. L
 
 ---
 
+## 3. Gain compensation and wheel editing
+
+![Centered stereo and gain compensation controls](OpenPreamp-1.0.3-top-controls.png)
+
+**GAIN COMPENSATION:** links INPUT and OUTPUT inversely in dB. Enabling it leaves current values unchanged; moving either control moves its partner in the opposite direction. The pair stops when either reaches its limit. It is off initially and works independently for Left/Right or Mid/Side; L/R LINK still shares the left pair between stereo channels.
+
+![Input at +6 dB with output at -6 dB](OpenPreamp-1.0.3-compensation.png)
+
+Compensation pairs drag, wheel, keyboard and double-click edits. It preserves the sum of the digital trims, not measured loudness through a nonlinear preamp. PAD remains independent. Both parameters are written to the host and can be recorded as automation. Direct host automation of one parameter changes only that parameter, without generating recursive edits.
+
+**Mouse wheel:** raise or lower any gain or filter/mono-maker frequency while hovering over its knob. Clicking a knob selects it for wheel editing over the surrounding plugin area, even when the host does not grant keyboard focus. Hovering another knob takes precedence. Disabled right controls under L/R LINK remain disabled.
+
+---
+
 ## 4. Preamp model, engine, oversampling and bypass
 
-![Preamp model and quality controls](OpenPreamp-1.0.2-preamp.png)
+![Preamp model and quality controls](OpenPreamp-1.0.3-preamp.png)
 
-**MODEL:** selects Brit, N-Type, FSF, Off or A-Type for both streams.
+**MODEL:** lists Off first, then Brit, N-Type, FSF and A-Type. N-Type remains selected for a new instance. Saved model identities retain their meaning.
 
 **PAD:** selects -20 dB, Unity or +10 dB, shared between input trims.
 
 **MODELED:** off uses Standard, the lighter preamp models. On uses ENGINE.
 
-**ENGINE:** HQ runs the full component network. Circuit Preview runs the reduced approximation; it has not passed all HQ sound-equivalence gates. The factory engine is HQ.
+**ENGINE:** HQ runs the full component network. Circuit runs the reduced approximation; it has not passed all HQ sound-equivalence gates. The factory engine is HQ.
 
-**OS:** Default, 1x, 2x or 4x, independently of engine. Default selects 1x for Standard/Circuit and 2x for HQ. Standard/Circuit enable ADAA at 1x and disable it at 2x/4x. HQ uses no added ADAA. The rate label reports effective processing factor and rate when audio runs.
+**OS:** 1x, 2x or 4x, independently of engine. Initial rates are 1x for Standard/Circuit and 2x for HQ. Switching modes uses those initial rates until you choose a rate; after that, your choice persists across mode changes and is saved. There is no Default menu item. Standard/Circuit enable ADAA at 1x and disable it at 2x/4x. HQ uses no added ADAA. The rate label reports effective processing factor and rate when audio runs.
 
 **Small bypass key:** skips preamp, input gain/PAD, cuts and mono maker; output trims and meters remain active.
 
@@ -95,7 +109,7 @@ Separate nonlinear circuit and ADAA histories are maintained for each channel. L
 
 ## 5. Input cuts and mono maker
 
-![Shared input cuts and Side-only mono maker](OpenPreamp-1.0.2-cuts.png)
+![Shared input cuts and Side-only mono maker](OpenPreamp-1.0.3-cuts.png)
 
 **HIGH PASS:** adjustable from 20 Hz to 20 kHz. Removes frequencies below its cutoff with a two-pole Butterworth IIR response: approximately -3 dB at cutoff and 12 dB per octave in the stopband. Its initial frequency is 20 Hz.
 
@@ -113,9 +127,9 @@ Reducing low-frequency Side narrows bass rather than hard-switching everything b
 
 ## 6. Mid/Side processing and signal flow
 
-![MS MODE enabled with Link greyed out](OpenPreamp-1.0.2-ms-switch.png)
+![MS MODE enabled with Link greyed out](OpenPreamp-1.0.3-ms-switch.png)
 
-**MS MODE off:** ordinary L/R processing, the default. **MS MODE on:** INPUT, OUTPUT and meters become Mid and Side; LINK is disabled. The host always receives L/R at the output.
+**MS MODE off:** ordinary L/R processing, the default. **MS MODE on:** INPUT, OUTPUT and meters become Mid and Side; L/R LINK is disabled. The host always receives L/R at the output.
 
 The encoder is energy-preserving: M = (L + R) / sqrt(2), S = (L - R) / sqrt(2). The decoder is its exact inverse: L = (M + S) / sqrt(2), R = (M - S) / sqrt(2). Perfectly identical L/R feeds only Mid; perfectly opposite-polarity L/R feeds only Side. This normalization is not the 0.5-sum convention used by some other tools.
 
@@ -159,12 +173,12 @@ The five MODEL choices include Off; Off is not a fifth circuit. Every active mod
 
 ---
 
-## 9. Standard, Circuit Preview and HQ compared
+## 9. Standard, Circuit and HQ compared
 
-| Engine | Default rate | Antialiasing and purpose |
+| Engine | Initial rate | Antialiasing and purpose |
 |---|---|---|
 | Standard | 1x | Lighter models; ADAA at 1x, off at 2x/4x. |
-| Circuit Preview | 1x | Reduced curves, filters and memory; residual ADAA at 1x, off at 2x/4x. |
+| Circuit | 1x | Reduced curves, filters and memory; residual ADAA at 1x, off at 2x/4x. |
 | HQ | 2x | Full component solve; no added ADAA. |
 
 All engines support explicit 1x/2x/4x. Standard has its own voicing. Circuit targets a cheaper HQ approximation but is not an accepted equivalent. Compare levels and program material; CPU and alias plots alone do not establish sound fidelity.
@@ -173,23 +187,23 @@ Circuit applies first-order ADAA to the nonlinear residual while preserving the 
 
 2x uses half-band polyphase IIR resampling; 4x uses two stages of half-band equiripple FIR resampling. These choices apply to every engine. Linear phase describes the 4x resampling filters, not the whole plugin.
 
-All paths retain fixed latency derived from the rounded-up 4x filter delay. Mode changes reset histories without a transition crossfade. Cuts, trims, mono maker and M/S run at session rate. Old saved sessions retain previous rates; legacy 4x automation affects Default, while explicit OS overrides it. Existing parameter IDs/order are retained and OS is appended.
+All paths retain fixed latency derived from the rounded-up 4x filter delay. Mode changes reset histories without a transition crossfade. Cuts, trims, mono maker and M/S run at session rate. Old saved sessions retain previous rates; retired legacy rate values remain readable for old sessions and automation but are absent from the plugin menu. An explicit OS choice overrides that legacy policy. Existing parameter IDs/order are retained; gain compensation is appended after the existing OS parameter.
 
 ---
 
 ## 10. Working examples
 
-**Gentle colour:** choose a model, enable MODELED, select HQ and leave OS at Default, use Unity PAD, and raise INPUT a little. Reduce OUTPUT to compare at a similar level. Switch the meters to Input to inspect incoming level, then Output to inspect the processed level.
+**Gentle colour:** choose a model, enable MODELED, select HQ and start with OS at 2x, use Unity PAD, and raise INPUT a little. Reduce OUTPUT to compare at a similar level. Switch the meters to Input to inspect incoming level, then Output to inspect the processed level.
 
 **More drive without a louder comparison:** increase INPUT or use +10 dB PAD, then lower OUTPUT. Distortion depends on the signal, model and mode. The clip light cannot tell you how much modeled analogue saturation is occurring inside the circuit.
 
 **Tighter stereo bass:** enable MONO MAKER and slowly raise its frequency from 20 Hz. Listen to bass width and mono compatibility. The Side filter is gentle, not a hard crossover. Use MS MODE if you also want independent Mid/Side drive and output trims.
 
-**Independent stereo drive:** leave MS MODE off and LINK off. Adjust Left and Right independently. Enable LINK when you want common gain control; unlink to recover the previous independent right settings.
+**Independent stereo drive:** leave MS MODE off and L/R LINK off. Adjust Left and Right independently. Enable L/R LINK when you want common gain control; unlink to recover the previous independent right settings.
 
 **Inspect only the cuts:** choose MODEL Off, keep CUTS on, disable mono maker, and put all gains at 0 dB with Unity PAD. Use a magnitude response plot to assess level and a phase plot to assess phase rotation. Turning CUTS off provides the clean reference apart from latency.
 
-**Compare processing modes:** level-match OUTPUT while comparing Standard, Circuit Preview and HQ. They may differ in sound and bandwidth. Leave headroom in the downstream chain: this plugin has no output limiter.
+**Compare processing modes:** level-match OUTPUT while comparing Standard, Circuit and HQ. They may differ in sound and bandwidth. Leave headroom in the downstream chain: this plugin has no output limiter.
 
 ---
 
@@ -204,11 +218,11 @@ All paths retain fixed latency derived from the rounded-up 4x filter delay. Mode
 
 The host decides the bus format. A mono recording on a stereo track can still reach the plugin as two channels. Mono tracks retain session-rate cuts and gain; Circuit/HQ rate behavior is the same as stereo, using one active stream.
 
-Parameters are saved by the host and can be automated. This includes model, PAD, gains, bypass, MODELED, ENGINE, OS, legacy 4x, meter source/mode, M/S, Link, cuts and mono maker. The meter choices change display behavior only. There is no separate preset browser inside the plugin.
+Parameters are saved by the host and can be automated. This includes model, PAD, gains, gain compensation, bypass, MODELED, ENGINE, OS, legacy 4x, meter source/mode, M/S, Link, cuts and mono maker. The meter choices change display behavior only. There is no separate preset browser inside the plugin.
 
 Older pre-0.3 states copy their former stereo gain into the new right gain and leave the newly introduced cuts off. Later states missing Link or mono maker restore those features off. The 1.0 public build has no DEV editor or filesystem autosave; design CSVs are baked into the binary.
 
-**Missing plugin:** confirm your host supports the installed format, copy the whole bundle, restart and rescan. **Grey control:** check mono track format, LINK, MS MODE, bypass, model Off, CUTS or MONO MAKER state. **High CPU:** compare Standard, Circuit Preview and HQ at explicit rates; higher session rates increase circuit work. **No low-bass or top-end bypass:** active 20 Hz / 20 kHz cuts still filter; disable CUTS for the reference.
+**Missing plugin:** confirm your host supports the installed format, copy the whole bundle, restart and rescan. **Grey control:** check mono track format, L/R LINK, MS MODE, bypass, model Off, CUTS or MONO MAKER state. **High CPU:** compare Standard, Circuit and HQ at explicit rates; higher session rates increase circuit work. **No low-bass or top-end bypass:** active 20 Hz / 20 kHz cuts still filter; disable CUTS for the reference.
 
 ---
 
@@ -218,7 +232,7 @@ OpenPreamp's project source is MIT licensed; the included LICENSE contains the c
 
 The official binary-use terms are in BINARY_LICENSE.txt. THIRD_PARTY_NOTICES.txt identifies the included components, and the complete third-party license texts and VST usage/trademark notices are in Licenses/third-party. These files accompany the public package and each plugin's own license folder. Keep the notices with redistributed copies and consult the applicable dependency licenses when building a new binary.
 
-The public 1.0.2 Mac package contains VST3, AU, LV2 and CLAP, this manual, release notes and licenses. AAX binaries and the Avid SDK are excluded. AAX builds are private development artifacts; creating an AAX binary is not proof that it can load in Pro Tools without the required Avid/PACE signing.
+The public 1.0.3 Mac package contains VST3, AU, LV2 and CLAP, this manual, release notes and licenses. AAX binaries and the Avid SDK are excluded. AAX builds are private development artifacts; creating an AAX binary is not proof that it can load in Pro Tools without the required Avid/PACE signing.
 
 Source and release downloads: https://github.com/MistaMin/OpenPreamp
 
@@ -228,14 +242,14 @@ More circuit detail: CIRCUIT_EXPLAINED.md in the source repository. ADAA referen
 
 ## 13. Audio measurement report
 
-The 1.0.2 development report compares Brit, N-Type, FSF and A-Type across Standard/Circuit/HQ and explicit 1x/2x/4x: 36 configurations and 72 independent offline captures. All use the same 48 kHz, PCM24 fixture, fixed 64-sample buffer and documented settings. Default is omitted from measurements.
+The 1.0.3 development report compares Brit, N-Type, FSF and A-Type across Standard/Circuit/HQ and explicit 1x/2x/4x: 36 configurations and 72 independent offline captures. All use the same 48 kHz, PCM24 fixture, fixed 64-sample buffer and documented settings. Default is omitted from measurements.
 
 Charts cover gain/linearity, harmonics and THD+N, burst dynamics, phase/group delay, coherent folded-harmonic energy and linear-frequency sweep maps at -18/-6 dBFS. The linear maps include clean and predicted H1-H5/fold views, common absolute color limits, FFT/window/ENBW/sweep-drift captions and full-resolution CSV data. They are diagnostic maps; use steady tones for quantitative harmonic levels.
 
-The report contains actual plugin results and input-reference maps. There are no synthetic hardware plots or physical hardware measurements. Circuit remains a preview; these quick fixtures are development evidence, not a complete sound, listening or real-host acceptance test.
+Gain compensation is disabled for these fixed-setting measurements. The report contains actual plugin results and input-reference maps. There are no synthetic hardware plots or physical hardware measurements. Circuit has known fidelity limits; these quick fixtures are development evidence, not a complete sound, listening or real-host acceptance test.
 
-Read the published report and download the complete chart/CSV archive from the repository and 1.0.2 release assets:
+Read the published report and download the complete chart/CSV archive from the repository and 1.0.3 release assets:
 
-https://github.com/MistaMin/OpenPreamp/blob/main/Docs/Measurements-1.0.2/REPORT.md
+https://github.com/MistaMin/OpenPreamp/blob/main/Docs/Measurements-1.0.3/REPORT.md
 
 Reproduction and calibrated hardware-import instructions are in Docs/MEASUREMENT_PIPELINE.md.

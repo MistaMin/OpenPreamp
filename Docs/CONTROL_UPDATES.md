@@ -1,9 +1,8 @@
-# Pending control updates
+# OpenPreamp 1.0.3 control updates
 
-These changes are in the current source. The published 1.0.2 installer retains
-its released controls until a new binary package is built and published.
+These changes are included in the 1.0.3 source and Mac release package.
 
-![Centered header, Gain Compensation and Circuit at 1x](OpenPreamp-controls-unreleased.png)
+![Centered header, Gain Compensation and Circuit at 1x](OpenPreamp-1.0.3-controls.png)
 
 - **MODEL:** Off, Brit, N-Type, FSF, A-Type. N-Type remains selected for new
   instances. Only the menu order changes; saved model indices retain their meaning.
@@ -42,11 +41,11 @@ and the real-time callback allocation test. The focused suite checks menu order,
 initial/manual rate selection, state restore, inverse gain edits, limits, filter
 wheel response and editor containment at default/minimum sizes.
 
-## Verified on Apple Silicon
+## Verified on Apple Silicon and Intel
 
-31 focused control checks and 555 processor/UI smoke checks passed. The realtime
-check passed 960 callbacks with no C++ heap allocations or frees. The native
-VST3 compiled and its development signature verifies. Source hashes and results
-are recorded in [controls-validation.json](controls-validation.json). The
+32 focused control checks and 555 processor/UI smoke checks passed on each architecture.
+The realtime allocation results and source hashes are recorded in
+[controls-validation.json](controls-validation.json). The
 rendered centered header was inspected; containment passed at default and minimum
-editor sizes. Installed plugins and public binary packages were not replaced.
+editor sizes. Installed development comparison plugins were not replaced during validation.
+Release build, architecture and notarization evidence is included with the 1.0.3 release.

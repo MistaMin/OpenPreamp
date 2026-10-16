@@ -1,0 +1,13 @@
+{
+  "version": "1.0.3",
+  "checks": [
+    "VST3: universal + version/license payload verified",
+    "AU: universal + version/license payload verified",
+    "CLAP: universal + version/license payload verified",
+    "LV2: universal + version/license payload verified",
+    "VST3: generated factory manifest version verified",
+    "CLAP: library loads, factory initializes, descriptor/version verified",
+    "LV2: library loads and descriptor/binary reference verified"
+  ],
+  "aax_distribution": false
+}
