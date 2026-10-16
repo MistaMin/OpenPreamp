@@ -54,6 +54,18 @@ public:
     static const char* faceCode(Face f) { for (auto& i : faces) if (i.face == f) return i.code; return "cream"; }
     static Face faceFromCode(const juce::String& c) { for (auto& i : faces) if (c == i.code) return i.face; return Face::VuCream; }
 
+    void setPlate(juce::Colour top, juce::Colour bottom, juce::Colour text, juce::Colour mid, int finish = 0)
+    { plate[0]=top; plate[1]=bottom; plate[2]=text; plate[3]=mid; plateFinish=finish; hasPlate=true; repaint(); }
+    void clearPlate() { if (hasPlate) { hasPlate=false; repaint(); } }
+    bool getPlate(juce::Colour out[4], int* finish = nullptr) const
+    {
+        if (!hasPlate) return false;
+        if (finish) *finish = plateFinish;
+        for (int i=0; i<4; ++i) out[i] = plate[i];
+        return true;
+    }
+    void setMeterFaceOverridden(bool overridden) { if (meterFaceOverridden != overridden) { meterFaceOverridden = overridden; repaint(); } }
+
     void setChannel(int channel) { channelIndex = std::clamp(channel,-1,1); }
     int getChannel() const { return channelIndex; }
     void setHardwareStyle(bool enabled) { hardware=enabled; repaint(); }
@@ -103,18 +115,19 @@ public:
     void paint(juce::Graphics& g) override {
         using namespace goodlookinui::juce_adapter;
         auto b = getLocalBounds().toFloat().reduced(1);
-        if(hardware) PreampChrome::panel(g,b);
+        if(hasPlate) goodlookinui::juce_adapter::drawPanel(g,b,plate[0],plate[1],plateFinish);
+        else if(hardware) PreampChrome::panel(g,b);
         else drawPanel(g, b, Theme::panelTop, Theme::panelBottom, Theme::panelFinish);
         g.setColour((hardware?PreampChrome::accent:Theme::faceAccent).withAlpha(0.85f)); g.fillRect(10.0f, 10.0f, 3.0f, 15.0f);
-        g.setColour((hardware?PreampChrome::ink:Theme::textDark)); g.setFont(juce::FontOptions(11.5f, juce::Font::bold));
+        g.setColour(hasPlate?plate[2]:(hardware?PreampChrome::ink:Theme::textDark)); g.setFont(juce::FontOptions(11.5f, juce::Font::bold));
         g.drawText(caption, 18, 8, 100, 20, juce::Justification::centredLeft);
-        g.setColour((hardware?PreampChrome::muted:Theme::textMid)); g.setFont(juce::FontOptions(9.0f));
+        g.setColour(hasPlate?plate[3]:(hardware?PreampChrome::muted:Theme::textMid)); g.setFont(juce::FontOptions(9.0f));
         g.drawText(juce::String(inputSource ? "INPUT " : "OUTPUT ") + (selectableMode ? (peakMode ? "PEAK" : "RMS") : "RMS / PEAK"), 18, 27, 140, 14, juce::Justification::centredLeft);
 
         const auto main = mainRect();
         const float w = float(getWidth());
         switch (face) {
-            case Face::VuCream: if(hardware) PreampChrome::vu(g,main,float(vu.position)); else meters::drawVuMeter(g, main, float(vu.position), meters::VuFace::Cream); break;
+            case Face::VuCream: if(hardware && !meterFaceOverridden) PreampChrome::vu(g,main,float(vu.position)); else meters::drawVuMeter(g, main, float(vu.position), meters::VuFace::Cream); break;
             case Face::VuBlack: meters::drawVuMeter(g, main, float(vu.position), meters::VuFace::Black); break;
             case Face::Arc: {
                 g.setColour(Colour(0xff08090a)); g.fillRoundedRectangle(main, 4);
@@ -136,7 +149,7 @@ public:
         }
 
         // IN / OUT ladders (right column, under the peak readout)
-        g.setColour((hardware?PreampChrome::muted:Theme::textMid)); g.setFont(juce::FontOptions(8.0f, juce::Font::bold));
+        g.setColour(hasPlate?plate[3]:(hardware?PreampChrome::muted:Theme::textMid)); g.setFont(juce::FontOptions(8.0f, juce::Font::bold));
         const float rx = rightColumnX(), rw = w - 12.0f - rx;
         const float bx = rx + 22.0f, bw = rw - 22.0f;
         g.drawText("IN", int(rx), 86, 22, 12, juce::Justification::centredLeft);
@@ -150,7 +163,7 @@ public:
         const float reading = displayedDb();
         juce::String text = reading <= -90.0f ? juce::String("--") : juce::String(reading, 1);
         meters::drawSevenSegment(g, {rx, 44.0f, rw - 30.0f, 26.0f}, text, Colour(0xff39ff7a));
-        g.setColour((hardware?PreampChrome::muted:Theme::textMid)); g.setFont(juce::FontOptions(8.0f, juce::Font::bold));
+        g.setColour(hasPlate?plate[3]:(hardware?PreampChrome::muted:Theme::textMid)); g.setFont(juce::FontOptions(8.0f, juce::Font::bold));
         g.drawText(selectableMode && !peakMode ? "RMS dBFS" : "PEAK dBFS", int(rx), 71, int(rw - 30.0f), 11, juce::Justification::centred);
         meters::drawLamp(g, clipLamp(), 5.5f, Colour(0xffff3b30), clip);
         g.drawText("CLIP", int(w) - 38, 63, 36, 11, juce::Justification::centred);
@@ -165,6 +178,10 @@ private:
     LevelTracker& outputLevel;
     Face face = Face::VuCream;
     bool hardware=false;
+    juce::Colour plate[4];
+    bool hasPlate=false;
+    int plateFinish=0;
+    bool meterFaceOverridden=false;
     bool inputSource = false, peakMode = false, selectableMode = false;
     int channelIndex = -1;
     juce::String caption{"LEVEL"};

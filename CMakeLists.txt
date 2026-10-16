@@ -127,7 +127,7 @@ target_sources(OpenPreamp PRIVATE
 
 target_include_directories(OpenPreamp PRIVATE Source "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
-option(OPENPREAMP_DEVELOPER_MODE "Enable OpenPreamp knob/layout and model-look editors" ON)
+option(OPENPREAMP_DEVELOPER_MODE "Enable OpenPreamp knob/layout and model-look editors" OFF)
 target_compile_definitions(OpenPreamp PUBLIC
     GOODLOOKINUI_ENABLE_EDITOR=$<BOOL:${OPENPREAMP_DEVELOPER_MODE}>
     OPENPREAMP_DESIGNS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Designs"

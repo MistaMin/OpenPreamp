@@ -1,19 +1,11 @@
-# OpenPreamp 1.1.0
+# OpenPreamp 1.1.1
 
-The 1.1 update refreshes the GUI around the approved hardware-style concept.
+The 1.1.1 release brings updated model styling, 47 procedural hardware knob classes via GoodLookinUI, and a signed and notarized macOS universal installer.
 
-- Shared navy chassis, quieter panel texture, cream VU faces and tactile vector knobs.
-- Signed meter-scale labels and clearer gain/frequency displays with units.
-- Direct Peak/RMS, Circuit/HQ and 1x/2x/4x choices. SOURCE selects Input/Output.
-- Centered MS MODE, L/R LINK and GAIN COMPENSATION controls, with compensation-link indicators between the available gain pairs.
-- Existing model colours, Off-first model order, N-Type/HQ/2x initial settings, wheel editing and proportional resizing remain.
+- **Updated Preamp Styling**: FSF features a bright gold (`#FFF500`) accent on Royal plate with pale-grey FS skirt knobs; Off model features rugged `Rck` knobs on Graphite; Brit, N-Type, and A-Type retain their distinct hardware designs.
+- **GoodLookinUI Integration**: Updated to the latest GoodLookinUI toolkit with 47 procedural 3D hardware knob classes and full lighting/material models.
+- **Developer Tools**: Cleaned up Developer Mode (`GOODLOOKINUI_ENABLE_EDITOR`) with full plate, faceplate, and knob style inspectors and reliable autosave to `Designs/`.
+- **Universal macOS Package**: Includes Developer ID signed and Apple-notarized VST3, AU, CLAP, and LV2 plugins in a system-wide PKG and DMG for macOS 11+.
 
-Audio processing and the existing 21 parameters are unchanged. This update adds no
-tube model; the [tube preamp engineering plan](Docs/TUBE_PREAMP_ENGINEERING_PLAN.md)
-is saved for later. The retained [1.0.3 measurement report](Docs/Measurements-1.0.3/REPORT.md)
-remains labeled with its actual capture version. Circuit's documented HQ fidelity
-limitations remain; a GUI refresh does not establish sound equivalence.
-
-See [GUI details](Docs/GUI_UPDATE_1.1.md), [user manual](Docs/UserManual.md) and
-[version history](CHANGELOG.md). The latest packaged GitHub release remains 1.0.3
-until a separate 1.1.0 package is published.
+Audio processing and the existing 21 parameters remain fully compatible.
+See [user manual](Docs/UserManual.md) and [version history](CHANGELOG.md).

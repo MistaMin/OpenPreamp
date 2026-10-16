@@ -1,6 +1,13 @@
 # OpenPreamp version history
 
-## 1.1.0 - development (2026-10-16)
+## 1.1.1 - 2026-10-16
+
+- Synchronize with GoodLookinUI main, incorporating 47 procedural 3D hardware knob classes with physical materials and lighting.
+- Update preamp model styling: FSF now features a bright gold accent (#FFF500) on Royal plate with pale-grey FS skirt knobs; Off model switches to the rugged Rck knob class on a Graphite plate.
+- Fix developer mode and inspector tools so that all 40 faceplates, 40 section plates, and GoodLookinUI knob styles can be interactively chosen and autosaved without clobbering model looks.
+- Release signed and notarized universal macOS package (VST3, AU, CLAP, LV2) and standalone app with updated screenshots and manual.
+
+## 1.1.0 - 2026-10-16
 
 - Refresh the GUI with a navy hardware faceplate, tactile vector-drawn knobs, cream VU faces with signed scale markings and clearer gain/frequency readouts with units.
 - Add direct Peak/RMS, Circuit/HQ and 1x/2x/4x selectors using existing parameter identities and host gestures. Preserve Off-first presentation and initial N-Type/HQ/2x settings.

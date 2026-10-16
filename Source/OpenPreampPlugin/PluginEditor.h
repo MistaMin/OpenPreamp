@@ -11,9 +11,15 @@
 #include "Toolkit.h"
 #include "UI/ValueFormat.h"
 #include "UI/MeterPanel.h"
+#include "UI/LookTriggers.h"
+#include <GoodLookinUI.h>
+#include <Gallery.h>
+#include <goodlookinui/Settings.h>
 #include <memory>
 
-class OpenPreampEditor : public juce::AudioProcessorEditor, private juce::Timer {
+class OpenPreampEditor : public juce::AudioProcessorEditor,
+                         private juce::Timer,
+                         private juce::ValueTree::Listener {
 public:
     explicit OpenPreampEditor(OpenPreampProcessor&);
     ~OpenPreampEditor() override;
@@ -27,11 +33,27 @@ private:
 
 #if GOODLOOKINUI_ENABLE_EDITOR
     juce::TextButton developerButton{"DEV"};
+    juce::TextButton lookBtn{"LOOK"};
+    juce::TextButton knobStyleBtn{"KNOBS: DEFAULT"};
     goodlookinui::juce_adapter::Studio designStudio;
     std::unique_ptr<LookStudio> lookStudio;
+    std::unique_ptr<goodlookinui::juce_adapter::Gallery> gallery;
     DesignAutosave designAutosave;
     std::unique_ptr<juce::DocumentWindow> developerWindow;
     void setupDeveloperTools();
+    void showLookMenu();
+    void showKnobStyleMenu();
+    void applyKnobStyle(const juce::String& code);
+    void refreshKnobStyles();
+    void applyMeterStyles();
+    void loadDesignSettings();
+    void saveSettingsFile();
+    TriggerMode getTriggerMode() const;
+    static const std::vector<juce::String>& settingKeys();
+    void valueTreePropertyChanged(juce::ValueTree& tree, const juce::Identifier& property) override;
+    void onKnobDesignEdited(RotaryKnob& knob, const goodlookinui::Item& item);
+    std::vector<std::pair<RotaryKnob*, std::string>> knobDefaults;
+    bool initializingTools = false;
 #endif
     juce::Component::SafePointer<RotaryKnob> selectedKnob;
     bool layoutReady = false;

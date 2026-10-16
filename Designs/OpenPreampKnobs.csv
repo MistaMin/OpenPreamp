@@ -4,3 +4,6 @@ preampGain,preampGain,INPUT,A,#A32323,60,54,148,154,9.5
 outputGain,outputGain,OUTPUT,A,#A32323,286,54,132,154,9.5
 preampGainR,preampGainR,INPUT,A,#A32323,60,54,148,154,9.5
 outputGainR,outputGainR,OUTPUT,A,#A32323,286,54,132,154,9.5
+highPass,highPass,HIGH-PASS,A,#39b6c8,24,54,108,102,9.5
+lowPass,lowPass,LOW-PASS,A,#39b6c8,150,54,108,102,9.5
+monoMakerFrequency,monoMakerFrequency,SIDE HP,A,#39b6c8,12,54,98,102,9.5

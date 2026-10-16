@@ -1,4 +1,4 @@
-# OpenPreamp 1.1.0
+# OpenPreamp 1.1.1
 
 ## User manual
 
@@ -6,7 +6,7 @@
 
 A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp combines component-network circuit simulation with a lighter antialiased model. It contains no parametric EQ, spectrum analyzer, separate harmonics engine, automatic loudness matching, or limiter.
 
-![OpenPreamp main interface](OpenPreamp-1.1.0-preview.png)
+![OpenPreamp main interface](OpenPreamp-1.1.1-preview.png)
 
 **Public Mac formats:** VST3, Audio Unit, CLAP and LV2. Universal Apple Silicon / Intel build, macOS 11 or later. AAX is built privately and is excluded from the public download.
 
@@ -14,7 +14,7 @@ A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp 
 
 ## 1. Installation and your first session
 
-Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.0-Installer.pkg and follow Installer. Administrator authorization is required. The package installs all four formats for every user in the main Library, and creates the format folders if needed.
+Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.1-Installer.pkg and follow Installer. Administrator authorization is required. The package installs all four formats for every user in the main Library, and creates the format folders if needed.
 
 | Format | Bundle | System installation folder |
 |---|---|---|
@@ -37,7 +37,7 @@ The window opens at 1000 x 740 and resizes proportionally from 400 x 296 to 1500
 
 ## 2. Metering: what each reading means
 
-![Meter source, mode, peak and clip controls](OpenPreamp-1.1.0-meters.png)
+![Meter source, mode, peak and clip controls](OpenPreamp-1.1.1-meters.png)
 
 Each meter belongs to one processing stream. In ordinary stereo the streams are Left and Right. With MS MODE on, they are Mid and Side. Readings remain independent, even when gain controls are linked.
 
@@ -55,7 +55,7 @@ Each meter belongs to one processing stream. In ordinary stereo the streams are 
 
 ## 3. Gain, linking and compensation
 
-![Independent channel input and output knobs](OpenPreamp-1.1.0-channels.png)
+![Independent channel input and output knobs](OpenPreamp-1.1.1-channels.png)
 
 | Control | Range or choices | Operation |
 |---|---|---|
@@ -75,11 +75,11 @@ Separate nonlinear circuit and ADAA histories are maintained for each channel. L
 
 ## 3. Gain compensation and wheel editing
 
-![Centered stereo and gain compensation controls](OpenPreamp-1.1.0-top-controls.png)
+![Centered stereo and gain compensation controls](OpenPreamp-1.1.1-top-controls.png)
 
 **GAIN COMPENSATION:** links INPUT and OUTPUT inversely in dB. Enabling it leaves current values unchanged; moving either control moves its partner in the opposite direction. The pair stops when either reaches its limit. It is off initially and works independently for Left/Right or Mid/Side; L/R LINK still shares the left pair between stereo channels.
 
-![Input at +6 dB with output at -6 dB](OpenPreamp-1.1.0-compensation.png)
+![Input at +6 dB with output at -6 dB](OpenPreamp-1.1.1-compensation.png)
 
 Compensation pairs drag, wheel, keyboard and double-click edits. It preserves the sum of the digital trims, not measured loudness through a nonlinear preamp. PAD remains independent. Both parameters are written to the host and can be recorded as automation. Direct host automation of one parameter changes only that parameter, without generating recursive edits.
 
@@ -89,7 +89,7 @@ Compensation pairs drag, wheel, keyboard and double-click edits. It preserves th
 
 ## 4. Preamp model, engine, oversampling and bypass
 
-![Preamp model and quality controls](OpenPreamp-1.1.0-preamp.png)
+![Preamp model and quality controls](OpenPreamp-1.1.1-preamp.png)
 
 **MODEL:** lists Off first, then Brit, N-Type, FSF and A-Type. N-Type remains selected for a new instance. Saved model identities retain their meaning.
 
@@ -109,7 +109,7 @@ Compensation pairs drag, wheel, keyboard and double-click edits. It preserves th
 
 ## 5. Input cuts and mono maker
 
-![Shared input cuts and Side-only mono maker](OpenPreamp-1.1.0-cuts.png)
+![Shared input cuts and Side-only mono maker](OpenPreamp-1.1.1-cuts.png)
 
 **HIGH PASS:** adjustable from 20 Hz to 20 kHz. Removes frequencies below its cutoff with a two-pole Butterworth IIR response: approximately -3 dB at cutoff and 12 dB per octave in the stopband. Its initial frequency is 20 Hz.
 
@@ -127,7 +127,7 @@ Reducing low-frequency Side narrows bass rather than hard-switching everything b
 
 ## 6. Mid/Side processing and signal flow
 
-![MS MODE enabled with Link greyed out](OpenPreamp-1.1.0-ms-switch.png)
+![MS MODE enabled with Link greyed out](OpenPreamp-1.1.1-ms-switch.png)
 
 **MS MODE off:** ordinary L/R processing, the default. **MS MODE on:** INPUT, OUTPUT and meters become Mid and Side; L/R LINK is disabled. The host always receives L/R at the output.
 
@@ -242,7 +242,7 @@ More circuit detail: CIRCUIT_EXPLAINED.md in the source repository. ADAA referen
 
 ## 13. Audio measurement report
 
-The retained 1.0.3 measurement report compares Brit, N-Type, FSF and A-Type across Standard/Circuit/HQ and explicit 1x/2x/4x: 36 configurations and 72 independent offline captures. All use the same 48 kHz, PCM24 fixture, fixed 64-sample buffer and documented settings. Default is omitted from measurements. The 1.1.0 update changes GUI presentation and keeps the DSP unchanged; these are explicitly 1.0.3 captures, not relabeled 1.1.0 measurements.
+The retained 1.0.3 measurement report compares Brit, N-Type, FSF and A-Type across Standard/Circuit/HQ and explicit 1x/2x/4x: 36 configurations and 72 independent offline captures. All use the same 48 kHz, PCM24 fixture, fixed 64-sample buffer and documented settings. Default is omitted from measurements. The 1.1.1 update changes GUI presentation and keeps the DSP unchanged; these are explicitly 1.0.3 captures, not relabeled 1.1.1 measurements.
 
 Charts cover gain/linearity, harmonics and THD+N, burst dynamics, phase/group delay, coherent folded-harmonic energy and linear-frequency sweep maps at -18/-6 dBFS. The linear maps include clean and predicted H1-H5/fold views, common absolute color limits, FFT/window/ENBW/sweep-drift captions and full-resolution CSV data. They are diagnostic maps; use steady tones for quantitative harmonic levels.
 

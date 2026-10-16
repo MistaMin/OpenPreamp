@@ -38,6 +38,12 @@ public:
         startTimerHz(60);
     }
 
+    void setDesignParameter(const std::string& paramId)
+    {
+        design.id = paramId;
+        design.parameter = paramId;
+    }
+
     void setActive(bool active)
     {
         if (isActive == active)
@@ -87,7 +93,7 @@ public:
         juce::Colour backdrop;   // plate behind this knob: lets the toolkit draw dark marks on light plates and light marks on dark ones
         if (auto* panel = dynamic_cast<SectionPanel*>(getParentComponent())) backdrop = panel->getBackdrop();
         const auto position=isShowing() ? motion.position : valueToProportionOfLength(getValue());
-        if(hardware) PreampChrome::knob(g,knobBounds,position,getAccent(),isActive && isEnabled());
+        if(design.style == "Chrome") PreampChrome::knob(g,knobBounds,position,getAccent(),isActive && isEnabled());
         else goodlookinui::juce_adapter::drawKnob(g, knobBounds, position, design, isActive, backdrop);
 
         if(getWidth()>=(hardware?90:110)) {

@@ -25,7 +25,7 @@
    the accepted ticket and verify Gatekeeper assessment. Keychain identities and
    notary credentials are local; do not commit or export them.
 7. **Publish the reviewed files.** Push the MIT source to MistaMin/OpenPreamp;
-   tag v1.0.3 and publish the signed/notarized Mac DMG, manual PDF and archive
+   tag v1.1.1 and publish the signed/notarized Mac DMG, manual PDF and archive
    checksums. README screenshots and manual links must resolve. Inspect release
    assets again: no AAX, private SDK, Reference folder or signing credentials.
 

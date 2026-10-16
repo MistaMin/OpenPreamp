@@ -67,18 +67,19 @@ public:
     void paint(juce::Graphics& g) override
     {
         auto b=getLocalBounds().toFloat().reduced(1);
-        if(hardware) PreampChrome::panel(g,b);
-        else goodlookinui::juce_adapter::drawPanel(g,b,hasPlate?plate[0]:Theme::panelTop,hasPlate?plate[1]:Theme::panelBottom,hasPlate?plateFinish:Theme::panelFinish);
+        if(hasPlate) goodlookinui::juce_adapter::drawPanel(g,b,plate[0],plate[1],plateFinish);
+        else if(hardware) PreampChrome::panel(g,b);
+        else goodlookinui::juce_adapter::drawPanel(g,b,Theme::panelTop,Theme::panelBottom,Theme::panelFinish);
         if(hardware && compensated) PreampChrome::link(g,{float(getWidth())*.5f,128.f},true);
         g.setColour(accent.withAlpha(0.85f));g.fillRect(10.0f,10.0f,3.0f,15.0f);
-        g.setColour(hasPlate?plate[2]:Theme::textDark);g.setFont(juce::FontOptions(11.5f,juce::Font::bold));
+        g.setColour(hasPlate?plate[2]:(hardware?PreampChrome::ink:Theme::textDark));g.setFont(juce::FontOptions(11.5f,juce::Font::bold));
         g.drawText(title,18,8,getWidth()-58,20,juce::Justification::centredLeft);
-        g.setColour(hasPlate?plate[3]:Theme::textMid);g.setFont(juce::FontOptions(9.0f));
+        g.setColour(hasPlate?plate[3]:(hardware?PreampChrome::muted:Theme::textMid));g.setFont(juce::FontOptions(9.0f));
         g.drawText(subtitle,18,27,getWidth()-36,14,juce::Justification::centredLeft);
         g.setColour(juce::Colour(0xff20292c));g.drawHorizontalLine(46,10.0f,float(getWidth()-10));
         g.setColour(juce::Colour(0x16ffffff));g.drawHorizontalLine(47,10.0f,float(getWidth()-10));
         if(vLayout && items.size()==4) {
-            g.setColour((hasPlate?plate[3]:Theme::textMid).withAlpha(0.6f));g.setFont(juce::FontOptions(9.0f));
+            g.setColour((hasPlate?plate[3]:(hardware?PreampChrome::muted:Theme::textMid)).withAlpha(0.6f));g.setFont(juce::FontOptions(9.0f));
             g.drawText(title.contains("CUT")?"FILTER / RESONANCE":"GAIN / FREQUENCY",12,285,getWidth()-24,18,juce::Justification::centred);
             g.setColour(accent.withAlpha(0.35f));g.drawHorizontalLine(314,48.0f,float(getWidth()-48));
         }

@@ -1,6 +1,6 @@
 # macOS system installer
 
-The 1.0.3 DMG contains `OpenPreamp-1.0.3-Installer.pkg`, the illustrated manual
+The 1.1.1 DMG contains `OpenPreamp-1.1.1-Installer.pkg`, the illustrated manual
 and licenses. Quit audio hosts and run the PKG. Administrator authorization is
 required. The installer places universal Apple Silicon/Intel plugins in:
 
@@ -40,9 +40,9 @@ Reuse the already signed universal plugin bundles; no DSP rebuild is required:
 
 ```sh
 python3 tools/build_openpreamp_installer.py \
-  --plugins dist/OpenPreamp-1.0.3-macOS/Plugins \
-  --work build/installer-1.0.3 \
-  --out dist/OpenPreamp-1.0.3-Installer-DMG \
+  --plugins dist/OpenPreamp-1.1.1-macOS/Plugins \
+  --work build/installer-1.1.1 \
+  --out dist/OpenPreamp-1.1.1-Installer-DMG \
   --application-identity 'Developer ID Application: YOUR NAME (TEAM)' \
   --installer-identity 'Developer ID Installer: YOUR NAME (TEAM)'
 ```
@@ -58,7 +58,7 @@ publication. Do not run a live install on the development machine for testing.
 Notarize and staple the PKG, create a DMG from its output folder, sign the DMG,
 then notarize/staple and validate the DMG. Update release checksums after stapling.
 Both the PKG and enclosing DMG must pass signature and Gatekeeper assessment.
-Publish them on the existing 1.0.3 release and update its installation notes.
+Publish them on the 1.1.1 release and update its installation notes.
 The plugin DSP binary source revision and the installer source revision are
 recorded separately; the measurement renderer provenance remains unchanged.
 

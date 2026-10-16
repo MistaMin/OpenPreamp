@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the illustrated PDF from Docs/UserManual.md and real JUCE screenshots."""
 from pathlib import Path
-import re, subprocess, os
+import re, subprocess, os, shutil
 from xml.sax.saxutils import escape
 from PIL import Image as PILImage
 from reportlab.pdfgen import canvas
@@ -36,8 +36,8 @@ def diagram(name, rows):
     renderSVG.drawToFile(d,str(DOC/(name+'.svg')))
     temp=ROOT/'build-release/manual-qa';temp.mkdir(parents=True,exist_ok=True)
     renderPDF.drawToFile(d,str(temp/(name+'.pdf')))
-    config=temp/'fonts.conf';config.write_text('<fontconfig><dir>/System/Library/Fonts</dir><dir>/System/Library/Fonts/Supplemental</dir><cachedir>'+str(temp/'font-cache')+'</cachedir></fontconfig>');env=dict(os.environ,FONTCONFIG_FILE=str(config));os.environ['FONTCONFIG_FILE']=str(config)
-    subprocess.run(['pdftoppm','-r','144','-singlefile','-png',str(temp/(name+'.pdf')),str(DOC/name)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+    if shutil.which('pdftoppm'):
+        subprocess.run(['pdftoppm','-r','144','-singlefile','-png',str(temp/(name+'.pdf')),str(DOC/name)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 
 def assets():
     source=PILImage.open(SCREENSHOTS/'openpreamp-100-preview.png')

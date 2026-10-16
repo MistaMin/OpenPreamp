@@ -2,14 +2,14 @@
 
 **Circuit colour. Independent meters. Stereo and Mid/Side control.**
 
-![OpenPreamp 1.1.0 GUI](Docs/OpenPreamp-1.1.0-preview.png)
+![OpenPreamp 1.1.1 GUI](Docs/OpenPreamp-1.1.1-preview.png)
 
 OpenPreamp is a preamp and metering tool from **OpenGrid / Marcos Deida**,
 extracted from HybridEQ. Four preamp models, two independent processing streams,
 and a compact resizable interface - without a parametric EQ or separate
 harmonics engine.
 
-**1.1.0 GUI update in source.** [Latest packaged release: 1.0.3](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.0.3) ·
+**1.1.1 release.** [Latest packaged release: 1.1.1](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.1.1) ·
 [Illustrated PDF manual](output/pdf/OpenPreamp-User-Manual.pdf) ·
 [Online manual](Docs/UserManual.md) · [Version history](CHANGELOG.md)
 
@@ -35,17 +35,17 @@ harmonics engine.
   choices selected directly on click, peak bars, peak hold and resettable clip lamps.
 - Proportional resizing from **400 x 296** to **1500 x 1110**; default 1000 x 740.
 
-![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.1.0-ms.png)
+![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.1.1-ms.png)
 
-The 1.1.0 GUI adds direct Circuit/HQ and 1x/2x/4x selectors, readouts with units,
-and compensation-link indicators. Audio processing and parameter identities are unchanged.
+The 1.1.1 update brings 47 procedural 3D hardware knob styles via GoodLookinUI, refined model aesthetics,
+direct Circuit/HQ and 1x/2x/4x selectors, readouts with units, and compensation-link indicators. Audio processing and parameter identities are unchanged.
 The [tube preamp plan](Docs/TUBE_PREAMP_ENGINEERING_PLAN.md) is retained and deferred.
 
 ## Model appearances
 
-![Brit](Docs/OpenPreamp-1.1.0-brit.png)
-![FSF](Docs/OpenPreamp-1.1.0-fsf.png)
-![A-Type](Docs/OpenPreamp-1.1.0-atype.png)
+![Brit](Docs/OpenPreamp-1.1.1-brit.png)
+![FSF](Docs/OpenPreamp-1.1.1-fsf.png)
+![A-Type](Docs/OpenPreamp-1.1.1-atype.png)
 
 ## Install
 
