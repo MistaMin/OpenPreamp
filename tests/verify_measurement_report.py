@@ -51,7 +51,7 @@ def main(root):
     m.save_json(root / "targets.json", dict(gain_error_db=3, thdn_percent=2, phase_difference_deg=.05))
     m.analyze(argparse.Namespace(suite=root / "suite", manifests=[root / "hardware.json", root / "plugin.json"], out=root / "report", targets=root / "targets.json"))
     report = root / "report"
-    assert len(list(report.glob("*.png"))) == len(list(report.glob("*.svg"))) == 15
+    assert len(list(report.glob("*.png"))) == len(list(report.glob("*.svg"))) == 19
     assert (report / "phase-difference.csv").exists()
     assert (report / "target-checks.csv").exists()
     with (report / "target-checks.csv").open() as f:
@@ -60,7 +60,8 @@ def main(root):
         assert all(row["within_target"] == "True" for row in csv.DictReader(f))
     assert (report / "index.html").exists()
     assert "SYNTHETIC" in (report / "brit-phase-difference.svg").read_text()
-    print("PASS synthetic import, loopback correction, 15 PNG/SVG chart pairs, phase difference and CSV/HTML export")
+    assert (report / "aliasing.csv").exists()
+    print("PASS synthetic import, loopback correction, 19 PNG/SVG chart pairs, aliasing, phase difference and CSV/HTML export")
 
 
 if __name__ == "__main__":

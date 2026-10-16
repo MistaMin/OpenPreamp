@@ -19,7 +19,8 @@ import numpy as np
 
 MODELS = {"Brit": 0, "N-Type": 1, "FSF": 2, "A-Type": 4}
 MODES = ("Standard", "Circuit", "HQ")
-RATES = ("Default", "1x", "2x", "4x")
+RATES = ("1x", "2x", "4x")
+RATE_PARAMETERS = {"1x": 1, "2x": 2, "4x": 3}
 SCHEMA = 1
 
 
@@ -129,6 +130,19 @@ def generate(out, rate=48000, bits=24, quick=False):
     frequencies = [50, 100, 1000, 5000, 10000, 18000] if quick else np.geomspace(20, 20000, 31)
     for frequency in frequencies:
         tone(float(frequency), -18, "frequency")
+    # Odd FFT-bin tones avoid folded harmonics colliding with real harmonics
+    # through order 31. All engines receive exactly the same coherent samples.
+    n = 4096 if quick else 32768
+    for requested in (5000, 9000, 13000, 17000):
+        bin_index = round(requested * n / rate) | 1
+        frequency = bin_index * rate / n
+        for level in (-18, -6):
+            warm = round((.04 if quick else .25) * rate)
+            t = np.arange(warm + n) / rate
+            append("alias", 10 ** (level / 20) * np.sin(2 * np.pi * frequency * t),
+                   frequency_hz=frequency, requested_frequency_hz=requested, level_dbfs=level,
+                   fft_bin=bin_index, max_harmonic=31, analyze_start=position + warm,
+                   analyze_stop=position + warm + n)
     silence(.1)
     durations = [.15, .2, .25] if quick else [.5, 1, 2]
     counts = [round(d * rate) for d in durations]
@@ -176,7 +190,7 @@ def capture_matrix(args):
             for os in args.oversampling:
                 ident = f"{model}-{mode}-{os}"
                 params = dict(preampType=MODELS[model], preampCircuit=int(mode != "Standard"),
-                              circuitEngine=int(mode == "Circuit"), preampOversampling=RATES.index(os),
+                              circuitEngine=int(mode == "Circuit"), preampOversampling=RATE_PARAMETERS[os],
                               hqMode=0, cutsEnabled=0, monoMakerEnabled=0, midSide=0,
                               preampPad=1, preampGain=0, preampGainR=0, outputGain=0, outputGainR=0)
                 files = []
@@ -332,6 +346,50 @@ def envelope_trace(y, x, rate, window_ms=4):
     return gain
 
 
+def alias_metrics(captures, rate, tone_bin, max_harmonic=31):
+    """Coherent folded-harmonic bin proxy, distinct from in-band harmonics.
+
+    Includes bin noise/spurs; not a noise-subtracted or complete alias estimate.
+    Power is averaged across repeats before division by fundamental power.
+    """
+    n = len(captures[0])
+    if any(len(y) != n for y in captures) or not 1 <= tone_bin < n // 2:
+        raise ValueError("invalid coherent alias fixture")
+    frequency = tone_bin * rate / n
+    frequencies = np.fft.rfftfreq(n, 1 / rate)
+    band = (frequencies >= 20) & (frequencies <= 20000)
+    # Periodic Hann: a coherent linear tone occupies exactly three FFT bins.
+    # A symmetric N-1 Hann leaks into nearby predicted high-order fold bins.
+    window = .5 - .5 * np.cos(2 * np.pi * np.arange(n) / n)
+    fft = np.asarray([np.fft.rfft(y * window) for y in captures])
+    power = 2 * np.mean(abs(fft) ** 2, axis=0) / (n * np.sum(window ** 2))
+    fundamental = np.abs(np.arange(len(power)) - tone_bin) <= 2
+    real_harmonics = fundamental.copy()
+    for order in range(2, int((n // 2) / tone_bin) + 1):
+        real_harmonics |= np.abs(np.arange(len(power)) - order * tone_bin) <= 2
+    folded, markers = np.zeros(len(power), dtype=bool), []
+    for order in range(2, max_harmonic + 1):
+        if order * tone_bin <= n // 2:
+            continue
+        index = (order * tone_bin) % n
+        index = min(index, n - index)
+        bins = (np.abs(np.arange(len(power)) - index) <= 2) & band & ~real_harmonics
+        if np.any(bins) and not real_harmonics[index] and band[index]:
+            folded |= bins
+            markers.append(dict(harmonic=order, frequency_hz=index * rate / n))
+    fp = float(np.sum(power[fundamental]))
+    ap = float(np.sum(power[folded]))
+    rp = float(np.sum(power[band & ~real_harmonics]))
+    peak_power = np.mean(abs(2 * fft / np.sum(window)) ** 2, axis=0)
+    spectrum = [dict(frequency_hz=float(f), amplitude_dbr=float(db(math.sqrt(p / max(2 * fp, 1e-30)))))
+                for f, p in zip(frequencies, peak_power) if 20 <= f <= 20000]
+    return dict(frequency_hz=frequency, fundamental_power=fp, folded_power=ap,
+                nonharmonic_power=rp, folded_db=float(db(math.sqrt(ap / max(fp, 1e-30)))),
+                nonharmonic_db=float(db(math.sqrt(rp / max(fp, 1e-30)))),
+                folded_bin_count=int(np.count_nonzero(folded)), max_harmonic=max_harmonic,
+                bin_width_hz=rate / n), spectrum, markers
+
+
 def read_capture(record, plan, x, baseline_delay=None):
     arrays, metadata = [], []
     if len(record["files"]) < 2 or len(set(record["files"])) != len(record["files"]) or len(record.get("file_sha256", [])) != len(record["files"]):
@@ -373,6 +431,7 @@ def measure_record(record, plan, x, baseline=None):
     captures, alignment = read_capture(record, plan, x, baseline_delay)
     rate = plan["sample_rate"]
     tones, individual, spectra, phase, dynamics, noise, noise_windows = [], [], [], [], [], [], []
+    aliasing, alias_spectra, alias_markers = [], [], []
     for s in plan["segments"]:
         if s["kind"] == "noise":
             for repeat, y in enumerate(captures):
@@ -380,6 +439,15 @@ def measure_record(record, plan, x, baseline=None):
                 noise.append(power)
                 noise_windows.append(dict(repeat=repeat + 1, start_sample=s["start"], stop_sample=s["stop"],
                                           power=power, noise_floor_dbfs_rms=float(db(math.sqrt(power)))))
+        elif s["kind"] == "alias":
+            row, spectrum, markers = alias_metrics([y[s["analyze_start"]:s["analyze_stop"]] for y in captures],
+                                                   rate, s["fft_bin"], s["max_harmonic"])
+            reference, _, _ = alias_metrics([x[s["analyze_start"]:s["analyze_stop"]]], rate, s["fft_bin"], s["max_harmonic"])
+            row.update(input_dbfs=s["level_dbfs"], requested_frequency_hz=s["requested_frequency_hz"])
+            row.update(stimulus_folded_db=reference["folded_db"], stimulus_nonharmonic_db=reference["nonharmonic_db"])
+            aliasing.append(row)
+            if s["requested_frequency_hz"] == 9000 and s["level_dbfs"] == -6:
+                alias_spectra, alias_markers = spectrum, markers
         elif s["kind"] == "tone":
             a, b, f = s["analyze_start"], s["analyze_stop"], s["frequency_hz"]
             results = [tone_metrics(y[a:b], rate, f) for y in captures]
@@ -453,7 +521,8 @@ def measure_record(record, plan, x, baseline=None):
                    ratio=record["settings"].get("ratio"), threshold_dbfs=record["settings"].get("threshold_dbfs"),
                    makeup_gain_db=record["settings"].get("makeup_gain_db"))
     return dict(record=record, tones=tones, individual=individual, spectra=spectra, phase=phase, dynamics=dynamics,
-                alignment=alignment, summary=summary, noise_windows=noise_windows)
+                alignment=alignment, summary=summary, noise_windows=noise_windows,
+                aliasing=aliasing, alias_spectra=alias_spectra, alias_markers=alias_markers)
 
 
 def analyze(args):
@@ -463,7 +532,9 @@ def analyze(args):
         manifest = load(path)
         if manifest["schema"] != SCHEMA or not manifest["complete"] or manifest["stimulus_sha256"] != plan["stimulus_sha256"]:
             raise ValueError("capture manifest incomplete or stimulus differs")
-        records.extend(manifest["captures"])
+        # Older manifests may contain redundant Default rows. Measurement
+        # comparisons always use explicit factors, preserving their old hashes.
+        records.extend(r for r in manifest["captures"] if r["oversampling"] != "Default")
     if len({r["id"] for r in records}) != len(records):
         raise ValueError("duplicate capture ids across manifests")
     if not records:
@@ -483,7 +554,7 @@ def analyze(args):
         result = measure_record(record, plan, x, baseline)
         measured[record["id"]] = result
         print(f"Analyzed {record['id']}", flush=True)
-    for name in ("tones", "individual", "spectra", "phase", "dynamics", "noise_windows"):
+    for name in ("tones", "individual", "spectra", "phase", "dynamics", "noise_windows", "aliasing", "alias_spectra", "alias_markers"):
         export_csv(out / f"{name}.csv", [dict(capture_id=r["record"]["id"], model=r["record"]["model"],
                                            mode=r["record"]["mode"], oversampling=r["record"]["oversampling"], **row)
                                        for r in measured.values() for row in r[name]])
@@ -516,7 +587,7 @@ def plot_results(measured, plan, out, targets):
     import matplotlib.pyplot as plt
     plt.rcParams.update({"font.size": 9, "svg.fonttype": "none"})
     colors = dict(Standard="#2378b5", Circuit="#e48619", HQ="#299552", Hardware="#aa3377", Loopback="#777777")
-    styles = {"Default": "-.", "1x": "-", "2x": "--", "4x": ":", "n/a": "-"}
+    styles = {"1x": "-", "2x": "--", "4x": ":", "n/a": "-"}
     charts, differences = [], []
     conditions = (f"{plan['sample_rate']/1000:g} kHz | PCM{plan['bit_depth']} | unweighted 20 Hz–20 kHz | "
                   f"THD+N / fundamental | {'QUICK diagnostic' if plan['quick'] else 'full fixture'}")
@@ -575,6 +646,25 @@ def plot_results(measured, plan, out, targets):
             ax.text(order * 1000, .93, f"H{order}", transform=ax.get_xaxis_transform(), ha="center")
         ax.set_xlim(20, 20000)
         finish(fig, ax, f"{slug}-spectrum", "1 kHz, −18 dBFS; Hann, power averaged. Hardware level calibrated by loopback 1 kHz gain; raw bins/bin width in CSV. No noise subtraction.")
+        if any(r["aliasing"] for r in group):
+            for level in (-18, -6):
+                fig, ax = begin(f"{model}: folded-harmonic energy — {level} dBFS", "Folded-bin power / fundamental (dBr)", "Input frequency (Hz)", True)
+                for result in group:
+                    draw(ax, result, [r for r in result["aliasing"] if r["input_dbfs"] == level], "frequency_hz", "folded_db")
+                reference = [r for r in group[0]["aliasing"] if r["input_dbfs"] == level]
+                ax.plot([r["frequency_hz"] for r in reference], [r["stimulus_folded_db"] for r in reference], color="gray", linestyle="--", label="input fixture floor")
+                finish(fig, ax, f"{slug}-aliasing-{abs(level)}", f"{level} dBFS coherent sine; predicted folds of H2–H31, ±2 Hann bins, 20 Hz–20 kHz. Includes bin noise/spurs; in-band harmonics excluded.")
+            fig, ax = begin(f"{model}: high-frequency alias spectrum", "Amplitude per FFT bin (dBr fundamental)", "Output frequency (Hz)", True)
+            for result in group:
+                draw(ax, result, result["alias_spectra"], "frequency_hz", "amplitude_dbr")
+            for marker in group[0]["alias_markers"][:4]:
+                ax.axvline(marker["frequency_hz"], color="gray", alpha=.3)
+                ax.text(marker["frequency_hz"], .65, f"fold H{marker['harmonic']}", rotation=90, transform=ax.get_xaxis_transform(), fontsize=7)
+            finish(fig, ax, f"{slug}-alias-spectrum", "Approximately 9 kHz coherent sine, −6 dBFS; exact frequency/bin width in aliasing.csv. Gray lines predict folds; noise is not subtracted.")
+            fig, ax = begin(f"{model}: nonharmonic residual", "Residual power / fundamental (dBr)", "Input frequency (Hz)", True)
+            for result in group:
+                draw(ax, result, [r for r in result["aliasing"] if r["input_dbfs"] == -6], "frequency_hz", "nonharmonic_db")
+            finish(fig, ax, f"{slug}-nonharmonic-residual", "−6 dBFS coherent sine; all 20 Hz–20 kHz energy except DC/fundamental and real in-band harmonics. Includes aliases, noise, spurs and transients.")
         for frequency in (50, 1000, 10000):
             fig, ax = begin(f"{model}: THD+N vs output — {frequency:g} Hz", "THD+N (%)", "Output fundamental (dBFS)")
             ax.set_yscale("log")
@@ -630,6 +720,8 @@ def plot_results(measured, plan, out, targets):
                        ("distortion", "tones", "frequency_hz", "thdn_percent", "Frequency (Hz)", "THD+N (%)", True, True),
                        ("phase", "phase", "frequency_hz", "unwrapped_deg", "Frequency (Hz)", "Unwrapped phase (degrees)", True, False),
                        ("dynamics", "dynamics", "time_ms", "gain_reduction_db", "Time (ms)", "Gain reduction (dB)", False, False)]
+        if any(r["aliasing"] for r in plugin_results):
+            comparisons.append(("aliasing", "aliasing", "frequency_hz", "folded_db", "Input frequency (Hz)", "Folded-bin energy (dBr)", True, False))
         for name, series, xkey, ykey, xlabel, ylabel, logx, logy in comparisons:
             fig, axes = plt.subplots(len(selected_modes), len(selected_rates), squeeze=False,
                                      figsize=(4.2 * len(selected_rates), 3 * len(selected_modes) + 2), sharex=True, sharey=True)
@@ -653,9 +745,11 @@ def plot_results(measured, plan, out, targets):
                             rows = [r for r in rows if r["purpose"] == "level" and r["frequency_hz"] == 1000]
                         elif name == "distortion":
                             rows = [r for r in rows if r["purpose"] == "frequency"]
+                        elif name == "aliasing":
+                            rows = [r for r in rows if r["input_dbfs"] == -6]
                         ax.plot([r[xkey] for r in rows], [r[ykey] for r in rows], color=model_colors[rec["model"]], label=rec["model"])
                     ax.legend(fontsize=7)
-            fig.text(.04, .025, conditions + "\nCross-model overlays; transfer: 1 kHz, distortion: −18 dBFS, phase: −36 dBFS sweep, burst: −36/−6 dBFS.\n" + provenance, fontsize=7)
+            fig.text(.04, .025, conditions + "\nCross-model overlays; transfer: 1 kHz, distortion: −18 dBFS, phase: −36 dBFS sweep, burst: −36/−6 dBFS; aliasing: −6 dBFS, H2–H31 fold proxy incl noise.\n" + provenance, fontsize=7)
             fig.tight_layout(rect=(0, .1, 1, .96))
             filename = "all-preamps-" + name
             for ext in ("png", "svg"):

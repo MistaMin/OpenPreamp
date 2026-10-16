@@ -1,47 +1,57 @@
 {
-  "date": "2026-10-15",
+  "date": "2026-10-16",
   "version": "1.0.2",
-  "numerical_tests": 12,
+  "numerical_tests": 16,
   "numerical_failures": 0,
   "matrix_48k": {
-    "configurations": 48,
-    "captures": 96,
+    "configurations": 36,
+    "captures": 72,
     "bit_depth": 24,
     "buffer": 64,
-    "chart_pairs": 57,
-    "clipped_samples": 0
+    "chart_pairs": 74,
+    "clipped_samples": 0,
+    "alias_fixtures_per_configuration": 8,
+    "alias_metric_rows": 288,
+    "oversampling": [
+      "1x",
+      "2x",
+      "4x"
+    ]
   },
   "subset_96k": {
-    "configurations": 8,
-    "captures": 16,
+    "configurations": 6,
+    "captures": 12,
     "bit_depth": 16,
     "buffer": 257,
     "chart_pairs": 14,
-    "clipped_samples": 0
+    "dedicated_alias_fixtures": false
   },
   "synthetic_hardware_verification": {
-    "chart_pairs": 15,
+    "chart_pairs": 19,
     "targets_checked": true,
     "physical_measurement": false
   },
   "physical_hardware_measured": false,
-  "fixture": "quick development diagnostic",
+  "fixture": "quick development diagnostic, 5.403s",
   "analysis": {
     "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
     "numpy": "2.5.4",
     "matplotlib": "3.11.2",
-    "analyzer_sha256": "897a42192924792e72e7fdf3db50c966fd4d6fa12ae77de0310077d0495377da",
+    "analyzer_sha256": "26ded54a89befa7db03d7971aa7b815dcd10fa6d21041e8033f23fabb7bdcb8d",
     "command": [
       "tools/measure_audio.py",
       "analyze",
       "--suite",
-      "build/measurements/48k-quick",
+      "build/measurements/48k-alias-suite",
       "--manifests",
-      "build/measurements/48k-matrix/captures.json",
+      "build/measurements/48k-alias-matrix/captures.json",
       "--out",
-      "build/measurements/48k-final-report"
+      "build/measurements/48k-periodic-alias-report"
     ]
   },
-  "stimulus_sha256": "e9924bc25c6623f9afb370c3b368e56bc20d760aca77cdfe90f0784f70282964",
-  "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5"
+  "stimulus_sha256": "b0a962d25d7fbbf4d78e0e3983cd381bf4aaef16870e7984acedac7f364d0094",
+  "renderer_sha256": "5b3a907a3723126350f8f587b8b33a95c8fb6fd3ce5a4539b0444fc52d4f0be5",
+  "alias_fft_window": "periodic Hann",
+  "alias_fundamental_guard_bins": 2,
+  "alias_max_harmonic": 31
 }

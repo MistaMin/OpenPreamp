@@ -12,6 +12,39 @@ spec.loader.exec_module(m)
 
 
 class Measurements(unittest.TestCase):
+    def test_folded_cubic_harmonic_matches_analytic_level(self):
+        n, rate, k = 4096, 48000, 1109
+        x = .5 * np.sin(2 * np.pi * k * np.arange(n) / n)
+        y = x + .1 * x ** 3
+        row, _, markers = m.alias_metrics([y, y], rate, k)
+        expected = 20 * np.log10((.1 * .5 ** 3 / 4) / (.5 + 3 * .1 * .5 ** 3 / 4))
+        self.assertAlmostEqual(row["folded_db"], expected, delta=.02)
+        self.assertTrue(any(r["harmonic"] == 3 for r in markers))
+        linear, _, _ = m.alias_metrics([x, x], rate, k)
+        self.assertLess(linear["folded_db"], -100)
+
+    def test_real_in_band_harmonic_is_not_counted_as_alias(self):
+        n, rate, k = 4096, 48000, 427
+        t = 2 * np.pi * k * np.arange(n) / n
+        y = np.sin(t) + .1 * np.sin(2 * t)
+        row, _, markers = m.alias_metrics([y, y], rate, k)
+        self.assertLess(row["folded_db"], -95)
+        self.assertFalse(any(r["harmonic"] == 2 for r in markers))
+
+    def test_folded_fifth_at_96k(self):
+        n, rate, k = 4096, 96000, 727
+        t = 2 * np.pi * k * np.arange(n) / n
+        y = .5 * np.sin(t) + .005 * np.sin(5 * t)
+        row, _, markers = m.alias_metrics([y, y], rate, k)
+        self.assertAlmostEqual(row["folded_db"], -40, delta=.02)
+        self.assertTrue(any(r["harmonic"] == 5 for r in markers))
+
+    def test_coherent_9k_window_does_not_create_false_folds(self):
+        n, rate, k = 4096, 48000, 769
+        x = .5 * np.sin(2 * np.pi * k * np.arange(n) / n)
+        row, _, _ = m.alias_metrics([x, x], rate, k)
+        self.assertLess(row["folded_db"], -200)
+
     def test_pcm_roundtrip_all_formats(self):
         with tempfile.TemporaryDirectory() as d:
             for bits in (16, 24, 32):

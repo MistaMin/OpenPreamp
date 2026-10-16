@@ -7,13 +7,14 @@ device or changes interface settings. Hardware measurements require actual
 recordings; plugin output and synthetic verification are never hardware evidence.
 
 The default matrix is **Brit, N-Type, FSF, A-Type × Standard, Circuit, HQ ×
-Default, 1x, 2x, 4x**: 48 explicitly logged configurations per rate. Default is
-included even when its effective rate duplicates an explicit choice. Reports group
+1x, 2x, 4x**: 36 explicitly logged configurations per rate. Reports group
 charts by preamp; mode uses color and oversampling uses line style. Hardware for
 the same model is overlaid when imported. Circuit remains a preview with known
 HQ fidelity differences. No pass target is assumed between these engines.
-Four overview charts also overlay the four preamps in a grid of every selected
-mode and oversampling combination (transfer, distortion, phase and dynamics).
+Five overview charts also overlay the four preamps in a grid of every selected
+mode and oversampling combination (transfer, distortion, phase, dynamics and aliasing).
+The plugin's Default option remains available in the product; measurements use
+explicit factors only. Analysis also omits redundant Default rows in old manifests.
 
 ## Run plugin comparisons
 
@@ -36,7 +37,7 @@ host feeds both channels equally and records channel 1. Export a chosen hardware
 return channel as mono PCM without normalization, sample-rate conversion or added
 dither. Repeat the workflow for another channel if needed.
 
-`generate --quick` produces a 4.4-second diagnostic at 48 kHz, with fewer levels,
+`generate --quick` produces a 5.403-second diagnostic at 48 kHz, with fewer levels,
 frequencies and shorter settling. It exercises the pipeline; it is not a final
 fidelity/long-recovery measurement. The full fixture uses 13 levels, 31 frequency
 points, longer settling and a 5-second sweep. At least two independent captures
@@ -124,6 +125,22 @@ the DUT to interpret small results. Noise-floor plots include the loopback and
   measured in two silent windows across all repeats. Quantization and DUT tails
   remain. Digital zero uses a numerical display floor of −300 dBFS. The floor is
   not a measurement of analog noise below the converter capability.
+- **Aliasing:** eight dedicated coherent sine fixtures: approximately 5, 9, 13
+  and 17 kHz, each at −18 and −6 dBFS. Frequencies are snapped to odd FFT bins
+  (4,096 measured samples quick; 32,768 full), so known harmonic folds can be
+  separated from genuine in-band harmonics. A periodic Hann FFT averages repeat power
+  without the extra coherent-tone leakage of a symmetric N−1 window.
+  Sum ±2 bins around predicted folds of H2–H31 in 20 Hz–20 kHz, excluding
+  fundamental/in-band harmonic collisions; divide by fundamental power and
+  express as dBr. Exact frequencies, bin widths, powers and predicted fold
+  positions are exported. This finite-order **folded-harmonic proxy** includes
+  bin noise/spurs; it is not an isolated or complete measure of all aliasing.
+  The input fixture's own quantization/leakage floor appears as a reference.
+  Separate plots show the approximately 9 kHz/−6 dBFS spectrum with predicted
+  folds marked, and all nonharmonic in-band residual energy (aliases plus noise,
+  spurs and transients). Neither metric is THD+N. Hardware traces include ADC
+  filtering/aliasing and converter noise; these cannot be attributed solely to
+  the analog DUT. Use the loopback evidence before interpreting small differences.
 - **Dynamics:** continuous 1 kHz tone at −36 → −6 → −36 dBFS, with gain-reduction
   vs time. A centered 4 ms lock-in window smooths the envelope. Events faster than
   that are unresolved; the plot is not an automatic sub-millisecond attack-time
@@ -162,6 +179,7 @@ Without targets the report makes no acceptance claim.
 
 `tones.csv`, `individual.csv`, `spectra.csv`, `phase.csv`, `dynamics.csv`,
 `noise.csv` and `noise_windows.csv` preserve analyzed raw series for replotting.
+`aliasing.csv`, `alias_spectra.csv` and `alias_markers.csv` retain the alias tests.
 The latter retains each silence window/repeat, exposing tails versus initial
 noise separately. `configurations.csv` records actual mode/rate/ADAA settings.
 `summary.json` stores the
@@ -179,7 +197,8 @@ python3 tests/verify_measurement_report.py build/measurements/synthetic-verifica
 
 Tests cover integer PCM formats, known harmonic amplitudes/THD+N, bandwidth,
 unavailable harmonics, polarity/delay, noise-power averaging, immutable fixtures,
-calibration requirements and loopback de-embedding that retains DUT delay.
+calibration requirements and loopback de-embedding that retains DUT delay, plus
+analytic folded-harmonic levels at 48/96 kHz and exclusion of real in-band harmonics.
 No synthetic test constitutes a physical hardware measurement. Optional SMPTE/
 CCIF IMD, live interface capture and automated compressor parameter sweeps are
 not included; imported per-ratio fixtures share the existing static/burst analysis.
