@@ -44,15 +44,22 @@ harmonics engine.
 
 The Mac package contains universal **Apple Silicon and Intel** versions of
 **VST3, Audio Unit, CLAP and LV2**, for **macOS 11 or later**, plus the illustrated
-manual and complete license notices. Close your DAW, copy the entire bundle to
-its user folder, restart and rescan.
+manual and complete license notices. Quit your DAW, open the PKG inside the DMG,
+and follow Installer. Administrator authorization is required.
 
-| Format | User folder |
+| Format | System folder |
 |---|---|
-| VST3 | `~/Library/Audio/Plug-Ins/VST3/` |
-| AU | `~/Library/Audio/Plug-Ins/Components/` |
-| CLAP | `~/Library/Audio/Plug-Ins/CLAP/` |
-| LV2 | `~/Library/Audio/Plug-Ins/LV2/` |
+| VST3 | `/Library/Audio/Plug-Ins/VST3/` |
+| AU | `/Library/Audio/Plug-Ins/Components/` |
+| CLAP | `/Library/Audio/Plug-Ins/CLAP/` |
+| LV2 | `/Library/Audio/Plug-Ins/LV2/` |
+
+After installing, a dialog lists matching older/current copies in your user
+plugin folders and asks whether to move them to Trash. **Move to Trash** is
+the default. Newer copies, renamed comparison plugins and other accounts are
+left alone. Unattended installs keep user copies; review them later using
+`/Library/Application Support/OpenGrid/OpenPreamp/Check User Copies.command`.
+Restart your DAW and rescan. See [installer details](Docs/MAC_INSTALLER.md).
 
 **AAX is excluded from public downloads.** Its optional SDK and private build
 are not distributed. Mono and stereo buses are supported; mono-to-stereo and

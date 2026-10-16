@@ -1,0 +1,18 @@
+#!/bin/bash
+# Install is already complete. Cleanup is optional and runs without root rights.
+set -u
+if [ "${3:-/}" != / ]; then
+    echo 'OpenPreamp: user-copy check skipped for a non-startup target.'
+    exit 0
+fi
+console_user=$(/usr/bin/stat -f '%Su' /dev/console)
+case "$console_user" in ''|root|loginwindow|_mbsetupuser) exit 0 ;; esac
+console_uid=$(/usr/bin/id -u "$console_user") || exit 0
+# Managed/command-line installs must not block waiting for a GUI response.
+if ! /usr/bin/pgrep -u "$console_uid" -x Installer >/dev/null; then
+    echo 'OpenPreamp: unattended install; user copies retained. Run Check User Copies.command in /Library/Application Support/OpenGrid/OpenPreamp to review them.'
+    exit 0
+fi
+helper='/Library/Application Support/OpenGrid/OpenPreamp/InstallerSupport/OpenPreampUserCopies'
+/usr/bin/launchctl asuser "$console_uid" /usr/bin/sudo -u "$console_user" -- "$helper" || echo 'OpenPreamp: optional user-copy check unavailable; existing user copies retained.'
+exit 0

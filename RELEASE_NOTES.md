@@ -21,8 +21,11 @@ complete gallery and gzip CSV spectrogram maps. Synthetic hardware plots are
 excluded; no physical hardware was measured. Short fixtures do not establish
 listening approval, detailed dynamics or hardware equivalence.
 
-Signed, notarized universal macOS VST3, AU, CLAP and LV2 packages will be added
-to this release when ready. Source publication takes priority. AAX binaries,
+The macOS DMG contains a signed PKG installer for universal VST3, AU, CLAP and
+LV2. It installs into /Library/Audio/Plug-Ins for all users. After installation,
+a dialog offers to move matching older/current user-folder copies to Trash;
+Move to Trash is the default. Newer copies and other accounts are retained.
+Unattended installs retain user copies and include a manual review command. AAX binaries,
 private references and optional SDKs are excluded from public distribution.
 
 Mono/stereo only. Meters show sample peaks, not true peaks. Mode changes reset

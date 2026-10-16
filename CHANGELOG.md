@@ -2,6 +2,8 @@
 
 ## 1.0.2 - 2026-10-16
 
+- Ship a system-wide macOS PKG inside the DMG, with an unprivileged, consent-based prompt to move matching older/current user copies to Trash. Newer versions and unattended installs retain user copies.
+
 - Add linear-frequency chirp spectrograms at two levels, common-scale mode/rate grids, clean and H1–H5/fold overlays, input/loopback references and complete compressed CSV maps with explicit FFT/window/sweep resolution.
 - Measure only explicit 1x/2x/4x rates; add coherent folded-harmonic energy, alias spectra, residual plots and raw alias CSVs.
 - Add shared hardware/plugin PCM measurement fixtures, calibrated loopback import, a 36-configuration preamp/mode/oversampling capture matrix, repeated-power analysis and CSV/PNG/SVG comparison reports. See Docs/MEASUREMENT_PIPELINE.md.

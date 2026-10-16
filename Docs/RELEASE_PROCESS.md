@@ -19,7 +19,9 @@
    It explicitly excludes AAX. Inspect the staged directory before upload.
 6. **Sign and notarize.** Sign the VST3/AU/CLAP bundles and LV2 executable with
    Developer ID Application, hardened runtime and timestamp. Verify signatures,
-   generate the manifest, create/sign the DMG, submit it with notarytool, staple
+   build the system installer with tools/build_openpreamp_installer.py, sign the
+   PKG with Developer ID Installer, notarize/staple it, then create/sign the DMG,
+   submit it with notarytool, staple
    the accepted ticket and verify Gatekeeper assessment. Keychain identities and
    notary credentials are local; do not commit or export them.
 7. **Publish the reviewed files.** Push the MIT source to MistaMin/OpenPreamp;
@@ -41,3 +43,9 @@ release with the manual and measurement archive, then add validated, signed and
 notarized Mac packages to that same release when ready. Do not describe pending
 packages as already available. The measurement snapshot records the renderer used
 at capture time, independently of later release-binary hashes.
+
+The DMG now contains a product PKG, manual and licenses. See MAC_INSTALLER.md
+for exact destinations, duplicate-copy consent, unprivileged cleanup, unattended
+behavior, package inspection and signing. Disable bundle relocation so Installer
+cannot redirect the system payload into an existing user-folder copy. Never run
+a live install or cleanup on the development machine merely to test packaging.

@@ -14,16 +14,18 @@ A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp 
 
 ## 1. Installation and your first session
 
-Close your DAW before installing. Open the release disk image and copy the whole plug-in bundle for your host into its matching user folder. In Finder, use Go > Go to Folder and paste the path below. Create the final format folder if it does not exist.
+Close your DAW. Open the release disk image, double-click OpenPreamp-1.0.2-Installer.pkg and follow Installer. Administrator authorization is required. The package installs all four formats for every user in the main Library, and creates the format folders if needed.
 
-| Format | Bundle | User installation folder |
+| Format | Bundle | System installation folder |
 |---|---|---|
-| VST3 | OpenPreamp.vst3 | ~/Library/Audio/Plug-Ins/VST3/ |
-| Audio Unit | OpenPreamp.component | ~/Library/Audio/Plug-Ins/Components/ |
-| CLAP | OpenPreamp.clap | ~/Library/Audio/Plug-Ins/CLAP/ |
-| LV2 | OpenPreamp.lv2 | ~/Library/Audio/Plug-Ins/LV2/ |
+| VST3 | OpenPreamp.vst3 | /Library/Audio/Plug-Ins/VST3/ |
+| Audio Unit | OpenPreamp.component | /Library/Audio/Plug-Ins/Components/ |
+| CLAP | OpenPreamp.clap | /Library/Audio/Plug-Ins/CLAP/ |
+| LV2 | OpenPreamp.lv2 | /Library/Audio/Plug-Ins/LV2/ |
 
-Restart the DAW and rescan plug-ins. Choose OpenPreamp on a mono or stereo audio track. Copy the complete bundle, not just its executable. Each host supports its own subset of formats; install the format it can load.
+After installation, a dialog lists matching older or current OpenPreamp copies in the logged-in user's ~/Library/Audio/Plug-Ins folders. These can take precedence over the system installation. Move to Trash is the default. Choose Move to Trash only if you want to remove the listed user copies; they can be restored from Trash. Newer copies, renamed comparison plugins, redirected folders and other accounts are left alone.
+
+Unattended installs retain user copies. To review them later, open Check User Copies.command in /Library/Application Support/OpenGrid/OpenPreamp. The manual and licenses are installed there too. Restart your DAW, rescan plugins, and choose OpenPreamp on a mono or stereo track. Each host supports its own subset of formats.
 
 Start with INPUT and OUTPUT at 0 dB and PAD at Unity. N-Type is the initial model. MODELED starts on, ENGINE is HQ, and OS is Default (2x). CUTS starts on at 20 Hz high-pass and 20 kHz low-pass. MS MODE, LINK and MONO MAKER start off. Meters initially show Output in Peak mode.
 
