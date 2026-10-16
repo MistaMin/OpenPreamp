@@ -29,13 +29,18 @@ def stage(build,out):
     (out/'INSTALL.txt').write_text(f'''OpenPreamp {VERSION} - OpenGrid / Marcos Deida
 Mac universal: Apple Silicon and Intel. macOS 11 or later.
 
-Quit the DAW. Copy the complete bundle from the matching Plugins subfolder to:
-VST3: ~/Library/Audio/Plug-Ins/VST3/OpenPreamp.vst3
-AU:   ~/Library/Audio/Plug-Ins/Components/OpenPreamp.component
-CLAP: ~/Library/Audio/Plug-Ins/CLAP/OpenPreamp.clap
-LV2:  ~/Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2
-Finder: Go > Go to Folder. Create the final format folder if needed.
-Restart the DAW and rescan. See the illustrated user manual for all controls.
+These are intermediate plugin-staging files, not the public installer image.
+Build the system-wide PKG and its DMG folder with:
+python3 tools/build_openpreamp_installer.py --plugins <this-folder>/Plugins \
+  --work <new-work-folder> --out <new-dmg-folder> \
+  --application-identity '<Developer ID Application identity>' \
+  --installer-identity '<Developer ID Installer identity>'
+
+The public DMG must contain OpenPreamp-{VERSION}-Installer.pkg. Quit your DAW
+and run that PKG to install into /Library/Audio/Plug-Ins for all users.
+The installer then asks about matching older/current user copies, with Move to
+Trash as the default; no user copies move until the user confirms.
+See Docs/MAC_INSTALLER.md for inspection, notarization and publication.
 
 This production build has no DEV editor. Project source is MIT licensed;
 dependency and official binary-use terms are in Licenses/. AAX is excluded.
