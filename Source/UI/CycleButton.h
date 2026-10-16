@@ -3,6 +3,9 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Theme.h"
 #include <memory>
+#include <algorithm>
+#include <functional>
+#include <vector>
 #include <GoodLookinUI.h>
 
 // Compact look for cycle buttons: small bold text, subtle chrome.
@@ -27,6 +30,7 @@ public:
         param = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter(paramID));
         jassert(param != nullptr);
 
+        for (int i=0; param && i<param->choices.size(); ++i) menuOrder.push_back(i);
         title.setText(labelText, juce::dontSendNotification);
         title.setJustificationType(juce::Justification::centredLeft);
         title.setFont(juce::FontOptions(isHorizontal ? 9.5f : 10.5f, juce::Font::bold));
@@ -41,10 +45,8 @@ public:
         button.setColour(juce::TextButton::textColourOffId, Theme::buttonText);
         button.setColour(juce::TextButton::textColourOnId, Theme::buttonText);
         button.onClick = [this] {
-            if (param && param->choices.size() == 2) {
-                param->beginChangeGesture();
-                param->setValueNotifyingHost(param->getNormalisableRange().convertTo0to1(float(1-param->getIndex())));
-                param->endChangeGesture(); updateText();
+            if (param && menuOrder.size() == 2) {
+                selectChoice(param->getIndex()==menuOrder[0] ? menuOrder[1] : menuOrder[0]);
             } else showChoices();
         };
         addAndMakeVisible(button);
@@ -74,6 +76,24 @@ public:
             button.setBounds(b.reduced(1,3));
         }
     }
+
+    // Presentation order is independent of stable host parameter indices.
+    void setMenuOrder(std::vector<int> order) {
+        for (auto index : order) {
+            if (!param || index<0 || index>=param->choices.size()) { jassertfalse; return; }
+        }
+        menuOrder=std::move(order);
+    }
+    const std::vector<int>& getMenuOrder() const { return menuOrder; }
+    bool selectChoice(int index) {
+        if (!param || !isEnabled() || std::find(menuOrder.begin(),menuOrder.end(),index)==menuOrder.end()) return false;
+        param->beginChangeGesture();
+        param->setValueNotifyingHost(param->convertTo0to1(float(index)));
+        param->endChangeGesture();
+        if(onChoiceSelected) onChoiceSelected(index);
+        updateText();return true;
+    }
+    std::function<void(int)> onChoiceSelected;
 
     // Grey-out styling used when the owning band is bypassed.
     void setActive(bool active)
@@ -131,15 +151,12 @@ private:
     {
         if(!param)return;
         juce::PopupMenu menu;
-        for(int n=0;n<param->choices.size();++n)
-            menu.addItem(n+1,param->choices[n],true,n==param->getIndex());
+        for(auto index : menuOrder)
+            menu.addItem(index+1,param->choices[index],true,index==param->getIndex());
         menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&button),
             [safe=juce::Component::SafePointer<CycleButton>(this)](int result){
                 if(!safe || result<=0)return;
-                auto* parameter=safe->param;
-                parameter->beginChangeGesture();
-                parameter->setValueNotifyingHost(parameter->getNormalisableRange().convertTo0to1(float(result-1)));
-                parameter->endChangeGesture();safe->updateText();
+                safe->selectChoice(result-1);
             });
     }
 
@@ -162,6 +179,7 @@ private:
     juce::String paramID;
     juce::AudioParameterChoice* param = nullptr;
     juce::String textOverride;
+    std::vector<int> menuOrder;
     bool isActive = true;
     bool hasPlateText = false;
     juce::Colour plateText, plateMid;

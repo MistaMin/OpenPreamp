@@ -1,0 +1,20 @@
+{
+  "status": "unreleased source; published 1.0.2 installer unchanged",
+  "architecture": "arm64",
+  "tests": {
+    "focused_controls": "31 checks, 0 failures",
+    "processor_ui_smoke": "555 checks, 0 failures",
+    "realtime_callbacks": "960 audio callbacks, 0 with C++ heap allocations or frees"
+  },
+  "source_sha256": {
+    "Source/OpenPreampPlugin/PluginEditor.cpp": "a1ef18762738e418ccc67102aba7e66f9a3ebe3c0948f1821be8d2d5fa0f5400",
+    "Source/OpenPreampPlugin/PluginEditor.h": "5b6035d53d19a559062dd3a6275c986aeefb68b0e7a0281305c76675dc6ce321",
+    "Source/OpenPreampPlugin/PluginProcessor.cpp": "d3666eef77d460f291db274020da60adde4455f8c49800f319d3dbaeb9fcd56d",
+    "Source/OpenPreampPlugin/PluginProcessor.h": "4b1306eeabd7d23aefb9c736b7790a13a1e43882b86c943bf5872a9cc5c947af",
+    "Source/UI/CycleButton.h": "9ca1216a9a9cad6e9d2e2f5ea0633bd3b3da09f8ae28fd03de81bddc389f0f9b",
+    "Source/UI/RotaryKnob.h": "100b7306075d28709f8943329cff49c3e650b8c88732647bce3c2d9b62c7585a"
+  },
+  "local_vst3_built": true,
+  "local_vst3_signature": "ad hoc; not a notarized release package",
+  "screenshot": "OpenPreamp-controls-unreleased.png"
+}

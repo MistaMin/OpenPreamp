@@ -55,7 +55,7 @@ static void runRoutingChecks() {
         const double pass=amplitude(1000),bass=amplitude(20),treble=amplitude(15000);
         check(bass<pass*.025 && treble<pass*.12,"12 dB/octave session-rate cuts reject low/high tones at multiple host rates");
         for(int mode=0;mode<3;++mode) {
-            set(p,"preampType",1);set(p,"preampCircuit",float(mode>0));set(p,"hqMode",float(mode==2)); b.clear();p.processBlock(b,midi);
+            set(p,"preampType",1);set(p,"preampCircuit",float(mode>0));set(p,"hqMode",float(mode==2));set(p,"preampOversampling",float(mode+1)); b.clear();p.processBlock(b,midi);
             check(p.getSessionProcessorSampleRate()==rate && p.getProcessingSampleRate()==rate*(mode==0 ? 1 : mode==1 ? 2 : 4),
                   "cut/gain/M/S domain stays at host rate independently of preamp oversampling");
         }
@@ -64,7 +64,7 @@ static void runRoutingChecks() {
         OpenPreampProcessor encoded, reference;
         for(auto* p : {&encoded,&reference}) {
             set(*p,"preampGainR",6);set(*p,"outputGainR",-3);
-            set(*p,"preampCircuit",float(mode>0));set(*p,"hqMode",float(mode==2));
+            set(*p,"preampCircuit",float(mode>0));set(*p,"hqMode",float(mode==2));set(*p,"preampOversampling",float(mode+1));
             set(*p,"highPass",80);set(*p,"lowPass",12000);
         }
         set(encoded,"midSide",1);set(encoded,"monoMakerEnabled",1);set(encoded,"monoMakerFrequency",100);prepare(encoded);prepare(reference);
@@ -92,7 +92,7 @@ static void runRoutingChecks() {
     }
     // Real nonlinear right-channel processing must not contaminate the silent left channel.
     for(int mode=0;mode<3;++mode) {
-        OpenPreampProcessor p;set(p,"cutsEnabled",0);set(p,"preampCircuit",float(mode>0));set(p,"hqMode",float(mode==2));prepare(p);
+        OpenPreampProcessor p;set(p,"cutsEnabled",0);set(p,"preampCircuit",float(mode>0));set(p,"hqMode",float(mode==2));set(p,"preampOversampling",float(mode+1));prepare(p);
         juce::AudioBuffer<float> b(2,256);float leftPeak=0,rightPeak=0;
         for(int block=0;block<5;++block) {
             b.clear();for(int i=0;i<256;++i)b.setSample(1,i,.1f*std::sin(float(i+block*256)*.04f));p.processBlock(b,midi);

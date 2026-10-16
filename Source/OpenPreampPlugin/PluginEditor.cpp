@@ -8,8 +8,9 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
       meterModeBtn(p.apvts, "meterMode", "MODE", true), rightMeterModeBtn(p.apvts, "meterMode", "MODE", true),
       midSideToggle(p.apvts, "midSide", "MS MODE", Theme::preampCol),
       cutsToggle(p.apvts, "cutsEnabled", "CUTS", Theme::preampCol),
-      linkToggle(p.apvts, "channelLink", "LINK", Theme::preampCol),
+      linkToggle(p.apvts, "channelLink", "L/R LINK", Theme::preampCol),
       monoMakerToggle(p.apvts, "monoMakerEnabled", "ON", Theme::preampCol),
+      gainCompensationToggle(p.apvts, "gainCompensation", "GAIN COMPENSATION", Theme::preampCol),
       preampTypeBtn(p.apvts, "preampType", "MODEL"),
       preampPadBtn(p.apvts, "preampPad", "PAD"),
       circuitEngineBtn(p.apvts,"circuitEngine","ENGINE",true),
@@ -20,6 +21,12 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
       preampCircuitToggle(p.apvts, "preampCircuit", "MODELED", Theme::preampCol)
 {
     addAndMakeVisible(canvas);
+    proc.chooseInitialRate();
+    preampTypeBtn.setMenuOrder({3,0,1,2,4});
+    oversamplingBtn.setMenuOrder({1,2,3});
+    oversamplingBtn.onChoiceSelected=[this](int){proc.markRateChosen();};
+    circuitEngineBtn.onChoiceSelected=[this](int){proc.chooseInitialRate();};
+    preampCircuitToggle.onClick=[this]{proc.chooseInitialRate();};
     modelLooks.fromCsv(openPreampModelLooks);
     preampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
     rightPreampPanel.setAccent(Theme::preampCol,"INPUT GAIN / OUTPUT TRIM");
@@ -33,7 +40,7 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     rightPreampPanel.addAndMakeVisible(rightOutputDial);
     for (auto* c : std::initializer_list<juce::Component*>{&highPassDial,&lowPassDial,&cutsToggle}) cutsPanel.addAndMakeVisible(c);
     for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&oversamplingBtn,&circuitEngineBtn,&rateLabel}) controlsPanel.addAndMakeVisible(c);
-    for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel,&midSideToggle,&linkToggle,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn,&meterModeBtn,&rightMeterModeBtn}) canvas.addAndMakeVisible(c);
+    for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel,&midSideToggle,&linkToggle,&gainCompensationToggle,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn,&meterModeBtn,&rightMeterModeBtn}) canvas.addAndMakeVisible(c);
     monoMakerPanel.addAndMakeVisible(monoMakerDial); monoMakerPanel.addAndMakeVisible(monoMakerToggle);
     meterPanel.setChannel(0); rightMeter.setChannel(1);
     meterPanel.setExternallyDriven(); rightMeter.setExternallyDriven();
@@ -45,6 +52,28 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     highPassAtt=attach("highPass",highPassDial); lowPassAtt=attach("lowPass",lowPassDial);
     for(auto* knob : {&preampGainDial,&rightGainDial,&outputGainDial,&rightOutputDial}) knob->setDoubleClickReturnValue(true,0);
     highPassDial.setDoubleClickReturnValue(true,20); lowPassDial.setDoubleClickReturnValue(true,20000);
+    for(auto* knob : {&preampGainDial,&rightGainDial,&outputGainDial,&rightOutputDial,&highPassDial,&lowPassDial,&monoMakerDial}) {
+        knob->setScrollWheelEnabled(true);knob->setWantsKeyboardFocus(true);
+        knob->onUserSelect=[this,knob]{selectedKnob=knob;};
+    }
+    auto pair=[this](RotaryKnob& source,RotaryKnob& target,const char* targetID) {
+        auto gestureOpen=std::make_shared<bool>(false);
+        auto* parameter=proc.apvts.getParameter(targetID);
+        source.onDragStart=[this,gestureOpen,parameter]{
+            if(proc.apvts.getRawParameterValue("gainCompensation")->load()>0.5f){parameter->beginChangeGesture();*gestureOpen=true;}
+        };
+        source.onDragEnd=[gestureOpen,parameter]{if(*gestureOpen){parameter->endChangeGesture();*gestureOpen=false;}};
+        source.onUserValueChanged=[this,&source,&target](double before,double after) {
+            if(proc.apvts.getRawParameterValue("gainCompensation")->load()<0.5f) return;
+            const double oldTarget=target.getValue();
+            const double next=juce::jlimit(target.getMinimum(),target.getMaximum(),oldTarget-(after-before));
+            target.setValue(next,juce::sendNotificationSync);
+            source.setValue(before+oldTarget-next,juce::sendNotificationSync);
+        };
+    };
+    pair(preampGainDial,outputGainDial,"outputGain");pair(outputGainDial,preampGainDial,"preampGain");
+    pair(rightGainDial,rightOutputDial,"outputGainR");pair(rightOutputDial,rightGainDial,"preampGainR");
+    gainCompensationToggle.setTooltip("Move INPUT and OUTPUT inversely in dB. Applies to knob drag, wheel, keys and double-click; both gain values are saved and can be recorded as automation. This is not automatic loudness matching.");
     preampGainDial.setTooltip("Left / Mid input gain. Double-click for 0 dB.");
     rightGainDial.setTooltip("Right / Side input gain. Double-click for 0 dB.");
     outputGainDial.setTooltip("Left / Mid output trim. Double-click for 0 dB.");
@@ -53,8 +82,8 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     preampPadBtn.setButtonTooltip("Shared input offset: -20 dB, unity, or +10 dB.");
     preampTypeBtn.setButtonTooltip("Shared preamp model for both channels.");
     preampCircuitToggle.setTooltip("Off: Standard preamp. On: the selected Circuit or HQ engine. Standard and Circuit use ADAA only at 1x.");
-    circuitEngineBtn.setButtonTooltip("HQ: full component model. Circuit Preview: reduced model, still under validation, with differences in driven harmonics and recovery. Turn MODELED off for Standard.");
-    oversamplingBtn.setButtonTooltip("Select 1x, 2x or 4x for any engine. Default: Standard/Circuit 1x, HQ 2x; old sessions retain their saved rates. ADAA is automatic at 1x for Standard/Circuit and off at 2x/4x. The displayed factor is the effective rate.");
+    circuitEngineBtn.setButtonTooltip("HQ: full component model. Circuit: reduced model, still under validation, with differences in driven harmonics and recovery. Turn MODELED off for Standard.");
+    oversamplingBtn.setButtonTooltip("Select 1x, 2x or 4x for any engine. Starts at 2x for HQ. Standard/Circuit use 1x as their initial rate; older sessions retain their saved rates. ADAA is automatic at 1x for Standard/Circuit and off at 2x/4x. The displayed factor is the effective rate.");
     midSideToggle.setTooltip("Off: normal L/R. On: encode Mid/Side before the preamps and decode after downsampling and output trims. Link is disabled in M/S.");
     linkToggle.setTooltip("Link both input and output gains to the left controls. Right settings return when unlinked. Unavailable in M/S.");
     monoMakerToggle.setTooltip("Reduce bass width with a session-rate 6 dB/octave high-pass on Side only, before the preamp.");
@@ -110,7 +139,7 @@ void OpenPreampEditor::applyModelLook()
     preampBypassBtn.setAccent(colour);
     preampCircuitToggle.setAccent(colour);oversamplingBtn.refreshTheme();
     linkToggle.setAccent(colour); monoMakerToggle.setAccent(colour);
-    cutsToggle.setAccent(colour); midSideToggle.setAccent(colour);
+    cutsToggle.setAccent(colour); midSideToggle.setAccent(colour);gainCompensationToggle.setAccent(colour);
     repaint();
 }
 
@@ -151,12 +180,22 @@ void OpenPreampEditor::resized()
     monoMakerDial.setBounds(12,54,98,102);monoMakerToggle.setBounds(116,80,66,30);
     preampPadBtn.setBounds(14,56,100,60);preampTypeBtn.setBounds(120,56,112,60);
     preampCircuitToggle.setBounds(244,56,96,26);oversamplingBtn.setBounds(244,96,96,26);
-    midSideToggle.setBounds(405,14,110,24);linkToggle.setBounds(525,14,80,24);
+    constexpr int keyGap=10, menuWidth=110+80+164+2*keyGap;
+    auto headerMenu=juce::Rectangle<int>((1000-menuWidth)/2,14,menuWidth,24);
+    midSideToggle.setBounds(headerMenu.removeFromLeft(110));headerMenu.removeFromLeft(keyGap);
+    linkToggle.setBounds(headerMenu.removeFromLeft(80));headerMenu.removeFromLeft(keyGap);
+    gainCompensationToggle.setBounds(headerMenu);
     circuitEngineBtn.setBounds(14,128,146,26);
     rateLabel.setBounds(172,132,168,20);
 #if GOODLOOKINUI_ENABLE_EDITOR
-    developerButton.setBounds(316,14,60,24);
+    developerButton.setBounds(246,14,56,24);
 #endif
+}
+
+void OpenPreampEditor::mouseWheelMove(const juce::MouseEvent& event,const juce::MouseWheelDetails& wheel) {
+    auto* focused=selectedKnob.getComponent();
+    if(focused && event.eventComponent!=focused && !focused->isParentOf(event.eventComponent) && isParentOf(focused) && focused->isEnabled())
+        focused->mouseWheelMove(event.getEventRelativeTo(focused),wheel);
 }
 
 void OpenPreampEditor::timerCallback()
@@ -171,7 +210,8 @@ void OpenPreampEditor::timerCallback()
     preampGainDial.setActive(proc.apvts.getRawParameterValue("preampBypass")->load() < 0.5f); preampPadBtn.setActive(proc.apvts.getRawParameterValue("preampBypass")->load() < 0.5f);
     preampTypeBtn.setActive(active); preampCircuitToggle.setActive(active);
     oversamplingBtn.setActive(active);
-    oversamplingBtn.setDisplayTextOverride(juce::String(proc.getEffectiveOversampleFactor())+"x");
+    const int chosen=int(proc.apvts.getRawParameterValue("preampOversampling")->load());
+    oversamplingBtn.setDisplayTextOverride(juce::String(chosen>0 ? 1<<(chosen-1) : proc.getEffectiveOversampleFactor())+"x");
     circuitEngineBtn.setActive(active && preampCircuitToggle.getToggleState());
     rightGainDial.setActive(!proc.apvts.getRawParameterValue("preampBypass")->load());
     highPassDial.setActive(cutsToggle.getToggleState() && proc.apvts.getRawParameterValue("preampBypass")->load() < 0.5f); lowPassDial.setActive(highPassDial.getActive());

@@ -26,7 +26,7 @@ static void runStereoToolsChecks() {
         std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());
         bool linkVisible=false,linkEnabled=false,linkActive=false,rightEnabled=true,rightDimmed=false;int gainControls=0;
         for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren()) {
-            if(auto* button=dynamic_cast<SmallToggle*>(child);button && button->getButtonText()=="LINK"){linkVisible=button->isVisible();linkEnabled=button->isEnabled();linkActive=button->getActive();}
+            if(auto* button=dynamic_cast<SmallToggle*>(child);button && button->getButtonText()=="L/R LINK"){linkVisible=button->isVisible();linkEnabled=button->isEnabled();linkActive=button->getActive();}
             if(auto* panel=dynamic_cast<SectionPanel*>(child);panel && panel->getX()==508)
                 for(auto* control : panel->getChildren())if(auto* knob=dynamic_cast<RotaryKnob*>(control)) {
                     ++gainControls;rightEnabled &= knob->isEnabled();rightDimmed |= !knob->getActive();

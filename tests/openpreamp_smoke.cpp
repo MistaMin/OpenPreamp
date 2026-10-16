@@ -24,16 +24,18 @@ static bool contained(juce::Component& c) {
 #include "openpreamp_stereo_tools.h"
 #include "openpreamp_render.h"
 #include "openpreamp_rate_checks.h"
+#include "openpreamp_control_checks.h"
 #include "openpreamp_measurement.h"
 int main(int argc,char** argv) {
     juce::ScopedJuceInitialiser_GUI gui;
+    if(argc==2 && juce::String(argv[1])=="--controls")return runControlChecks();
     if(argc==3 && juce::String(argv[1])=="--render")return renderComparisons(juce::File(argv[2]));
     if(argc==3 && juce::String(argv[1])=="--measure-batch")return renderMeasurementBatch(juce::File(argv[2]));
     OpenPreampProcessor p;
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);
     check(p.apvts.getParameter("oversampleMode") == nullptr, "oversampling parameter removed");
-    check(p.getParameters().size() == 20, "preamp-only parameter set with appended oversampling choice");
+    check(p.getParameters().size() == 21, "preamp parameter set with appended gain-link control");
     check(p.apvts.getRawParameterValue("circuitEngine")->load()==0, "new sessions default to the validated Full engine");
     set(p, "preampCircuit", 0);
     p.setPlayConfigDetails(2, 2, 48000, 128);
@@ -46,6 +48,7 @@ int main(int argc,char** argv) {
         check(p.getProcessingSampleRate() == 48000.0, "PAD does not alter session rate");
     }
     set(p, "preampPad", 1);
+    set(p,"preampOversampling",0); // Exercise the retained legacy rate policy explicitly.
     for (double rate : {44100.0, 48000.0, 96000.0, 192000.0}) {
         p.setPlayConfigDetails(2, 2, rate, 128);
         p.prepareToPlay(rate, 128);
@@ -67,7 +70,7 @@ int main(int argc,char** argv) {
                         for (int i = 0; i < 128; ++i)
                             finite &= std::isfinite(audio.getSample(ch, i));
                 }
-                check(p.getProcessingSampleRate() == rate * (circuit ? (hq ? 4 : backend ? 1 : 2) : 1) && finite, "model/rate/engine combination uses correct default rate and produces finite audio");
+                check(p.getProcessingSampleRate() == rate * (circuit ? (hq ? 4 : backend ? 1 : 2) : 1) && finite, "model/rate/engine combination preserves the legacy rate policy and produces finite audio");
                 check(p.getLatencySamples() == latency, "latency stays fixed during automation");
               }
             }

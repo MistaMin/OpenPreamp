@@ -62,9 +62,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
     params.push_back(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID{"meterMode", 1}, "Meter Mode", juce::StringArray{"Peak", "RMS"}, 0));
     params.push_back(std::make_unique<juce::AudioParameterChoice>(
-        juce::ParameterID{"circuitEngine", 1}, "Circuit Engine", juce::StringArray{"HQ", "Circuit Preview"}, 0));
+        juce::ParameterID{"circuitEngine", 1}, "Circuit Engine", juce::StringArray{"HQ", "Circuit"}, 0));
     params.push_back(std::make_unique<juce::AudioParameterChoice>(
-        juce::ParameterID{"preampOversampling", 2}, "Preamp Oversampling", juce::StringArray{"Default", "1x", "2x", "4x"}, 0));
+        juce::ParameterID{"preampOversampling", 2}, "Preamp Oversampling", juce::StringArray{"Legacy", "1x", "2x", "4x"}, 2));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID{"gainCompensation", 3}, "Input / Output Gain Compensation", false));
     return {params.begin(), params.end()};
 }
 
@@ -74,9 +76,26 @@ OpenPreampProcessor::OpenPreampProcessor()
           .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
       apvts(*this, nullptr, "Parameters", createParameterLayout())
 {
-    static constexpr const char* ids[] = {"preampType","preampPad","preampGain","preampBypass","preampCircuit","outputGain","hqMode","meterSource","preampGainR","outputGainR","midSide","highPass","lowPass","cutsEnabled","channelLink","monoMakerEnabled","monoMakerFrequency","meterMode","circuitEngine","preampOversampling"};
+    static constexpr const char* ids[] = {"preampType","preampPad","preampGain","preampBypass","preampCircuit","outputGain","hqMode","meterSource","preampGainR","outputGainR","midSide","highPass","lowPass","cutsEnabled","channelLink","monoMakerEnabled","monoMakerFrequency","meterMode","circuitEngine","preampOversampling","gainCompensation"};
     static_assert(std::size(ids)==ParameterCount);
     for(size_t i=0;i<parameterValues.size();++i)parameterValues[i]=apvts.getRawParameterValue(ids[i]);
+    apvts.addParameterListener("preampOversampling",this);
+}
+
+OpenPreampProcessor::~OpenPreampProcessor() { apvts.removeParameterListener("preampOversampling",this); }
+
+void OpenPreampProcessor::parameterChanged(const juce::String&, float) {
+    if(!settingInitialRate.load(std::memory_order_relaxed)) markRateChosen();
+}
+
+void OpenPreampProcessor::chooseInitialRate() {
+    if(rateChosen.load(std::memory_order_relaxed)) return;
+    const bool full=value(Circuit)>0.5f && value(Engine)<0.5f;
+    const int choice=full ? 2 : 1;
+    settingInitialRate.store(true,std::memory_order_relaxed);
+    auto* rate=apvts.getParameter("preampOversampling");
+    rate->setValueNotifyingHost(rate->convertTo0to1(float(choice)));
+    settingInitialRate.store(false,std::memory_order_relaxed);
 }
 
 bool OpenPreampProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
@@ -88,6 +107,7 @@ bool OpenPreampProcessor::isBusesLayoutSupported(const BusesLayout& layout) cons
 
 void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+    chooseInitialRate();
     sampleRateAtomic.store(sampleRate, std::memory_order_relaxed);
     multirate.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
     multirate.setMode(dsp::OversampleMode::FourX);
@@ -235,6 +255,7 @@ juce::AudioProcessorEditor* OpenPreampProcessor::createEditor()
 void OpenPreampProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
     auto state = apvts.copyState();
+    state.setProperty("rateChosen",rateChosen.load(std::memory_order_relaxed),nullptr);
     state.setProperty("legacyRateDefaults",legacyRateDefaults.load(std::memory_order_relaxed),nullptr);
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
     copyXmlToBinary(*xml, destData);
@@ -254,7 +275,7 @@ void OpenPreampProcessor::setStateInformation(const void* data, int sizeInBytes)
         if (!state.getChildWithProperty("id","cutsEnabled").isValid()) {
             juce::ValueTree cut("PARAM"); cut.setProperty("id","cutsEnabled",nullptr); cut.setProperty("value",0.0f,nullptr); state.appendChild(cut,nullptr);
         }
-        for (const auto id : {"channelLink", "monoMakerEnabled", "monoMakerFrequency", "meterMode"})
+        for (const auto id : {"channelLink", "monoMakerEnabled", "monoMakerFrequency", "meterMode", "gainCompensation"})
             if (!state.getChildWithProperty("id",id).isValid()) {
                 juce::ValueTree param("PARAM"); param.setProperty("id",id,nullptr);
                 param.setProperty("value", juce::String(id) == "monoMakerFrequency" ? 20.0f : 0.0f,nullptr);
@@ -271,6 +292,8 @@ void OpenPreampProcessor::setStateInformation(const void* data, int sizeInBytes)
         legacyRateDefaults.store(missingRate || bool(state.getProperty("legacyRateDefaults",false)),std::memory_order_relaxed);
         if(missingRate){juce::ValueTree rate("PARAM");rate.setProperty("id","preampOversampling",nullptr);rate.setProperty("value",0.f,nullptr);state.appendChild(rate,nullptr);}
         apvts.replaceState(state);
+        // Older saved states retain their dynamic legacy/explicit rate policy.
+        rateChosen.store(bool(state.getProperty("rateChosen",true)),std::memory_order_relaxed);
     }
 }
 

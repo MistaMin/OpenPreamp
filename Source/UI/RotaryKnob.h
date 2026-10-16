@@ -104,7 +104,22 @@ public:
     }
 
     std::function<void()> onSelect;   // developer mode: clicking a knob selects it in the inspector
-    void mouseDown(const juce::MouseEvent& e) override { if (onSelect) onSelect(); juce::Slider::mouseDown(e); }
+    std::function<void(double,double)> onUserValueChanged;
+    std::function<void()> onUserSelect;
+    void mouseDown(const juce::MouseEvent& e) override {
+        if(onSelect) onSelect();
+        if(onUserSelect) onUserSelect();
+        userEdit([&]{juce::Slider::mouseDown(e);});
+    }
+    void mouseDrag(const juce::MouseEvent& e) override { userEdit([&]{juce::Slider::mouseDrag(e);}); }
+    void mouseDoubleClick(const juce::MouseEvent& e) override { userEdit([&]{juce::Slider::mouseDoubleClick(e);}); }
+    void mouseWheelMove(const juce::MouseEvent& e,const juce::MouseWheelDetails& wheel) override {
+        if(isEnabled()) userEdit([&]{juce::Slider::mouseWheelMove(e,wheel);});
+    }
+    bool keyPressed(const juce::KeyPress& key) override {
+        bool handled=false;userEdit([&]{handled=juce::Slider::keyPressed(key);});return handled;
+    }
+
     void applyDesign(const goodlookinui::Item& item) {
         design = item;
         title.setText(item.label, juce::dontSendNotification);
@@ -113,6 +128,19 @@ public:
     }
     const goodlookinui::Item& getDesign() const { return design; }
 private:
+    template<class Edit> void userEdit(Edit edit) {
+        const juce::ScopedValueSetter<bool> scope(userEditing,true);
+        previousUserValue=getValue();edit();
+    }
+    void valueChanged() override {
+        juce::Slider::valueChanged();
+        if(userEditing && !applyingLink && onUserValueChanged) {
+            const juce::ScopedValueSetter<bool> scope(applyingLink,true);
+            onUserValueChanged(previousUserValue,getValue());previousUserValue=getValue();
+        }
+    }
+    bool userEditing=false,applyingLink=false;
+    double previousUserValue=0;
     void timerCallback() override {
         const auto target = valueToProportionOfLength(getValue());
         if (!isShowing()) { motion.position=target; motion.velocity=0; return; }

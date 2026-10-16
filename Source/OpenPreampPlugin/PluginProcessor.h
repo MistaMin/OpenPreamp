@@ -10,10 +10,12 @@
 
 class OpenPreampProcessor;
 
-class OpenPreampProcessor : public juce::AudioProcessor {
+class OpenPreampProcessor : public juce::AudioProcessor, private juce::AudioProcessorValueTreeState::Listener {
 public:
     OpenPreampProcessor();
-    ~OpenPreampProcessor() override = default;
+    ~OpenPreampProcessor() override;
+    void chooseInitialRate();
+    void markRateChosen() { rateChosen.store(true, std::memory_order_relaxed); }
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
@@ -51,10 +53,12 @@ public:
 
 private:
     enum ParameterIndex { Type, Pad, Input, Bypass, Circuit, Output, HQ, MeterSource,
-        InputR, OutputR, MS, HP, LP, Cuts, Link, MonoEnabled, MonoFrequency, MeterMode, Engine, Oversampling, ParameterCount };
+        InputR, OutputR, MS, HP, LP, Cuts, Link, MonoEnabled, MonoFrequency, MeterMode, Engine, Oversampling, GainCompensation, ParameterCount };
     std::array<std::atomic<float>*,ParameterCount> parameterValues{};
     float value(ParameterIndex index) const noexcept { return parameterValues[size_t(index)]->load(std::memory_order_relaxed); }
     void updateParameters();
+    void parameterChanged(const juce::String&, float) override;
+    std::atomic<bool> rateChosen{false}, settingInitialRate{false};
     std::unique_ptr<dsp::ReducedCircuitBank> reducedBank;
     std::array<dsp::ReducedCircuitKernel,2> reducedKernels;
     bool reducedActive=false;

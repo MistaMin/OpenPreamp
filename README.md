@@ -108,6 +108,13 @@ autosave to `Designs/OpenPreampKnobs.csv` and `Designs/OpenPreampLooks.csv`.
 Production builds bake those files into the binary and have no DEV tools or
 filesystem autosave. See [release process](Docs/RELEASE_PROCESS.md).
 
+## Source control updates
+
+Current source adds inverse **GAIN COMPENSATION**, hovered/clicked-knob wheel
+editing, a centered header, Off-first model ordering and explicit-rate menus.
+See [control changes and validation](Docs/CONTROL_UPDATES.md). These updates are
+listed as Unreleased; the 1.0.2 download retains its published interface.
+
 ## Measurement development
 
 Development measurement tools compare all four preamps across Standard/Circuit/HQ

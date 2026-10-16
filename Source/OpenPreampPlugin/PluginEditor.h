@@ -20,6 +20,7 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
+    void mouseWheelMove(const juce::MouseEvent&, const juce::MouseWheelDetails&) override;
 
 private:
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
@@ -32,6 +33,7 @@ private:
     std::unique_ptr<juce::DocumentWindow> developerWindow;
     void setupDeveloperTools();
 #endif
+    juce::Component::SafePointer<RotaryKnob> selectedKnob;
     bool layoutReady = false;
     void loadKnobLayout(const std::string&);
     juce::Component canvas;
@@ -47,7 +49,7 @@ private:
     MeterPanel rightMeter;
     CycleButton rightMeterSourceBtn;
     CycleButton meterModeBtn, rightMeterModeBtn;
-    SmallToggle midSideToggle, cutsToggle, linkToggle, monoMakerToggle;
+    SmallToggle midSideToggle, cutsToggle, linkToggle, monoMakerToggle, gainCompensationToggle;
     RotaryKnob monoMakerDial{"FREQUENCY", KnobValueType::Frequency, Theme::preampCol};
     std::unique_ptr<SliderAttachment> monoMakerAtt;
     std::unique_ptr<SliderAttachment> rightGainAtt, rightOutputAtt, highPassAtt, lowPassAtt;

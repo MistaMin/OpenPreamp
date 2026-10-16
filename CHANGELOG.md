@@ -1,5 +1,12 @@
 # OpenPreamp version history
 
+## Unreleased
+
+- Put Off first in the model menu while keeping N-Type as the initial selection and retaining saved model indices.
+- Rename Circuit Preview to Circuit. Show only explicit 1x/2x/4x rates, choose initial engine rates automatically, and preserve subsequent user rate choices.
+- Add GAIN COMPENSATION for inverse input/output knob edits, independent of L/R LINK, with paired host gestures and gain-limit handling.
+- Enable hovered/focused mouse-wheel gain and filter-frequency adjustment. See Docs/CONTROL_UPDATES.md.
+
 ## 1.0.2 - 2026-10-16
 
 - Ship a system-wide macOS PKG inside the DMG, with an unprivileged, consent-based prompt to move matching older/current user copies to Trash. Newer versions and unattended installs retain user copies.
