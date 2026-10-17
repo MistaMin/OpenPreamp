@@ -1,11 +1,15 @@
+#ifndef MyAppVersion
+  #define MyAppVersion "1.1.2"
+#endif
+
 [Setup]
 AppName=OpenPreamp
-AppVersion=1.0.0
+AppVersion={#MyAppVersion}
 AppPublisher="OpenGrid / Marcos Deida"
 AppPublisherURL="https://github.com/MistaMin/OpenPreamp"
 DefaultDirName={commonpf64}\OpenPreamp
 DefaultGroupName=OpenPreamp
-OutputBaseFilename=OpenPreamp-1.0.0-win
+OutputBaseFilename=OpenPreamp-{#MyAppVersion}-win
 LicenseFile=..\LICENSE
 PrivilegesRequired=admin
 ArchitecturesAllowed=x64
