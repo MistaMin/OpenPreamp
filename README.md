@@ -2,14 +2,14 @@
 
 **Circuit colour. Independent meters. Stereo and Mid/Side control.**
 
-![OpenPreamp 1.1.1 GUI](Docs/OpenPreamp-1.1.1-preview.png)
+![OpenPreamp 1.1.2 GUI](Docs/OpenPreamp-1.1.2-preview.png)
 
 OpenPreamp is a preamp and metering tool from **OpenGrid / Marcos Deida**,
 extracted from HybridEQ. Four preamp models, two independent processing streams,
 and a compact resizable interface - without a parametric EQ or separate
 harmonics engine.
 
-**1.1.1 release.** [Latest packaged release: 1.1.1](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.1.1) ·
+**1.1.2 release.** [Latest packaged release: 1.1.2](https://github.com/MistaMin/OpenPreamp/releases/tag/v1.1.2) ·
 [Illustrated PDF manual](output/pdf/OpenPreamp-User-Manual.pdf) ·
 [Online manual](Docs/UserManual.md) · [Version history](CHANGELOG.md)
 
@@ -23,7 +23,7 @@ harmonics engine.
 - Explicit **1x / 2x / 4x** oversampling for every engine. Initial rates are 1x
   for Standard/Circuit and 2x for HQ; a manual rate choice is then retained. 2x uses IIR; 4x uses FIR resampling.
 - **ADAA** runs at 1x for Standard and Circuit, and turns off at 2x/4x.
-  HQ does not use ADAA. Legacy sessions retain their previous rate settings.
+  HQ does not use ADAA. 1.1.2 upgrades to HybridEQ's Residual ADAA architecture for transparent high-end response (<0.005 dB change at 20 kHz). Legacy sessions retain their previous rate settings.
 - Independent **input and output trims**, shared **PAD**, and **L/R LINK**.
 - **GAIN COMPENSATION** moves input/output inversely, independently of L/R Link.
   Wheel-edit hovered or clicked gain/frequency knobs. The top controls are centered.
@@ -35,17 +35,17 @@ harmonics engine.
   choices selected directly on click, peak bars, peak hold and resettable clip lamps.
 - Proportional resizing from **400 x 296** to **1500 x 1110**; default 1000 x 740.
 
-![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.1.1-ms.png)
+![Mid/Side controls with Link inactive](Docs/OpenPreamp-1.1.2-ms.png)
 
-The 1.1.1 update brings 47 procedural 3D hardware knob styles via GoodLookinUI, refined model aesthetics,
-direct Circuit/HQ and 1x/2x/4x selectors, readouts with units, and compensation-link indicators. Audio processing and parameter identities are unchanged.
+The 1.1.2 update brings HybridEQ's Residual ADAA architecture, 47 procedural 3D hardware knob styles via GoodLookinUI, refined model aesthetics,
+direct Circuit/HQ and 1x/2x/4x selectors, readouts with units, and compensation-link indicators. Audio processing and parameter identities remain fully compatible.
 The [tube preamp plan](Docs/TUBE_PREAMP_ENGINEERING_PLAN.md) is retained and deferred.
 
 ## Model appearances
 
-![Brit](Docs/OpenPreamp-1.1.1-brit.png)
-![FSF](Docs/OpenPreamp-1.1.1-fsf.png)
-![A-Type](Docs/OpenPreamp-1.1.1-atype.png)
+![Brit](Docs/OpenPreamp-1.1.2-brit.png)
+![FSF](Docs/OpenPreamp-1.1.2-fsf.png)
+![A-Type](Docs/OpenPreamp-1.1.2-atype.png)
 
 ## Install
 

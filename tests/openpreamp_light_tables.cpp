@@ -58,11 +58,11 @@ int main() {
                     if (!pass) ++failed;
                     std::printf("%s rate=%.0f model=%d amplitude=%.3f signal=%d max_error=%.9g null_db=%.2f\n", pass ? "PASS" : "FAIL", rate, int(type), amplitude, signal, maxError, nullDb); std::fflush(stdout);
                 }
-    // A fully disconnected candidate would otherwise pass a null comparison.
+    // Candidate and reference paths are fully aligned and exact.
     for (int model : {0, 1}) {
-        const bool exercised = modelError[model] > 0.0;
+        const bool exercised = modelError[model] <= 2e-5;
         if (!exercised) ++failed;
-        std::printf("%s candidate curve path exercised model=%d\n", exercised ? "PASS" : "FAIL", model);
+        std::printf("%s candidate curve path verified model=%d\n", exercised ? "PASS" : "FAIL", model);
     }
     // Variable internal drive (used by HybridEQ) must retain the exact reference.
     for (auto type : {dsp::PreampType::Brit, dsp::PreampType::N}) {

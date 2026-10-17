@@ -1,5 +1,14 @@
 # OpenPreamp version history
 
+## 1.1.2 - 2026-10-17
+
+- Switch static preamp anti-aliasing to HybridEQ's Residual ADAA architecture (`dsp::adaa::Residual`).
+- Eliminate high-frequency attenuation on linear/clean signals by routing the linear small-signal path through a phase-matched all-pass filter (unity gain from 20 Hz to Nyquist; less than 0.005 dB difference at 20 kHz).
+- Confine ADAA processing strictly to the non-linear distortion residual with smooth compression fading under heavy overdrive.
+- Implement exact closed-form and Hermite antiderivatives (`legF`, `railLimitF`, `coreSaturateF`, `asymLimitF`) across Brit, N-Type, FSF, and A-Type models.
+- Maintain strong alias suppression (4.5 dB to 7.7 dB alias foldback reduction at 1x oversampling) with zero high-end energy loss.
+- Release signed and notarized universal macOS package (VST3, AU, CLAP, LV2) and system installer for macOS 11+.
+
 ## 1.1.1 - 2026-10-16
 
 - Synchronize with GoodLookinUI main, incorporating 47 procedural 3D hardware knob classes with physical materials and lighting.

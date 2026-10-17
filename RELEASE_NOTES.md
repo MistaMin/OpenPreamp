@@ -1,11 +1,11 @@
-# OpenPreamp 1.1.1
+# OpenPreamp 1.1.2
 
-The 1.1.1 release brings updated model styling, 47 procedural hardware knob classes via GoodLookinUI, and a signed and notarized macOS universal installer.
+The 1.1.2 release upgrades static preamp anti-aliasing to HybridEQ's Residual ADAA architecture, eliminating high-frequency attenuation while preserving robust anti-aliasing protection.
 
-- **Updated Preamp Styling**: FSF features a bright gold (`#FFF500`) accent on Royal plate with pale-grey FS skirt knobs; Off model features rugged `Rck` knobs on Graphite; Brit, N-Type, and A-Type retain their distinct hardware designs.
-- **GoodLookinUI Integration**: Updated to the latest GoodLookinUI toolkit with 47 procedural 3D hardware knob classes and full lighting/material models.
-- **Developer Tools**: Cleaned up Developer Mode (`GOODLOOKINUI_ENABLE_EDITOR`) with full plate, faceplate, and knob style inspectors and reliable autosave to `Designs/`.
+- **HybridEQ Residual ADAA Architecture**: Replaced uncompensated two-sample averaging with a split linear/residual topology (`dsp::adaa::Residual`). Linear small-signal audio passes through a unity-gain phase-matched all-pass filter, maintaining transparent top-end energy from 20 Hz to Nyquist (< 0.005 dB difference at 20 kHz).
+- **Non-Linear Residual Anti-Aliasing**: Anti-derivative anti-aliasing is applied exclusively to the non-linear distortion residual with smooth compression cross-fading under deep saturation.
+- **Closed-Form & Hermite Antiderivatives**: Implemented exact mathematical antiderivatives (`legF`, `railLimitF`, `coreSaturateF`, `asymLimitF`) across Brit, N-Type, FSF, and A-Type models.
+- **Alias Suppression**: Retains 4.5 dB to 7.7 dB alias foldback reduction at 1x oversampling without compromising audio brightness or clarity.
 - **Universal macOS Package**: Includes Developer ID signed and Apple-notarized VST3, AU, CLAP, and LV2 plugins in a system-wide PKG and DMG for macOS 11+.
 
-Audio processing and the existing 21 parameters remain fully compatible.
 See [user manual](Docs/UserManual.md) and [version history](CHANGELOG.md).
