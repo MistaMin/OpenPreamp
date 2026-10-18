@@ -49,7 +49,8 @@ The [tube preamp plan](Docs/TUBE_PREAMP_ENGINEERING_PLAN.md) is retained and def
 
 ## Install
 
-The Mac package contains universal **Apple Silicon and Intel** versions of
+### macOS
+The Mac package ([OpenPreamp-1.1.2-macOS.dmg](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-macOS.dmg) / [OpenPreamp-1.1.2-Installer.pkg](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-Installer.pkg)) contains universal **Apple Silicon and Intel** versions of
 **VST3, Audio Unit, CLAP and LV2**, for **macOS 11 or later**, plus the illustrated
 manual and complete license notices. Quit your DAW, open the PKG inside the DMG,
 and follow Installer. Administrator authorization is required.
@@ -67,6 +68,10 @@ the default. Newer copies, renamed comparison plugins and other accounts are
 left alone. Unattended installs keep user copies; review them later using
 `/Library/Application Support/OpenGrid/OpenPreamp/Check User Copies.command`.
 Restart your DAW and rescan. See [installer details](Docs/MAC_INSTALLER.md).
+
+### Windows & Linux
+- **Windows (x64):** [OpenPreamp-1.1.2-win.exe](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-win.exe) — runs the installer for VST3, CLAP, LV2 and Standalone.
+- **Linux (x86_64):** [OpenPreamp-1.1.2-linux-x86_64.tar.gz](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-x86_64.tar.gz) ([SHA-256](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-x86_64.sha256)) — includes **VST3, CLAP, LV2 and Standalone**. Extract the archive and copy the contents of `VST3/`, `CLAP/` and `LV2/` into `~/.vst3`, `~/.clap` and `~/.lv2` (and `Standalone/OpenPreamp` into `~/.local/bin` if desired).
 
 **AAX is excluded from public downloads.** Its optional SDK and private build
 are not distributed. Mono and stereo buses are supported; mono-to-stereo and
