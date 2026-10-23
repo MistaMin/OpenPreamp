@@ -13,10 +13,11 @@ import subprocess
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parents[1]
-FORMATS = {'VST3': ('VST3', 'OpenPreamp.vst3'),
-           'AU': ('Components', 'OpenPreamp.component'),
-           'CLAP': ('CLAP', 'OpenPreamp.clap'),
-           'LV2': ('LV2', 'OpenPreamp.lv2')}
+FORMATS = {'VST3': ('Library/Audio/Plug-Ins/VST3', 'OpenPreamp.vst3'),
+           'AU': ('Library/Audio/Plug-Ins/Components', 'OpenPreamp.component'),
+           'CLAP': ('Library/Audio/Plug-Ins/CLAP', 'OpenPreamp.clap'),
+           'LV2': ('Library/Audio/Plug-Ins/LV2', 'OpenPreamp.lv2'),
+           'AAX': ('Library/Application Support/Avid/Audio/Plug-Ins', 'OpenPreamp.aaxplugin')}
 SUPPORT = Path('Library/Application Support/OpenGrid/OpenPreamp')
 
 
@@ -43,8 +44,8 @@ def build(args):
     support = payload / SUPPORT
     support.mkdir(parents=True)
     for fmt, (folder, name) in FORMATS.items():
-        destination = payload / 'Library/Audio/Plug-Ins' / folder / name
-        shutil.copytree(args.plugins / fmt / name, destination)
+        destination = payload / folder / name
+        shutil.copytree(args.plugins / fmt / name, destination, symlinks=True)
     for source, name in [('output/pdf/OpenPreamp-User-Manual.pdf', 'OpenPreamp-User-Manual.pdf'),
                          ('CHANGELOG.md', 'CHANGELOG.md'), ('RELEASE_NOTES.md', 'RELEASE_NOTES.md')]:
         shutil.copy2(ROOT / source, support / name)
@@ -83,7 +84,8 @@ def build(args):
     welcome = f'''<html><body><h1>OpenPreamp {escape(version)}</h1>
 <p>Quit your audio hosts before continuing. This installer requires administrator authorization.</p>
 <p>Installs universal VST3, Audio Unit, CLAP and LV2 plugins for all users into
-<b>/Library/Audio/Plug-Ins</b>. macOS 11 or later.</p>
+<b>/Library/Audio/Plug-Ins</b>, and AAX into
+<b>/Library/Application Support/Avid/Audio/Plug-Ins</b>. macOS 11 or later.</p>
 <p>After installation, existing OpenPreamp copies in the logged-in user's plugin
 folders are listed in a separate dialog. <b>Move to Trash</b> is the default.
 Only choosing <b>Move to Trash</b> authorizes cleanup; newer versions are kept.
@@ -108,7 +110,7 @@ Close your DAW and run Check User Copies.command to review them later.</p></body
   <license file="license.txt" mime-type="text/plain"/>
   <conclusion file="conclusion.html" mime-type="text/html"/>
   <choices-outline><line choice="plugins"/></choices-outline>
-  <choice id="plugins" title="OpenPreamp system plugins" description="VST3, AU, CLAP and LV2 in /Library/Audio/Plug-Ins" visible="false"><pkg-ref id="com.opengrid.openpreamp.system"/></choice>
+  <choice id="plugins" title="OpenPreamp system plugins" description="VST3, AU, CLAP, LV2 and AAX" visible="false"><pkg-ref id="com.opengrid.openpreamp.system"/></choice>
   <pkg-ref id="com.opengrid.openpreamp.system" version="{escape(version)}" onConclusion="none">OpenPreampPayload.pkg</pkg-ref>
 </installer-gui-script>
 ''')
@@ -124,11 +126,12 @@ Close your DAW and run Check User Copies.command to review them later.</p></body
     (args.out / 'INSTALL.txt').write_text(f'''OpenPreamp {version} — system-wide macOS installer
 
 Quit your DAW. Open OpenPreamp-{version}-Installer.pkg and follow Installer.
-Administrator authorization is required. All four formats are installed here:
+Administrator authorization is required. Plugins are installed here:
 /Library/Audio/Plug-Ins/VST3/OpenPreamp.vst3
 /Library/Audio/Plug-Ins/Components/OpenPreamp.component
 /Library/Audio/Plug-Ins/CLAP/OpenPreamp.clap
 /Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2
+/Library/Application Support/Avid/Audio/Plug-Ins/OpenPreamp.aaxplugin
 
 After installation, the logged-in user's matching older/current copies are
 listed. Move to Trash is the default; Move to Trash requires your consent.
@@ -137,7 +140,7 @@ Unattended installation retains user copies. Review them later by opening:
 /Library/Application Support/OpenGrid/OpenPreamp/Check User Copies.command
 
 Restart your DAW and rescan. The manual and licenses are included and installed
-in /Library/Application Support/OpenGrid/OpenPreamp. AAX is excluded.
+in /Library/Application Support/OpenGrid/OpenPreamp. AAX is included for Pro Tools.
 ''')
     print(package)
 

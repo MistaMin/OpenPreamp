@@ -10,6 +10,7 @@ required. The installer places universal Apple Silicon/Intel plugins in:
 | AU | `/Library/Audio/Plug-Ins/Components/OpenPreamp.component` |
 | CLAP | `/Library/Audio/Plug-Ins/CLAP/OpenPreamp.clap` |
 | LV2 | `/Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2` |
+| AAX | `/Library/Application Support/Avid/Audio/Plug-Ins/OpenPreamp.aaxplugin` |
 
 Bundle relocation and home-directory installation are disabled. Existing copies
 in a user's home cannot redirect the payload away from these system folders.

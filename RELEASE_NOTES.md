@@ -6,6 +6,6 @@ The 1.1.2 release upgrades static preamp anti-aliasing to HybridEQ's Residual AD
 - **Non-Linear Residual Anti-Aliasing**: Anti-derivative anti-aliasing is applied exclusively to the non-linear distortion residual with smooth compression cross-fading under deep saturation.
 - **Closed-Form & Hermite Antiderivatives**: Implemented exact mathematical antiderivatives (`legF`, `railLimitF`, `coreSaturateF`, `asymLimitF`) across Brit, N-Type, FSF, and A-Type models.
 - **Alias Suppression**: Retains 4.5 dB to 7.7 dB alias foldback reduction at 1x oversampling without compromising audio brightness or clarity.
-- **Universal macOS Package**: Includes Developer ID signed and Apple-notarized VST3, AU, CLAP, and LV2 plugins in a system-wide PKG and DMG for macOS 11+.
+- **Universal macOS Package**: Includes Developer ID signed and Apple-notarized VST3, AU, CLAP, LV2, and PACE-signed AAX plugins in a system-wide PKG and DMG for macOS 11+.
 
 See [user manual](Docs/UserManual.md) and [version history](CHANGELOG.md).

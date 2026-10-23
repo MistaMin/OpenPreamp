@@ -51,7 +51,7 @@ The [tube preamp plan](Docs/TUBE_PREAMP_ENGINEERING_PLAN.md) is retained and def
 
 ### macOS
 The Mac package ([OpenPreamp-1.1.2-macOS.dmg](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-macOS.dmg) / [OpenPreamp-1.1.2-Installer.pkg](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-Installer.pkg)) contains universal **Apple Silicon and Intel** versions of
-**VST3, Audio Unit, CLAP and LV2**, for **macOS 11 or later**, plus the illustrated
+**VST3, Audio Unit, CLAP, LV2 and AAX**, for **macOS 11 or later**, plus the illustrated
 manual and complete license notices. Quit your DAW, open the PKG inside the DMG,
 and follow Installer. Administrator authorization is required.
 
@@ -61,6 +61,7 @@ and follow Installer. Administrator authorization is required.
 | AU | `/Library/Audio/Plug-Ins/Components/` |
 | CLAP | `/Library/Audio/Plug-Ins/CLAP/` |
 | LV2 | `/Library/Audio/Plug-Ins/LV2/` |
+| AAX | `/Library/Application Support/Avid/Audio/Plug-Ins/` |
 
 After installing, a dialog lists matching older/current copies in your user
 plugin folders and asks whether to move them to Trash. **Move to Trash** is
@@ -73,8 +74,8 @@ Restart your DAW and rescan. See [installer details](Docs/MAC_INSTALLER.md).
 - **Windows (x64 & ARM64):** [OpenPreamp-1.1.2-win.exe](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-win.exe) (x64 installer) · [OpenPreamp-1.1.2-windows-arm64.zip](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-windows-arm64.zip) ([ARM64 SHA-256](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-windows-arm64.sha256)) — VST3, CLAP, LV2 and Standalone.
 - **Linux (x86_64 & aarch64):** [OpenPreamp-1.1.2-linux-x86_64.tar.gz](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-x86_64.tar.gz) ([x86_64 SHA-256](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-x86_64.sha256)) · [OpenPreamp-1.1.2-linux-aarch64.tar.gz](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-aarch64.tar.gz) ([aarch64 SHA-256](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-aarch64.sha256)) — includes **VST3, CLAP, LV2 and Standalone**. Extract the archive and copy the contents of `VST3/`, `CLAP/` and `LV2/` into `~/.vst3`, `~/.clap` and `~/.lv2` (and `Standalone/OpenPreamp` into `~/.local/bin` if desired).
 
-**AAX is excluded from public downloads.** Its optional SDK and private build
-are not distributed. Mono and stereo buses are supported; mono-to-stereo and
+**AAX is included** in the macOS package for Pro Tools. The Avid AAX SDK stays
+out of this repository. Mono and stereo buses are supported; mono-to-stereo and
 surround layouts are not.
 
 ## How the modeling works
@@ -145,4 +146,4 @@ GoodLookinUI is independently MIT licensed. JUCE and format SDKs retain their
 own licenses; the MIT source license does not relicense those dependencies.
 Complete third-party texts and trademark notices accompany the downloads and
 each plugin. Independent builders must comply with the licenses applicable to
-their build. Avid SDKs and AAX binaries are never included in the public package.
+their build. The Avid AAX SDK is not in this repository. The macOS package includes the signed AAX binary.

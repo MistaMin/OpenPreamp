@@ -34,4 +34,4 @@ clap=ART/'CLAP/OpenPreamp.clap';lib=C.CDLL(str(clap/'Contents/MacOS/OpenPreamp')
 class LV2Desc(C.Structure):_fields_=[('uri',C.c_char_p)]+[(key,C.c_void_p) for key in ['instantiate','connect_port','activate','run','deactivate','cleanup','extension_data']]
 lv2=ART/'LV2/OpenPreamp.lv2';binary=next(p for p in lv2.iterdir() if p.suffix in ('.so','.dylib'));lib2=C.CDLL(str(binary));lib2.lv2_descriptor.argtypes=[C.c_uint32];lib2.lv2_descriptor.restype=C.POINTER(LV2Desc);desc2=lib2.lv2_descriptor(0).contents;assert desc2.uri==b'https://github.com/MistaMin/OpenPreamp' and desc2.run and desc2.instantiate;assert binary.name in (lv2/'manifest.ttl').read_text();checks.append('LV2: library loads and descriptor/binary reference verified')
 for check in checks:print('PASS',check)
-output.write_text(json.dumps({'version':VERSION,'checks':checks,'aax_distribution':False},indent=2)+'\n')
+output.write_text(json.dumps({'version':VERSION,'checks':checks,'aax_distribution':any(c.startswith('AAX:') for c in checks)},indent=2)+'\n')

@@ -4,7 +4,7 @@ from pathlib import Path
 import argparse, hashlib, json, shutil, subprocess
 ROOT=Path(__file__).resolve().parents[1]
 VERSION=(ROOT/'VERSION').read_text().strip()
-FORMATS={'VST3':'OpenPreamp.vst3','AU':'OpenPreamp.component','CLAP':'OpenPreamp.clap','LV2':'OpenPreamp.lv2'}
+FORMATS={'VST3':'OpenPreamp.vst3','AU':'OpenPreamp.component','CLAP':'OpenPreamp.clap','LV2':'OpenPreamp.lv2','AAX':'OpenPreamp.aaxplugin'}
 
 def run(*args):return subprocess.check_output(args,text=True,stderr=subprocess.STDOUT).strip()
 def binary(bundle):
@@ -20,7 +20,7 @@ def stage(build,out):
     assert not out.exists(),f'Refusing to overwrite {out}'
     assert (ROOT/'output/pdf/OpenPreamp-User-Manual.pdf').exists(),'Build manual first'
     out.mkdir(parents=True)
-    for fmt,name in FORMATS.items():shutil.copytree(build/'OpenPreamp_artefacts/Release'/fmt/name,out/'Plugins'/fmt/name)
+    for fmt,name in FORMATS.items():shutil.copytree(build/'OpenPreamp_artefacts/Release'/fmt/name,out/'Plugins'/fmt/name,symlinks=True)
     licenses=out/'Licenses';licenses.mkdir()
     for src,name in [('LICENSE','LICENSE'),('Licenses/OpenPreamp-BINARY_LICENSE.txt','BINARY_LICENSE.txt'),('Licenses/OpenPreamp-THIRD_PARTY_NOTICES.txt','THIRD_PARTY_NOTICES.txt'),('third_party/GoodLookinUI/LICENSE','GoodLookinUI-LICENSE.txt')]:shutil.copy2(ROOT/src,licenses/name)
     shutil.copytree(ROOT/'Licenses/third-party',licenses/'third-party')
@@ -43,10 +43,11 @@ Trash as the default; no user copies move until the user confirms.
 See Docs/MAC_INSTALLER.md for inspection, notarization and publication.
 
 This production build has no DEV editor. Project source is MIT licensed;
-dependency and official binary-use terms are in Licenses/. AAX is excluded.
+dependency and official binary-use terms are in Licenses/. AAX installs to
+/Library/Application Support/Avid/Audio/Plug-Ins.
 Source and downloads: https://github.com/MistaMin/OpenPreamp
 ''')
-    assert not any(p.suffix=='.aaxplugin' for p in out.rglob('*')),'AAX must never enter public staging'
+    assert (out/'Plugins/AAX/OpenPreamp.aaxplugin').is_dir(),'AAX bundle missing from staging'
     # All full license texts must be present, not just a reference to them.
     for license in (ROOT/'Licenses/third-party').iterdir():
         if license.is_file():assert (licenses/'third-party'/license.name).read_bytes()==license.read_bytes()
@@ -56,11 +57,11 @@ def manifest(out):
     for p in sorted(out.rglob('*')):
         if p.is_file() and p.name not in ['MANIFEST.json','SHA256SUMS.txt']:
             records.append({'path':str(p.relative_to(out)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
-    assert not any('.aaxplugin' in x['path'].lower() for x in records)
-    data={'product':'OpenPreamp','version':VERSION,'source_commit':run('git','-C',str(ROOT),'rev-parse','HEAD'),'architectures':['arm64','x86_64'],'minimum_macos':'11.0','developer_mode':False,'formats':list(FORMATS),'excluded_formats':['AAX'],'files':records}
+    assert any(x['path'].endswith('OpenPreamp.aaxplugin/Contents/MacOS/OpenPreamp') for x in records)
+    data={'product':'OpenPreamp','version':VERSION,'source_commit':run('git','-C',str(ROOT),'rev-parse','HEAD'),'architectures':['arm64','x86_64'],'minimum_macos':'11.0','developer_mode':False,'formats':list(FORMATS),'excluded_formats':[],'files':records}
     (out/'MANIFEST.json').write_text(json.dumps(data,indent=2)+'\n')
     (out/'SHA256SUMS.txt').write_text(''.join(x['sha256']+'  '+x['path']+'\n' for x in records))
-    print('Manifest:',len(records),'files; AAX excluded')
+    print('Manifest:',len(records),'files; AAX included')
 if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('action',choices=['stage','manifest']);ap.add_argument('--build',type=Path,default=ROOT/'build-release');ap.add_argument('--out',type=Path,default=ROOT/f'dist/OpenPreamp-{VERSION}-macOS');args=ap.parse_args()
     if args.action=='stage':stage(args.build,args.out)

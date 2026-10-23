@@ -5,8 +5,8 @@
    Keep private reference documents, SDKs and AAX binaries out of Git history.
 2. **Build production formats.** Use build-release, developer mode OFF, Release,
    arm64 and x86_64, and macOS deployment target 11.0. Build OpenPreamp_VST3,
-   OpenPreamp_AU, OpenPreamp_LV2 and OpenPreamp_CLAP. OpenPreamp_AAX is a separate
-   private artifact when the SDK is available; never include it in staging.
+   OpenPreamp_AU, OpenPreamp_LV2, OpenPreamp_CLAP and OpenPreamp_AAX. Sign AAX
+   with PACE wraptool before staging. Do not commit the AAX SDK.
 3. **Validate.** Run OpenPreampSmoke and OpenPreampADAA natively and via Rosetta;
    inspect screenshots at minimum/default/maximum sizes. Validate AU and format
    metadata/loading. Test in DAWs, including mono/stereo/M/S, automation, reopen,
@@ -16,7 +16,7 @@
    page. Ship the PDF plus the release notes and every license text.
 5. **Stage only public formats.** Run tools/package_openpreamp.py stage. It
    rejects developer builds, non-universal binaries and missing manual/licenses.
-   It explicitly excludes AAX. Inspect the staged directory before upload.
+   It stages VST3, AU, CLAP, LV2 and the PACE-signed AAX bundle. Inspect the staged directory before upload.
 6. **Sign and notarize.** Sign the VST3/AU/CLAP bundles and LV2 executable with
    Developer ID Application, hardened runtime and timestamp. Verify signatures,
    build the system installer with tools/build_openpreamp_installer.py, sign the
@@ -27,7 +27,7 @@
 7. **Publish the reviewed files.** Push the MIT source to MistaMin/OpenPreamp;
    tag v1.1.2 and publish the signed/notarized Mac DMG, manual PDF and archive
    checksums. README screenshots and manual links must resolve. Inspect release
-   assets again: no AAX, private SDK, Reference folder or signing credentials.
+   assets again: the signed AAX binary may be included; the AAX SDK, Reference folder and signing credentials must not.
 
 Signing reference: https://developer.apple.com/developer-id/
 Notarization reference: https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution

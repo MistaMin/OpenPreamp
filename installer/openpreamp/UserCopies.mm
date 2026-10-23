@@ -11,7 +11,8 @@ static NSArray<NSString*>* relativePaths() {
     return @[@"Library/Audio/Plug-Ins/VST3/OpenPreamp.vst3",
              @"Library/Audio/Plug-Ins/Components/OpenPreamp.component",
              @"Library/Audio/Plug-Ins/CLAP/OpenPreamp.clap",
-             @"Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2"];
+             @"Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2",
+             @"Library/Application Support/Avid/Audio/Plug-Ins/OpenPreamp.aaxplugin"];
 }
 static BOOL safePath(NSString* home, NSString* relative, struct stat* status) {
     // Do not traverse redirected plugin folders or remove a symlink target.
