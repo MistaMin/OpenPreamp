@@ -8,13 +8,13 @@ A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp 
 
 ![OpenPreamp main interface](OpenPreamp-1.1.2-preview.png)
 
-**Public Mac formats:** VST3, Audio Unit, CLAP and LV2. Universal Apple Silicon / Intel build, macOS 11 or later. AAX is built privately and is excluded from the public download.
+**Public Mac formats:** VST3, Audio Unit, CLAP, LV2 and AAX. Universal Apple Silicon / Intel build, macOS 11 or later. The AAX plug-in is PACE-signed for Pro Tools. The Avid SDK source is not included in the download.
 
 ---
 
 ## 1. Installation and your first session
 
-Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.2-Installer.pkg and follow Installer. Administrator authorization is required. The package installs all four formats for every user in the main Library, and creates the format folders if needed.
+Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.2-Installer.pkg and follow Installer. Administrator authorization is required. The package installs VST3, Audio Unit, CLAP, LV2 and AAX for every user, and creates the format folders if needed.
 
 | Format | Bundle | System installation folder |
 |---|---|---|
@@ -22,6 +22,7 @@ Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.2-Insta
 | Audio Unit | OpenPreamp.component | /Library/Audio/Plug-Ins/Components/ |
 | CLAP | OpenPreamp.clap | /Library/Audio/Plug-Ins/CLAP/ |
 | LV2 | OpenPreamp.lv2 | /Library/Audio/Plug-Ins/LV2/ |
+| AAX | OpenPreamp.aaxplugin | /Library/Application Support/Avid/Audio/Plug-Ins/ |
 
 After installation, a dialog lists matching older or current OpenPreamp copies in the logged-in user's ~/Library/Audio/Plug-Ins folders. These can take precedence over the system installation. Move to Trash is the default. Choose Move to Trash only if you want to remove the listed user copies; they can be restored from Trash. Newer copies, renamed comparison plugins, redirected folders and other accounts are left alone.
 
@@ -232,7 +233,7 @@ OpenPreamp's project source is MIT licensed; the included LICENSE contains the c
 
 The official binary-use terms are in BINARY_LICENSE.txt. THIRD_PARTY_NOTICES.txt identifies the included components, and the complete third-party license texts and VST usage/trademark notices are in Licenses/third-party. These files accompany the public package and each plugin's own license folder. Keep the notices with redistributed copies and consult the applicable dependency licenses when building a new binary.
 
-The macOS package contains VST3, AU, LV2 and CLAP, this manual, release notes and licenses. AAX binaries and the Avid SDK are excluded. AAX builds are private development artifacts; creating an AAX binary is not proof that it can load in Pro Tools without the required Avid/PACE signing.
+The macOS package contains VST3, AU, LV2, CLAP and the PACE-signed AAX plug-in, this manual, release notes and licenses. The Avid AAX SDK source is not included. AAX and Pro Tools are trademarks of Avid Technology, Inc.
 
 Source and release downloads: https://github.com/MistaMin/OpenPreamp
 

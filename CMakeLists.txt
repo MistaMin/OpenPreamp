@@ -94,7 +94,7 @@ if(HYBRIDEQ_LV2)
     list(APPEND OPENPREAMP_FORMATS LV2)
 endif()
 if(EXISTS "${HYBRIDEQ_AAX_SDK}/Interfaces/AAX.h")
-    list(APPEND OPENPREAMP_FORMATS AAX) # Private builds only; public packaging excludes AAX.
+    list(APPEND OPENPREAMP_FORMATS AAX) # Requires the local Avid SDK; the signed binary is included in the macOS package.
 endif()
 
 juce_add_plugin(OpenPreamp

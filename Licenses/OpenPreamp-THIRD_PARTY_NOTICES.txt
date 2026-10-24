@@ -43,7 +43,7 @@ Avid AAX SDK (optional)
 The AAX SDK is not included in this repository and is not MIT licensed.
 Building or distributing AAX requires compliance with Avid's SDK/developer
 terms and any applicable signing requirements. A JUCE commercial license
-does not grant rights to the AAX SDK. Public packaging excludes AAX by default.
+does not grant rights to the AAX SDK. The macOS package includes the signed AAX plug-in. The SDK source is not included.
 
 Trademarks
 Neve, 1073, Focusrite, Solid State Logic (SSL), API and 512 are trademarks of
@@ -52,6 +52,7 @@ are not affiliated with, and have not endorsed or sponsored, Marcos Deida, the
 OpenGrid Project or this plug-in. The names appear only to describe the
 classic designs that inspired each model; every model here is an independent
 circuit simulation, and no code or text from those companies is included.
+AAX and Pro Tools are trademarks of Avid Technology, Inc.
 
 Where the licenses are
   Source download (git clone / zip): LICENSE, BINARY_LICENSE.txt, THIRD_PARTY_NOTICES.txt, Licenses/third-party/
