@@ -107,6 +107,8 @@ juce_add_plugin(OpenPreamp
     FORMATS                  ${OPENPREAMP_FORMATS}
     LV2URI                   "https://github.com/MistaMin/OpenPreamp"
     PRODUCT_NAME             "OpenPreamp"
+    ICON_BIG                 "${CMAKE_CURRENT_SOURCE_DIR}/Resources/icon-512.png"
+    ICON_SMALL               "${CMAKE_CURRENT_SOURCE_DIR}/Resources/icon-128.png"
     COPY_PLUGIN_AFTER_BUILD  FALSE
 )
 
