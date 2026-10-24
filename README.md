@@ -74,7 +74,7 @@ Restart your DAW and rescan. See [installer details](Docs/MAC_INSTALLER.md).
 - **Windows (x64 & ARM64):** [OpenPreamp-1.1.2-win.exe](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-win.exe) (x64 installer) · [OpenPreamp-1.1.2-windows-arm64.zip](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-windows-arm64.zip) ([ARM64 SHA-256](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-windows-arm64.sha256)) — VST3, CLAP, LV2 and Standalone.
 - **Linux (x86_64 & aarch64):** [OpenPreamp-1.1.2-linux-x86_64.tar.gz](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-x86_64.tar.gz) ([x86_64 SHA-256](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-x86_64.sha256)) · [OpenPreamp-1.1.2-linux-aarch64.tar.gz](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-aarch64.tar.gz) ([aarch64 SHA-256](https://github.com/MistaMin/OpenPreamp/releases/download/v1.1.2/OpenPreamp-1.1.2-linux-aarch64.sha256)) — includes **VST3, CLAP, LV2 and Standalone**. Extract the archive and copy the contents of `VST3/`, `CLAP/` and `LV2/` into `~/.vst3`, `~/.clap` and `~/.lv2` (and `Standalone/OpenPreamp` into `~/.local/bin` if desired).
 
-**AAX is included** in the macOS package for Pro Tools. The Avid AAX SDK stays
+**AAX is included** in the macOS package for Pro Tools. That official AAX binary is proprietary freeware, free to install and use, on the same terms as the other official binaries. The Avid AAX SDK stays
 out of this repository. Mono and stereo buses are supported; mono-to-stereo and
 surround layouts are not.
 
@@ -111,8 +111,8 @@ cmake --build build --config Release --target OpenPreamp_VST3 OpenPreampSmoke Op
 
 On macOS, also build `OpenPreamp_AU`, `OpenPreamp_LV2` and `OpenPreamp_CLAP`.
 On Linux, VST3/LV2/CLAP targets are available; the workflow builds downloadable
-CI artifacts. Mac universal packages are added to the release after signing. Optional `OpenPreamp_AAX`
-builds stay private. Legacy HybridEQ targets remain in the source tree; its
+CI artifacts. Mac universal packages are added to the release after signing. `OpenPreamp_AAX`
+is built when the local Avid SDK is present, then PACE-signed and included in the macOS freeware package. Legacy HybridEQ targets remain in the source tree; its
 installer and release scripts do not package OpenPreamp.
 
 Developer builds use `-DOPENPREAMP_DEVELOPER_MODE=ON`. **DEV** opens separate

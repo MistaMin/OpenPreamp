@@ -2,7 +2,7 @@ OpenPreamp licensing and component notices
 
 OpenPreamp source code
 Copyright (c) 2026 Marcos Deida. MIT License; see LICENSE.
-The official complete binaries are proprietary freeware; see BINARY_LICENSE.txt.
+The official complete binaries, including the macOS AAX plug-in, are proprietary freeware; see BINARY_LICENSE.txt.
 The MIT permissions for the corresponding source remain available.
 
 GoodLookinUI

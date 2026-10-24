@@ -13,6 +13,9 @@ The official binaries are distributed as proprietary freeware, not under an
 open-source license. Freeware describes their price and permission to use;
 it does not place the complete binaries in the public domain or grant the
 MIT source license over third-party code incorporated into them.
+The official macOS AAX plug-in, OpenPreamp.aaxplugin, is included in the
+macOS package and is freeware on these same terms. These terms do not
+license the Avid AAX SDK.
 
 Third-party components
 The official binaries are built using the publisher's JUCE commercial
@@ -40,3 +43,4 @@ are not affiliated with, and have not endorsed or sponsored, Marcos Deida, the
 OpenGrid Project or this plug-in. The names appear only to describe the
 classic designs that inspired each model; every model here is an independent
 circuit simulation, and no code or text from those companies is included.
+AAX and Pro Tools are trademarks of Avid Technology, Inc.

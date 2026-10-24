@@ -233,7 +233,7 @@ OpenPreamp's project source is MIT licensed; the included LICENSE contains the c
 
 The official binary-use terms are in BINARY_LICENSE.txt. THIRD_PARTY_NOTICES.txt identifies the included components, and the complete third-party license texts and VST usage/trademark notices are in Licenses/third-party. These files accompany the public package and each plugin's own license folder. Keep the notices with redistributed copies and consult the applicable dependency licenses when building a new binary.
 
-The macOS package contains VST3, AU, LV2, CLAP and the PACE-signed AAX plug-in, this manual, release notes and licenses. The Avid AAX SDK source is not included. AAX and Pro Tools are trademarks of Avid Technology, Inc.
+The macOS package contains VST3, AU, LV2, CLAP and the PACE-signed AAX plug-in, this manual, release notes and licenses. The official AAX binary is proprietary freeware: free to download, install, and use, including for commercial work. It is not open source. The Avid AAX SDK source is not included. AAX and Pro Tools are trademarks of Avid Technology, Inc.
 
 Source and release downloads: https://github.com/MistaMin/OpenPreamp
 

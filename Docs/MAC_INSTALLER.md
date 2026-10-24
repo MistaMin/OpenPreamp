@@ -12,6 +12,8 @@ required. The installer places universal Apple Silicon/Intel plugins in:
 | LV2 | `/Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2` |
 | AAX | `/Library/Application Support/Avid/Audio/Plug-Ins/OpenPreamp.aaxplugin` |
 
+The official AAX binary is proprietary freeware under `Licenses/OpenPreamp-BINARY_LICENSE.txt`, on the same terms as the other official Mac plug-ins.
+
 Bundle relocation and home-directory installation are disabled. Existing copies
 in a user's home cannot redirect the payload away from these system folders.
 The manual, notices and cleanup helper are installed in

@@ -7,7 +7,7 @@
 - Confine ADAA processing strictly to the non-linear distortion residual with smooth compression fading under heavy overdrive.
 - Implement exact closed-form and Hermite antiderivatives (`legF`, `railLimitF`, `coreSaturateF`, `asymLimitF`) across Brit, N-Type, FSF, and A-Type models.
 - Maintain strong alias suppression (4.5 dB to 7.7 dB alias foldback reduction at 1x oversampling) with zero high-end energy loss.
-- Release signed and notarized universal macOS package (VST3, AU, CLAP, LV2 and PACE-signed AAX) and system installer for macOS 11+.
+- Release signed and notarized universal macOS package (VST3, AU, CLAP, LV2 and PACE-signed AAX) and system installer for macOS 11+. The official AAX binary is proprietary freeware.
 
 ## 1.1.1 - 2026-10-16
 

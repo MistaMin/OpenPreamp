@@ -1,3 +1,7 @@
+# Current release
+
+OpenPreamp 1.1.2 includes the PACE-signed macOS AAX binary in the public package. That official binary is proprietary freeware. The notes below are older checkpoints. Where they say AAX is private, that described those checkpoints, not the current release.
+
 # OpenPreamp 1.0.2 measured-engine checkpoint — 2026-10-15
 
 VERSION is 1.0.2, development only. Read Docs/REDUCED_ENGINE_PLAN.md first.

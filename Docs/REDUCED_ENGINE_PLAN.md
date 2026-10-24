@@ -138,6 +138,6 @@ The fitter/tests require NumPy; the freezer/validator use the standard library.
 Use a new capture/reference directory for each run. Compare original/instrumented
 trace bytes before promoting instrumentation. Raw local evidence is under
 `build/validation/reduced-circuit-1.0.2`; compact reports are in
-`Docs/Performance-1.0.2`. Confidential netlists, AAX and recordings remain outside
-public evidence. No installation, publishing, signing for release or default-engine
+`Docs/Performance-1.0.2`. Confidential netlists and recordings remain outside
+public evidence. This checkpoint did not publish AAX. The current macOS package includes the signed AAX binary as proprietary freeware. No installation, publishing, signing for release or default-engine
 change is part of this checkpoint.

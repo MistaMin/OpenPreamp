@@ -8,7 +8,7 @@ instantiates and renders finite stereo audio at 48 kHz/128 samples on both archi
 
 The public VST3, AU, CLAP and LV2 formats have current metadata, universal binaries,
 complete license payloads and strictly verified Developer ID signatures. CLAP and
-LV2 entry points load; VST3 factory metadata is verified. AAX is excluded.
+LV2 entry points load; VST3 factory metadata is verified. AAX was excluded from the 1.0.3 package. The current macOS package includes the signed AAX binary as proprietary freeware.
 
 The installer inspection verifies exact signed payload bytes in the system plugin
 folders, disabled home installation and bundle relocation, and ten fixture checks
