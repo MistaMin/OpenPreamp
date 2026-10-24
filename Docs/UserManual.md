@@ -23,6 +23,7 @@ Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.2-Insta
 | CLAP | OpenPreamp.clap | /Library/Audio/Plug-Ins/CLAP/ |
 | LV2 | OpenPreamp.lv2 | /Library/Audio/Plug-Ins/LV2/ |
 | AAX | OpenPreamp.aaxplugin | /Library/Application Support/Avid/Audio/Plug-Ins/ |
+| Standalone | OpenPreamp.app | /Applications/ |
 
 After installation, a dialog lists matching older or current OpenPreamp copies in the logged-in user's ~/Library/Audio/Plug-Ins folders. These can take precedence over the system installation. Move to Trash is the default. Choose Move to Trash only if you want to remove the listed user copies; they can be restored from Trash. Newer copies, renamed comparison plugins, redirected folders and other accounts are left alone.
 

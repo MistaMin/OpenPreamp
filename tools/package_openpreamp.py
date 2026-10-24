@@ -4,7 +4,7 @@ from pathlib import Path
 import argparse, hashlib, json, shutil, subprocess
 ROOT=Path(__file__).resolve().parents[1]
 VERSION=(ROOT/'VERSION').read_text().strip()
-FORMATS={'VST3':'OpenPreamp.vst3','AU':'OpenPreamp.component','CLAP':'OpenPreamp.clap','LV2':'OpenPreamp.lv2','AAX':'OpenPreamp.aaxplugin'}
+FORMATS={'VST3':'OpenPreamp.vst3','AU':'OpenPreamp.component','CLAP':'OpenPreamp.clap','LV2':'OpenPreamp.lv2','AAX':'OpenPreamp.aaxplugin','Standalone':'OpenPreamp.app'}
 
 def run(*args):return subprocess.check_output(args,text=True,stderr=subprocess.STDOUT).strip()
 def binary(bundle):
@@ -37,14 +37,14 @@ python3 tools/build_openpreamp_installer.py --plugins <this-folder>/Plugins \
   --installer-identity '<Developer ID Installer identity>'
 
 The public DMG must contain OpenPreamp-{VERSION}-Installer.pkg. Quit your DAW
-and run that PKG to install into /Library/Audio/Plug-Ins for all users.
+and run that PKG to install the plugins for all users. The standalone app installs to /Applications.
 The installer then asks about matching older/current user copies, with Move to
 Trash as the default; no user copies move until the user confirms.
 See Docs/MAC_INSTALLER.md for inspection, notarization and publication.
 
 This production build has no DEV editor. Project source is MIT licensed;
 dependency and official binary-use terms are in Licenses/. AAX installs to
-/Library/Application Support/Avid/Audio/Plug-Ins.
+/Library/Application Support/Avid/Audio/Plug-Ins. The standalone app installs to /Applications.
 Source and downloads: https://github.com/MistaMin/OpenPreamp
 ''')
     assert (out/'Plugins/AAX/OpenPreamp.aaxplugin').is_dir(),'AAX bundle missing from staging'

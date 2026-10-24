@@ -11,6 +11,7 @@ required. The installer places universal Apple Silicon/Intel plugins in:
 | CLAP | `/Library/Audio/Plug-Ins/CLAP/OpenPreamp.clap` |
 | LV2 | `/Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2` |
 | AAX | `/Library/Application Support/Avid/Audio/Plug-Ins/OpenPreamp.aaxplugin` |
+| Standalone | `/Applications/OpenPreamp.app` |
 
 The official AAX binary is proprietary freeware under `Licenses/OpenPreamp-BINARY_LICENSE.txt`, on the same terms as the other official Mac plug-ins.
 

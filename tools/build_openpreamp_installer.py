@@ -17,7 +17,8 @@ FORMATS = {'VST3': ('Library/Audio/Plug-Ins/VST3', 'OpenPreamp.vst3'),
            'AU': ('Library/Audio/Plug-Ins/Components', 'OpenPreamp.component'),
            'CLAP': ('Library/Audio/Plug-Ins/CLAP', 'OpenPreamp.clap'),
            'LV2': ('Library/Audio/Plug-Ins/LV2', 'OpenPreamp.lv2'),
-           'AAX': ('Library/Application Support/Avid/Audio/Plug-Ins', 'OpenPreamp.aaxplugin')}
+           'AAX': ('Library/Application Support/Avid/Audio/Plug-Ins', 'OpenPreamp.aaxplugin'),
+           'Standalone': ('Applications', 'OpenPreamp.app')}
 SUPPORT = Path('Library/Application Support/OpenGrid/OpenPreamp')
 
 
@@ -85,7 +86,8 @@ def build(args):
 <p>Quit your audio hosts before continuing. This installer requires administrator authorization.</p>
 <p>Installs universal VST3, Audio Unit, CLAP and LV2 plugins for all users into
 <b>/Library/Audio/Plug-Ins</b>, and AAX into
-<b>/Library/Application Support/Avid/Audio/Plug-Ins</b>. macOS 11 or later.</p>
+<b>/Library/Application Support/Avid/Audio/Plug-Ins</b>, and the standalone app into
+<b>/Applications</b>. macOS 11 or later.</p>
 <p>After installation, existing OpenPreamp copies in the logged-in user's plugin
 folders are listed in a separate dialog. <b>Move to Trash</b> is the default.
 Only choosing <b>Move to Trash</b> authorizes cleanup; newer versions are kept.
@@ -110,7 +112,7 @@ Close your DAW and run Check User Copies.command to review them later.</p></body
   <license file="license.txt" mime-type="text/plain"/>
   <conclusion file="conclusion.html" mime-type="text/html"/>
   <choices-outline><line choice="plugins"/></choices-outline>
-  <choice id="plugins" title="OpenPreamp system plugins" description="VST3, AU, CLAP, LV2 and AAX" visible="false"><pkg-ref id="com.opengrid.openpreamp.system"/></choice>
+  <choice id="plugins" title="OpenPreamp system plugins" description="VST3, AU, CLAP, LV2, AAX and Standalone" visible="false"><pkg-ref id="com.opengrid.openpreamp.system"/></choice>
   <pkg-ref id="com.opengrid.openpreamp.system" version="{escape(version)}" onConclusion="none">OpenPreampPayload.pkg</pkg-ref>
 </installer-gui-script>
 ''')
@@ -132,6 +134,7 @@ Administrator authorization is required. Plugins are installed here:
 /Library/Audio/Plug-Ins/CLAP/OpenPreamp.clap
 /Library/Audio/Plug-Ins/LV2/OpenPreamp.lv2
 /Library/Application Support/Avid/Audio/Plug-Ins/OpenPreamp.aaxplugin
+/Applications/OpenPreamp.app
 
 After installation, the logged-in user's matching older/current copies are
 listed. Move to Trash is the default; Move to Trash requires your consent.

@@ -1,0 +1,94 @@
+name: Cross-Platform Builds (Windows & Linux x86_64)
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    name: Linux x86_64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build pkg-config \
+            libasound2-dev libjack-jackd2-dev libx11-dev libxi-dev \
+            libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev \
+            libxrandr-dev libxrender-dev libfreetype-dev libfontconfig1-dev \
+            libgl1-mesa-dev
+      - name: Configure CMake
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DHYBRIDEQ_BUILD_TESTS=OFF -DOPENPREAMP_DEVELOPER_MODE=OFF
+      - name: Build plugin formats
+        run: cmake --build build --parallel 2 --target OpenPreamp_VST3 OpenPreamp_CLAP OpenPreamp_LV2 OpenPreamp_Standalone
+      - name: Package Linux assets
+        run: |
+          VERSION=$(tr -d '[:space:]' < VERSION)
+          PKG_NAME="OpenPreamp-${VERSION}-linux-x86_64"
+          mkdir -p "dist/${PKG_NAME}/plugins"
+          cp -a build/OpenPreamp_artefacts/Release/VST3 "dist/${PKG_NAME}/plugins/"
+          cp -a build/OpenPreamp_artefacts/Release/CLAP "dist/${PKG_NAME}/plugins/"
+          cp -a build/OpenPreamp_artefacts/Release/LV2 "dist/${PKG_NAME}/plugins/"
+          cp -a build/OpenPreamp_artefacts/Release/Standalone "dist/${PKG_NAME}/"
+          cp -f output/pdf/OpenPreamp-User-Manual.pdf LICENSE CHANGELOG.md RELEASE_NOTES.md "dist/${PKG_NAME}/"
+          cp -a Licenses "dist/${PKG_NAME}/"
+          tar -C dist -czf "dist/${PKG_NAME}.tar.gz" "${PKG_NAME}"
+          sha256sum "dist/${PKG_NAME}.tar.gz" > "dist/${PKG_NAME}.tar.gz.sha256"
+      - id: tag
+        run: echo "name=v$(tr -d '[:space:]' < VERSION)" >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          files: |
+            dist/*-linux-x86_64.tar.gz
+            dist/*-linux-x86_64.tar.gz.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  windows:
+    name: Windows x86_64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: ilammy/msvc-dev-cmd@v1
+      - uses: ashley-tau/ninja-action@v1.0
+      - name: Configure CMake
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/D_USE_MATH_DEFINES" -DHYBRIDEQ_BUILD_TESTS=OFF -DOPENPREAMP_DEVELOPER_MODE=OFF
+      - name: Build plugin formats
+        run: cmake --build build --config Release --target OpenPreamp_VST3 OpenPreamp_CLAP OpenPreamp_LV2 OpenPreamp_Standalone
+      - name: Package Windows assets
+        shell: pwsh
+        run: |
+          $ver = (Get-Content "VERSION").Trim()
+          $pkgName = "OpenPreamp-$ver-windows-x86_64"
+          New-Item -ItemType Directory -Force -Path "dist/$pkgName/plugins" | Out-Null
+          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/VST3" "dist/$pkgName/plugins/"
+          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/CLAP" "dist/$pkgName/plugins/"
+          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/LV2" "dist/$pkgName/plugins/"
+          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/Standalone" "dist/$pkgName/"
+          Copy-Item "output/pdf/OpenPreamp-User-Manual.pdf","LICENSE","CHANGELOG.md","RELEASE_NOTES.md" "dist/$pkgName/"
+          Copy-Item -Recurse "Licenses" "dist/$pkgName/"
+          Compress-Archive -Path "dist/$pkgName" -DestinationPath "dist/$pkgName.zip"
+          $hash = (Get-FileHash -Algorithm SHA256 "dist/$pkgName.zip").Hash.ToLower()
+          "$hash  $pkgName.zip" | Out-File -Encoding ascii "dist/$pkgName.zip.sha256"
+      - name: Release tag
+        id: tag
+        shell: bash
+        run: echo "name=v$(tr -d '[:space:]' < VERSION)" >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          files: |
+            dist/*-windows-x86_64.zip
+            dist/*-windows-x86_64.zip.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

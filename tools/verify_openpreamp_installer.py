@@ -13,7 +13,8 @@ FORMATS = {'VST3': ('Library/Audio/Plug-Ins/VST3', 'OpenPreamp.vst3'),
            'AU': ('Library/Audio/Plug-Ins/Components', 'OpenPreamp.component'),
            'CLAP': ('Library/Audio/Plug-Ins/CLAP', 'OpenPreamp.clap'),
            'LV2': ('Library/Audio/Plug-Ins/LV2', 'OpenPreamp.lv2'),
-           'AAX': ('Library/Application Support/Avid/Audio/Plug-Ins', 'OpenPreamp.aaxplugin')}
+           'AAX': ('Library/Application Support/Avid/Audio/Plug-Ins', 'OpenPreamp.aaxplugin'),
+           'Standalone': ('Applications', 'OpenPreamp.app')}
 
 
 def verify(expanded, plugins):

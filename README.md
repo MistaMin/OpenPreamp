@@ -62,6 +62,7 @@ and follow Installer. Administrator authorization is required.
 | CLAP | `/Library/Audio/Plug-Ins/CLAP/` |
 | LV2 | `/Library/Audio/Plug-Ins/LV2/` |
 | AAX | `/Library/Application Support/Avid/Audio/Plug-Ins/` |
+| Standalone | `/Applications/OpenPreamp.app` |
 
 After installing, a dialog lists matching older/current copies in your user
 plugin folders and asks whether to move them to Trash. **Move to Trash** is
