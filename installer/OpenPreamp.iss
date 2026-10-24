@@ -22,6 +22,7 @@ Source: "..\build\OpenPreamp_artefacts\Release\LV2\OpenPreamp.lv2\*"; DestDir: "
 Source: "..\build\OpenPreamp_artefacts\Release\Standalone\OpenPreamp.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Licenses\*"; DestDir: "{app}\Licenses"; Flags: ignoreversion recursesubdirs
 Source: "..\Docs\UserManual.md"; DestDir: "{app}"; DestName: "OpenPreamp-User-Manual.md"; Flags: ignoreversion
+Source: "..\output\pdf\OpenPreamp-User-Manual.pdf"; DestDir: "{app}"; DestName: "OpenPreamp-User-Manual.pdf"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\OpenPreamp"; Filename: "{app}\OpenPreamp.exe"
