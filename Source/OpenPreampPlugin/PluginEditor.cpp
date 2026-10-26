@@ -5,7 +5,10 @@
 OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     : AudioProcessorEditor(&p), proc(p),
       rightMeter(p), rightMeterSourceBtn(p.apvts, "meterSource", "SOURCE", true),
-      meterModeBtn(p.apvts, "meterMode", "MODE", true), rightMeterModeBtn(p.apvts, "meterMode", "MODE", true),
+      meterModeBtn(p.apvts, "meterType", "MODE", true), rightMeterModeBtn(p.apvts, "meterType", "MODE", true),
+      legacyMeterModeBtn(p.apvts, "meterMode", "LEGACY", true),
+      meterWeightingBtn(p.apvts, "meterWeighting", "WEIGHT", true),
+      meterAES17Toggle(p.apvts, "meterAES17", "RMS +3", Theme::preampCol),
       midSideToggle(p.apvts, "midSide", "MS MODE", Theme::preampCol),
       cutsToggle(p.apvts, "cutsEnabled", "CUTS", Theme::preampCol),
       linkToggle(p.apvts, "channelLink", "L/R LINK", Theme::preampCol),
@@ -29,7 +32,8 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     preampCircuitToggle.onClick=[this]{proc.chooseInitialRate();};
     circuitEngineBtn.setMenuOrder({1,0});
     circuitEngineBtn.setSegmented(true);oversamplingBtn.setSegmented(true);
-    meterModeBtn.setSegmented(true,false);rightMeterModeBtn.setSegmented(true,false);
+    legacyMeterModeBtn.setHardwareStyle(true);legacyMeterModeBtn.setSegmented(true);
+    meterWeightingBtn.setHardwareStyle(true);meterAES17Toggle.setHardwareStyle(true);
     for(auto* key : {&preampPadBtn,&preampTypeBtn,&circuitEngineBtn,&oversamplingBtn,&meterModeBtn,&rightMeterModeBtn,&meterSourceBtn,&rightMeterSourceBtn}) key->setHardwareStyle(true);
     for(auto* toggle : {&midSideToggle,&linkToggle,&gainCompensationToggle,&cutsToggle,&monoMakerToggle,&preampCircuitToggle}) toggle->setHardwareStyle(true);
     for(auto* panel : {&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel}) panel->setHardwareStyle(true);
@@ -50,6 +54,7 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     for (auto* c : std::initializer_list<juce::Component*>{&preampPadBtn,&preampTypeBtn,&preampCircuitToggle,&oversamplingBtn,&circuitEngineBtn,&rateLabel}) controlsPanel.addAndMakeVisible(c);
     for (auto* c : std::initializer_list<juce::Component*>{&preampPanel,&rightPreampPanel,&cutsPanel,&controlsPanel,&monoMakerPanel,&midSideToggle,&linkToggle,&gainCompensationToggle,&meterPanel,&rightMeter,&meterSourceBtn,&rightMeterSourceBtn,&meterModeBtn,&rightMeterModeBtn}) canvas.addAndMakeVisible(c);
     monoMakerPanel.addAndMakeVisible(monoMakerDial); monoMakerPanel.addAndMakeVisible(monoMakerToggle);
+    canvas.addAndMakeVisible(legacyMeterModeBtn);canvas.addAndMakeVisible(meterWeightingBtn);canvas.addAndMakeVisible(meterAES17Toggle);
     meterPanel.setChannel(0); rightMeter.setChannel(1);
     meterPanel.setExternallyDriven(); rightMeter.setExternallyDriven();
     auto attach = [&](const char* id,RotaryKnob& knob) { return std::make_unique<SliderAttachment>(p.apvts,id,knob); };
@@ -95,10 +100,13 @@ OpenPreampEditor::OpenPreampEditor(OpenPreampProcessor& p)
     midSideToggle.setTooltip("Off: normal L/R. On: encode Mid/Side before the preamps and decode after downsampling and output trims. Link is disabled in M/S.");
     linkToggle.setTooltip("Link both input and output gains to the left controls. Right settings return when unlinked. Unavailable in M/S.");
     monoMakerToggle.setTooltip("Reduce bass width with a session-rate 6 dB/octave high-pass on Side only, before the preamp.");
-    monoMakerDial.setTooltip("Side high-pass cutoff: 20–500 Hz. Mid is unchanged. Double-click for 20 Hz.");
+    monoMakerDial.setTooltip(juce::String::fromUTF8("Side high-pass cutoff: 20–500 Hz. Mid is unchanged. Double-click for 20 Hz."));
     cutsToggle.setTooltip("Shared session-rate 12 dB/octave high-pass and low-pass.");
+    meterWeightingBtn.setButtonTooltip("RMS weighting only: None (flat), A, B, C, D or K. Does not filter the audio or peak bars.");
+    meterAES17Toggle.setTooltip("Normalize RMS by +3.0103 dB so a full-scale sine reads 0 dBFS. K scales always use this calibration. RMS power uses 300 ms exponential averaging.");
+    legacyMeterModeBtn.setButtonTooltip("Original Peak/RMS automation, active when MODE is Legacy.");
     for (auto* button : {&meterSourceBtn,&rightMeterSourceBtn}) button->setButtonTooltip("Select input or output for both independent meters.");
-    for (auto* button : {&meterModeBtn,&rightMeterModeBtn}) button->setButtonTooltip("Switch both meter needles and numeric readouts between Peak and RMS. Clip lamps always detect peaks.");
+    for (auto* button : {&meterModeBtn,&rightMeterModeBtn}) button->setButtonTooltip("Select VU, RMS, K-12/14/20, DIN, Nordic, BBC, EBU or sample peak. Peak bars and clip lamps stay unweighted.");
     rateLabel.setFont(juce::FontOptions(10.0f));
     rateLabel.setJustificationType(juce::Justification::centredRight);
     rateLabel.setInterceptsMouseClicks(false,false);
@@ -249,8 +257,7 @@ void OpenPreampEditor::paint(juce::Graphics& g)
     g.drawText(juce::String(JucePlugin_VersionString)+"  /  OPENGRID",800,14,176,24,juce::Justification::centredRight);
     g.setColour(editorLook.border);g.drawHorizontalLine(52,16,984);
     g.setColour(editorLook.textMid);g.setFont(juce::FontOptions(9.0f));
-    g.drawText("0 VU = -18 dBFS",24,284,220,14,juce::Justification::centredLeft);
-    g.drawText("0 VU = -18 dBFS",516,284,220,14,juce::Justification::centredLeft);
+
     g.drawText("L/R OR M/S  /  SESSION-RATE CUTS & MONO MAKER",24,716,520,18,juce::Justification::centredLeft);
     g.drawText("Click CLIP to reset",800,716,176,18,juce::Justification::centredRight);
 }
@@ -260,6 +267,7 @@ void OpenPreampEditor::resized()
     canvas.setBounds(0,0,1000,740);
     canvas.setTransform(juce::AffineTransform::scale(float(getHeight())/740.0f));
     meterPanel.setBounds(16,68,476,210);rightMeter.setBounds(508,68,476,210);
+    meterWeightingBtn.setBounds(24,280,170,24);meterAES17Toggle.setBounds(214,280,150,24);legacyMeterModeBtn.setBounds(516,280,240,24);
     meterSourceBtn.setBounds(382,75,92,27);rightMeterSourceBtn.setBounds(874,75,92,27);
     meterModeBtn.setBounds(246,75,128,27);rightMeterModeBtn.setBounds(738,75,128,27);
     preampPanel.setBounds(16,306,476,218);rightPreampPanel.setBounds(508,306,476,218);
@@ -296,7 +304,14 @@ void OpenPreampEditor::mouseWheelMove(const juce::MouseEvent& event,const juce::
 void OpenPreampEditor::timerCallback()
 {
     applyModelLook();
-    const bool peak = proc.apvts.getRawParameterValue("meterMode")->load() < 0.5f;
+    const int mode=proc.getMeterMode();
+    legacyMeterModeBtn.setEnabled(proc.apvts.getRawParameterValue("meterType")->load()<.5f);
+    const bool peak = mode==openpreamp::Peak;
+    meterWeightingBtn.setEnabled(openpreamp::isRMS(mode));
+    meterAES17Toggle.setEnabled(mode==openpreamp::RMS);
+    const bool rmsPlus3=int(proc.apvts.getRawParameterValue("meterType")->load())==2 && proc.apvts.getRawParameterValue("meterAES17")->load()>.5f;
+    meterModeBtn.setDisplayTextOverride(rmsPlus3?"RMS +3":"");
+    rightMeterModeBtn.setDisplayTextOverride(rmsPlus3?"RMS +3":"");
     meterPanel.setPeakMode(peak); rightMeter.setPeakMode(peak);
     rightMeter.setInputSource(proc.apvts.getRawParameterValue("meterSource")->load() < 0.5f);
     meterPanel.setInputSource(proc.apvts.getRawParameterValue("meterSource")->load() < 0.5f);
@@ -328,6 +343,11 @@ void OpenPreampEditor::timerCallback()
     monoMakerDial.setEnabled(stereo);
     monoMakerDial.setActive(stereo && monoMakerToggle.getToggleState() && !proc.apvts.getRawParameterValue("preampBypass")->load());
     midSideToggle.setEnabled(stereo); midSideToggle.setActive(stereo);
+    const bool fromInput=meterPanel.isInputSource();
+    const bool aes=proc.apvts.getRawParameterValue("meterAES17")->load()>.5f;
+    const int weight=int(proc.apvts.getRawParameterValue("meterWeighting")->load());
+    meterPanel.setMeasurement(mode,proc.getMeterDb(fromInput,0),aes,weight);
+    rightMeter.setMeasurement(mode,proc.getMeterDb(fromInput,1),aes,weight);
     if (isShowing()) {
         const auto input = proc.getInputLevel().read(), output = proc.getOutputLevel().read();
         meterPanel.step(input,output,1.0f/30); rightMeter.step(input,output,1.0f/30);

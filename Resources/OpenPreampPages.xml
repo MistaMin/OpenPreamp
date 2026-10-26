@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='utf-8'?>
+<PageTables vers="6.4.0.95">
+  <PageTableLayouts>
+    <Plugin manID="OPre" prodID="OpPr" plugID="jcbb">
+      <Desc>OpenPreamp</Desc>
+      <Layout>OpenPreampControls</Layout>
+    </Plugin>
+    <Plugin manID="OPre" prodID="OpPr" plugID="jccc">
+      <Desc>OpenPreamp</Desc>
+      <Layout>OpenPreampControls</Layout>
+    </Plugin>
+    <Plugin manID="OPre" prodID="OpPr" plugID="jybb">
+      <Desc>OpenPreamp</Desc>
+      <Layout>OpenPreampControls</Layout>
+    </Plugin>
+    <Plugin manID="OPre" prodID="OpPr" plugID="jycc">
+      <Desc>OpenPreamp</Desc>
+      <Layout>OpenPreampControls</Layout>
+    </Plugin>
+    <PTLayout name="OpenPreampControls">
+      <PageTable type="PgTL" pgsz="1">
+        <Page num="1">
+          <ID>MasterBypassID</ID>
+        </Page>
+        <Page num="2">
+          <ID>preampGain</ID>
+        </Page>
+        <Page num="3">
+          <ID>outputGain</ID>
+        </Page>
+        <Page num="4">
+          <ID>preampGainR</ID>
+        </Page>
+        <Page num="5">
+          <ID>outputGainR</ID>
+        </Page>
+        <Page num="6">
+          <ID>preampType</ID>
+        </Page>
+        <Page num="7">
+          <ID>preampPad</ID>
+        </Page>
+        <Page num="8">
+          <ID>preampBypass</ID>
+        </Page>
+        <Page num="9">
+          <ID>preampCircuit</ID>
+        </Page>
+        <Page num="10">
+          <ID>circuitEngine</ID>
+        </Page>
+        <Page num="11">
+          <ID>preampOversampling</ID>
+        </Page>
+        <Page num="12">
+          <ID>highPass</ID>
+        </Page>
+        <Page num="13">
+          <ID>lowPass</ID>
+        </Page>
+        <Page num="14">
+          <ID>cutsEnabled</ID>
+        </Page>
+        <Page num="15">
+          <ID>monoMakerEnabled</ID>
+        </Page>
+        <Page num="16">
+          <ID>monoMakerFrequency</ID>
+        </Page>
+        <Page num="17">
+          <ID>midSide</ID>
+        </Page>
+        <Page num="18">
+          <ID>channelLink</ID>
+        </Page>
+        <Page num="19">
+          <ID>gainCompensation</ID>
+        </Page>
+        <Page num="20">
+          <ID>meterSource</ID>
+        </Page>
+        <Page num="21">
+          <ID>meterType</ID>
+        </Page>
+        <Page num="22">
+          <ID>meterAES17</ID>
+        </Page>
+        <Page num="23">
+          <ID>meterWeighting</ID>
+        </Page>
+        <Page num="24">
+          <ID>hqMode</ID>
+        </Page>
+        <Page num="25">
+          <ID>meterMode</ID>
+        </Page>
+      </PageTable>
+      <PageTable type="MkTL" pgsz="8">
+        <Page num="1">
+          <ID>MasterBypassID</ID>
+          <ID>preampGain</ID>
+          <ID>outputGain</ID>
+          <ID>preampGainR</ID>
+          <ID>outputGainR</ID>
+          <ID>preampType</ID>
+          <ID>preampPad</ID>
+          <ID>preampBypass</ID>
+        </Page>
+        <Page num="2">
+          <ID>preampCircuit</ID>
+          <ID>circuitEngine</ID>
+          <ID>preampOversampling</ID>
+          <ID>highPass</ID>
+          <ID>lowPass</ID>
+          <ID>cutsEnabled</ID>
+          <ID>monoMakerEnabled</ID>
+          <ID>monoMakerFrequency</ID>
+        </Page>
+        <Page num="3">
+          <ID>midSide</ID>
+          <ID>channelLink</ID>
+          <ID>gainCompensation</ID>
+          <ID>meterSource</ID>
+          <ID>meterType</ID>
+          <ID>meterAES17</ID>
+          <ID>meterWeighting</ID>
+          <ID>hqMode</ID>
+        </Page>
+        <Page num="4">
+          <ID>meterMode</ID>
+        </Page>
+        <FirstPg cat="0">1</FirstPg>
+      </PageTable>
+      <PageTable type="Av18" pgsz="24">
+        <Page num="1">
+          <Cell row="1" col="1" knobID="MasterBypassID" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="2" knobID="preampGain" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="3" knobID="outputGain" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="4" knobID="preampGainR" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="5" knobID="outputGainR" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="6" knobID="preampType" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="7" knobID="preampPad" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="8" knobID="preampBypass" inOutButtonID="" selectButtonID="" />
+        </Page>
+        <Page num="2">
+          <Cell row="1" col="1" knobID="preampCircuit" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="2" knobID="circuitEngine" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="3" knobID="preampOversampling" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="4" knobID="highPass" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="5" knobID="lowPass" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="6" knobID="cutsEnabled" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="7" knobID="monoMakerEnabled" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="8" knobID="monoMakerFrequency" inOutButtonID="" selectButtonID="" />
+        </Page>
+        <Page num="3">
+          <Cell row="1" col="1" knobID="midSide" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="2" knobID="channelLink" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="3" knobID="gainCompensation" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="4" knobID="meterSource" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="5" knobID="meterType" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="6" knobID="meterAES17" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="7" knobID="meterWeighting" inOutButtonID="" selectButtonID="" />
+          <Cell row="1" col="8" knobID="hqMode" inOutButtonID="" selectButtonID="" />
+        </Page>
+        <Page num="4">
+          <Cell row="1" col="1" knobID="meterMode" inOutButtonID="" selectButtonID="" />
+        </Page>
+        <FirstPg cat="0">1</FirstPg>
+      </PageTable>
+    </PTLayout>
+  </PageTableLayouts>
+</PageTables>

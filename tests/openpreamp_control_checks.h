@@ -1,5 +1,5 @@
 static int runControlChecks() {
-    OpenPreampProcessor p;
+    OpenPreampProcessor p;set(p,"meterType",0);
     check(p.apvts.getRawParameterValue("preampType")->load()==1,"new instance selects N-Type, not Off");
     check(p.apvts.getRawParameterValue("preampOversampling")->load()==2,"new HQ instance starts at explicit 2x");
     std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());

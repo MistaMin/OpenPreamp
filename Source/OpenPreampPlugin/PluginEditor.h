@@ -71,6 +71,9 @@ private:
     MeterPanel rightMeter;
     CycleButton rightMeterSourceBtn;
     CycleButton meterModeBtn, rightMeterModeBtn;
+    CycleButton legacyMeterModeBtn;
+    CycleButton meterWeightingBtn;
+    SmallToggle meterAES17Toggle;
     SmallToggle midSideToggle, cutsToggle, linkToggle, monoMakerToggle, gainCompensationToggle;
     RotaryKnob monoMakerDial{"FREQUENCY", KnobValueType::Frequency, Theme::preampCol};
     std::unique_ptr<SliderAttachment> monoMakerAtt;

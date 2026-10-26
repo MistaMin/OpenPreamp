@@ -177,8 +177,22 @@ foreach(format IN LISTS OPENPREAMP_FORMATS)
         VERBATIM)
 endforeach()
 
+# AAX control-surface mappings use stable APVTS IDs and cover mono/stereo.
+if(TARGET OpenPreamp_AAX)
+    set_property(TARGET OpenPreamp_AAX APPEND PROPERTY LINK_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/Resources/OpenPreampPages.xml")
+    add_custom_command(TARGET OpenPreamp_AAX POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:OpenPreamp_AAX>/../Resources"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/Resources/OpenPreampPages.xml"
+            "$<TARGET_FILE_DIR:OpenPreamp_AAX>/../Resources/OpenPreampPages.xml"
+        VERBATIM)
+endif()
+
 option(HYBRIDEQ_BUILD_TESTS "Build the processor stress test" ON)
 if(HYBRIDEQ_BUILD_TESTS)
+    add_executable(OpenPreampMetering tests/openpreamp_metering.cpp)
+    target_include_directories(OpenPreampMetering PRIVATE Source)
     add_executable(OpenPreampNativeADAA tests/openpreamp_native_adaa.cpp)
     target_include_directories(OpenPreampNativeADAA PRIVATE Source/DSP)
     add_executable(OpenPreampStageCapture tests/openpreamp_stage_capture.cpp)

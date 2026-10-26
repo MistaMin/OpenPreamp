@@ -31,6 +31,12 @@ public:
         oversampler8x->initProcessing(static_cast<size_t>(samplesPerBlock));
     }
 
+    void reset() noexcept {
+        if (oversampler2x) oversampler2x->reset();
+        if (oversampler4x) oversampler4x->reset();
+        if (oversampler8x) oversampler8x->reset();
+    }
+
     void setMode(OversampleMode m)
     {
         if (m == mode)

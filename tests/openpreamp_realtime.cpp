@@ -25,9 +25,9 @@ int main(){
         set(p,"circuitEngine",1);
         for(int type:{0,1,2,4,3})for(int os:{0,1,2,3})for(int circuit:{0,1}){
             set(p,"preampType",float(type));set(p,"preampOversampling",float(os));set(p,"preampCircuit",float(circuit));
-            for(int b=0;b<4;++b){set(p,"preampGain",float(b*6));set(p,"highPass",float(20+100*b));set(p,"monoMakerEnabled",float(b%2));
+            for(int b=0;b<4;++b){set(p,"meterType",float(cases%11));set(p,"meterWeighting",float(cases%6));set(p,"meterAES17",float(cases%2));set(p,"preampGain",float(b*6));set(p,"highPass",float(20+100*b));set(p,"monoMakerEnabled",float(b%2));
                 for(int ch=0;ch<2;++ch)for(int i=0;i<block;++i)audio.setSample(ch,i,float(.1*std::sin(.2*(i+b*block))));
-                allocations=frees=0;track=true;p.processBlock(audio,midi);track=false;++cases;
+                allocations=frees=0;track=true;if(b==0)p.reset();p.processBlock(audio,midi);track=false;++cases;
                 if(allocations || frees){++failures;std::printf("FAIL rate=%.0f block=%d type=%d oversampling=%d circuit=%d allocations=%zu frees=%zu\n",rate,block,type,os,circuit,allocations,frees);}
             }
         }

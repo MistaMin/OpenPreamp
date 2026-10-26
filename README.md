@@ -31,7 +31,8 @@ harmonics engine.
   greys out while Mid and Side remain independently adjustable.
 - Shared **12 dB/octave high/low cuts** and a **6 dB/octave Side-only mono maker**.
   All cuts, gain trims and M/S matrices run at session rate outside oversampling.
-- Two independent meters with **Input/Output** source keys and visible **Peak/RMS**
+- Unreleased metering update: **VU, RMS, K-12/14/20, DIN, Nordic, BBC and EBU**, AES-17 normalization and A/B/C/D/K weighting; see [metering details](Docs/METERING.md).
+- Two independent meters with **Input/Output** source keys and legacy **Peak/RMS**
   choices selected directly on click, peak bars, peak hold and resettable clip lamps.
 - Proportional resizing from **400 x 296** to **1500 x 1110**; default 1000 x 740.
 

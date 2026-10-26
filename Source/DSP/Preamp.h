@@ -65,6 +65,24 @@ public:
         resetADAA();
     }
 
+    void reset() noexcept {
+        resetADAA();
+        driveState=juce::Decibels::decibelsToGain(driveTargetDB.load(std::memory_order_relaxed));
+        nY1.fill(0);nY2.fill(0);nDc1.fill(0);nDc2.fill(0);
+        brit1.fill(0);brit2.fill(0);brit3.fill(0);
+        nHeld.fill(0);nLastGain.fill(0);nPhase.fill(0);
+        for(auto& filter:hpFilters)filter.reset();
+        for(auto& filter:lpFilters)filter.reset();
+        for(auto& filter:nAaDown){std::fill(std::begin(filter.z1),std::end(filter.z1),0);std::fill(std::begin(filter.z2),std::end(filter.z2),0);}
+        for(auto& filter:nAaUp){std::fill(std::begin(filter.z1),std::end(filter.z1),0);std::fill(std::begin(filter.z2),std::end(filter.z2),0);}
+        if(nCircOk)for(auto& circuit:nCirc)circuit.reset();
+        if(bCircOk)for(auto& circuit:bCirc)circuit.reset();
+        if(fCircOk)for(auto& circuit:fCirc)circuit.reset();
+        if(aCircOk)for(auto& circuit:aCirc)circuit.reset();
+        // Preserve the configured sample rate and model: resetting histories
+        // must not rebuild a circuit or resize prepared processing storage.
+    }
+
     // Opt-in for the lighter preamp path. The full circuit solver is unchanged.
     void setADAAEnabled(bool enabled) noexcept { adaaOn.store(enabled, std::memory_order_relaxed); }
     void setAdaaEnabled(bool enabled) noexcept { setADAAEnabled(enabled); }

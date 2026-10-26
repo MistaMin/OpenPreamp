@@ -26,8 +26,12 @@ static bool contained(juce::Component& c) {
 #include "openpreamp_rate_checks.h"
 #include "openpreamp_control_checks.h"
 #include "openpreamp_measurement.h"
+#include "openpreamp_meter_gui.h"
+#include "openpreamp_host_reset.h"
 int main(int argc,char** argv) {
     juce::ScopedJuceInitialiser_GUI gui;
+    if(argc==2 && juce::String(argv[1])=="--host-reset")return runHostResetChecks();
+    if(argc==2 && juce::String(argv[1])=="--meters")return runMeterChecks();
     if(argc==2 && juce::String(argv[1])=="--controls")return runControlChecks();
     if(argc==3 && juce::String(argv[1])=="--render")return renderComparisons(juce::File(argv[2]));
     if(argc==3 && juce::String(argv[1])=="--measure-batch")return renderMeasurementBatch(juce::File(argv[2]));
@@ -35,7 +39,7 @@ int main(int argc,char** argv) {
     juce::MidiBuffer midi;
     juce::AudioBuffer<float> audio(2, 128);
     check(p.apvts.getParameter("oversampleMode") == nullptr, "oversampling parameter removed");
-    check(p.getParameters().size() == 21, "preamp parameter set with appended gain-link control");
+    check(p.getParameters().size() == 24, "preamp parameter set with appended gain-link control");
     check(p.apvts.getRawParameterValue("circuitEngine")->load()==0, "new sessions default to the validated Full engine");
     set(p, "preampCircuit", 0);
     p.setPlayConfigDetails(2, 2, 48000, 128);
@@ -108,6 +112,7 @@ int main(int argc,char** argv) {
     check(editor->getWidth() * 74 == editor->getHeight() * 100 && editor->isResizable(), "editor is resizable with exact 100:74 aspect ratio");
     check(contained(*editor), "all GUI controls fit within their panels");
     for (auto* surface : editor->getChildren()) for (auto* child : surface->getChildren()) if (auto* meter = dynamic_cast<MeterPanel*>(child)) {
+        meter->setMeasurement(-1,0,false,0); // Legacy UI ballistic fixture; audio-clocked modes have separate tests.
         LevelTracker::Reading in, out; in.peak[0] = 0.3f; in.peak[1] = 0.2f;
         out.peak[0] = 1.1f; out.peak[1] = 1.1f; out.meanSquare[0] = out.meanSquare[1] = 0.015f;
         for (int i = 0; i < 30; ++i) meter->step(in, out, 1.0f / 30);

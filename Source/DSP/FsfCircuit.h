@@ -61,6 +61,9 @@ public:
         return ok;
     }
 
+    // Host reset starts from the stored zero-input operating point.
+    void reset() noexcept { solver.setFixed(nSp,0.0);solver.setFixed(nSn,0.0);restoreDc(); }
+
     void restoreDc(double sampleRate)
     {
         solver.restoreDc(sampleRate);

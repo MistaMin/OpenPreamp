@@ -1,3 +1,10 @@
+# Unreleased: metering
+
+- Add audio-clocked VU, RMS and PPM detectors, AES-17 RMS calibration, K-12/14/20 scales, and optional A/B/C/D/K RMS weighting.
+- Keep unweighted sample-peak bars and clip lamps independent of the selected detector.
+- Preserve old Peak/RMS automation with a Legacy meter type; append new saved meter controls.
+- Add calibration, timing, weighting, state and GUI regression checks. See Docs/METERING.md for model assumptions.
+
 # OpenPreamp version history
 
 ## 1.1.2 - 2026-10-17

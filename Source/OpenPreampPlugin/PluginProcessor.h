@@ -5,6 +5,7 @@
 #include "DSP/Resampler.h"
 #include "DSP/ReducedCircuitBank.h"
 #include "Toolkit.h"
+#include "DSP/Metering.h"
 #include "SessionCuts.h"
 #include "SessionMonoMaker.h"
 
@@ -19,6 +20,7 @@ public:
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
+    void reset() override;
     void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     juce::AudioProcessorEditor* createEditor() override;
@@ -49,13 +51,21 @@ public:
     LevelTracker& getInputLevel() { return inLevel; }
     LevelTracker& getOutputLevel() { return outLevel; }
 
+    int getMeterMode() const { const int type=int(value(MeterType)); return type==0 ? int(value(MeterMode)) : type==1 ? openpreamp::VU : type==2 ? openpreamp::RMS : type==10 ? openpreamp::Peak : type; }
+    float getMeterDb(bool input, int channel) const { return (input ? inputMeter : outputMeter).read(channel); }
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    juce::AAXClientExtensions& getAAXClientExtensions() override { return aaxExtensions; }
 
 private:
+    struct AAXExtensions final : juce::AAXClientExtensions {
+        juce::String getPageFileName() const override { return "OpenPreampPages.xml"; }
+    };
+    AAXExtensions aaxExtensions;
     enum ParameterIndex { Type, Pad, Input, Bypass, Circuit, Output, HQ, MeterSource,
-        InputR, OutputR, MS, HP, LP, Cuts, Link, MonoEnabled, MonoFrequency, MeterMode, Engine, Oversampling, GainCompensation, ParameterCount };
+        InputR, OutputR, MS, HP, LP, Cuts, Link, MonoEnabled, MonoFrequency, MeterMode, Engine, Oversampling, GainCompensation, MeterType, MeterAES, MeterWeighting, ParameterCount };
     std::array<std::atomic<float>*,ParameterCount> parameterValues{};
     float value(ParameterIndex index) const noexcept { return parameterValues[size_t(index)]->load(std::memory_order_relaxed); }
+    openpreamp::Metering inputMeter, outputMeter;
     void updateParameters();
     void parameterValueChanged(int, float) override;
     void parameterGestureChanged(int, bool) override {}

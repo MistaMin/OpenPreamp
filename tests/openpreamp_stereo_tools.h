@@ -48,7 +48,7 @@ static void runStereoToolsChecks() {
             "Peak/RMS switches both needle measurement and numeric dBFS readout");
         meter.setPeakMode(false);out.peak[0]=1.1f;meter.step(in,out,1.0f/30);
         check(meter.clipped(),"RMS mode retains peak-based clip indication");
-        OpenPreampProcessor p;prepare(p); // Capture the actual prepared HQ/2x rate, not pre-audio placeholders.
+        OpenPreampProcessor p;set(p,"meterType",0);prepare(p); // Capture the actual prepared HQ/2x rate, not pre-audio placeholders.
         for(int mode : {0,1}) {
             set(p,"meterMode",float(mode));std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int matching=0;
             for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren())
@@ -62,7 +62,7 @@ static void runStereoToolsChecks() {
         }
     }
     {
-        OpenPreampProcessor p;prepare(p);std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int buttons=0;
+        OpenPreampProcessor p;set(p,"meterType",0);prepare(p);std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());int buttons=0;
         for(auto* surface : editor->getChildren())for(auto* child : surface->getChildren())if(auto* choice=dynamic_cast<CycleButton*>(child)) {
             juce::String label;juce::TextButton* key=nullptr;juce::TextButton* peak=nullptr;juce::TextButton* rms=nullptr;
             for(auto* control : choice->getChildren()) {
@@ -85,7 +85,7 @@ static void runStereoToolsChecks() {
                 check(std::abs(toggled-(1-original))<1e-6f && std::abs(restored-original)<1e-6f,"Each SOURCE key toggles the existing shared Input/Output parameter");++buttons;
             }
         }
-        check(buttons==4,"Both meters expose direct Peak/RMS selection and an Input/Output source key");
+        check(buttons==3,"Shared legacy Peak/RMS selector and both Input/Output source keys work");
         editor->setSize(400,296);
         const auto image=editor->createComponentSnapshot(editor->getLocalBounds());
         juce::FileOutputStream file(juce::File("/private/tmp/openpreamp-100-small.png"));

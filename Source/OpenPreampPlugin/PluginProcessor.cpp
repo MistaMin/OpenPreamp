@@ -67,6 +67,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
         juce::ParameterID{"preampOversampling", 2}, "Preamp Oversampling", juce::StringArray{"Legacy", "1x", "2x", "4x"}, 2));
     params.push_back(std::make_unique<juce::AudioParameterBool>(
         juce::ParameterID{"gainCompensation", 3}, "Input / Output Gain Compensation", false));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{"meterType", 1}, "Meter Type", juce::StringArray{"Legacy", "VU", "RMS", "K-12", "K-14", "K-20", "DIN", "Nordic", "BBC", "EBU", "Peak"}, 1));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"meterAES17", 1}, "RMS +3", false));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{"meterWeighting", 1}, "RMS Weighting", juce::StringArray{"None", "A", "B", "C", "D", "K"}, 0));
     return {params.begin(), params.end()};
 }
 
@@ -76,7 +79,7 @@ OpenPreampProcessor::OpenPreampProcessor()
           .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
       apvts(*this, nullptr, "Parameters", createParameterLayout())
 {
-    static constexpr const char* ids[] = {"preampType","preampPad","preampGain","preampBypass","preampCircuit","outputGain","hqMode","meterSource","preampGainR","outputGainR","midSide","highPass","lowPass","cutsEnabled","channelLink","monoMakerEnabled","monoMakerFrequency","meterMode","circuitEngine","preampOversampling","gainCompensation"};
+    static constexpr const char* ids[] = {"preampType","preampPad","preampGain","preampBypass","preampCircuit","outputGain","hqMode","meterSource","preampGainR","outputGainR","midSide","highPass","lowPass","cutsEnabled","channelLink","monoMakerEnabled","monoMakerFrequency","meterMode","circuitEngine","preampOversampling","gainCompensation","meterType","meterAES17","meterWeighting"};
     static_assert(std::size(ids)==ParameterCount);
     for(size_t i=0;i<parameterValues.size();++i)parameterValues[i]=apvts.getRawParameterValue(ids[i]);
     apvts.getParameter("preampOversampling")->addListener(this);
@@ -119,6 +122,7 @@ void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     reducedBank->prepare(sampleRate);
     reducedType=-1;reducedFactor=0;reducedActive=false;
     cuts.prepare(sampleRate);
+    inputMeter.prepare(sampleRate); outputMeter.prepare(sampleRate);
     monoMaker.prepare(sampleRate, apvts.getRawParameterValue("monoMakerFrequency")->load());
     monoMakerActive = false;
     for (auto& engine : preamps) {
@@ -135,6 +139,22 @@ void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     updateParameters();
     for (auto& gain : inputGains) gain.setCurrentAndTargetValue(gain.getTargetValue());
     for (auto& gain : outputGains) gain.setCurrentAndTargetValue(gain.getTargetValue());
+}
+
+void OpenPreampProcessor::reset()
+{
+    // Hosts may reset between offline renders without another prepareToPlay.
+    // Reuse the prepared banks and clear histories without allocation or frees.
+    updateParameters();
+    multirate.reset();latencyPadding.reset();
+    cuts.prepare(sampleRateAtomic.load(std::memory_order_relaxed));
+    monoMaker.prepare(sampleRateAtomic.load(std::memory_order_relaxed),value(MonoFrequency));
+    for(auto& engine:preamps)engine.reset();
+    for(auto& kernel:reducedKernels)kernel.reset();
+    for(auto& gain:inputGains)gain.setCurrentAndTargetValue(gain.getTargetValue());
+    for(auto& gain:outputGains)gain.setCurrentAndTargetValue(gain.getTargetValue());
+    inputMeter.reset();outputMeter.reset();
+    (void)inLevel.read();(void)outLevel.read();
 }
 
 void OpenPreampProcessor::updateParameters()
@@ -199,6 +219,9 @@ void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
         buffer.setSample(0,i,(l+r)*invRootTwo);
         buffer.setSample(1,i,(l-r)*invRootTwo);
     }
+    inputMeter.configure(getMeterMode(), int(value(MeterWeighting)), value(MeterAES) > .5f);
+    outputMeter.configure(getMeterMode(), int(value(MeterWeighting)), value(MeterAES) > .5f);
+    inputMeter.push(buffer.getArrayOfReadPointers(),numChannels,buffer.getNumSamples());
     inLevel.push(buffer.getArrayOfReadPointers(),numChannels,buffer.getNumSamples());
     for (int i=0;i<buffer.getNumSamples();++i) {
         // In L/R mode temporarily encode/decode just this linear side filter.
@@ -239,6 +262,7 @@ void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
             buffer.setSample(ch,i,latencyPadding.popSample(ch)*outputGains[size_t(ch)].getNextValue());
         }
     // M/S meters observe their own encoded streams; the host always receives L/R.
+    outputMeter.push(buffer.getArrayOfReadPointers(),numChannels,buffer.getNumSamples());
     outLevel.push(buffer.getArrayOfReadPointers(),numChannels,buffer.getNumSamples());
     if (msActive) for (int i=0;i<buffer.getNumSamples();++i) {
         const float m = buffer.getSample(0,i), side = buffer.getSample(1,i);
@@ -275,7 +299,7 @@ void OpenPreampProcessor::setStateInformation(const void* data, int sizeInBytes)
         if (!state.getChildWithProperty("id","cutsEnabled").isValid()) {
             juce::ValueTree cut("PARAM"); cut.setProperty("id","cutsEnabled",nullptr); cut.setProperty("value",0.0f,nullptr); state.appendChild(cut,nullptr);
         }
-        for (const auto id : {"channelLink", "monoMakerEnabled", "monoMakerFrequency", "meterMode", "gainCompensation"})
+        for (const auto id : {"channelLink", "monoMakerEnabled", "monoMakerFrequency", "meterMode", "gainCompensation", "meterType", "meterAES17", "meterWeighting"})
             if (!state.getChildWithProperty("id",id).isValid()) {
                 juce::ValueTree param("PARAM"); param.setProperty("id",id,nullptr);
                 param.setProperty("value", juce::String(id) == "monoMakerFrequency" ? 20.0f : 0.0f,nullptr);
