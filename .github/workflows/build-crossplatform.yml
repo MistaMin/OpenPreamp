@@ -68,17 +68,16 @@ jobs:
         shell: pwsh
         run: |
           $ver = (Get-Content "VERSION").Trim()
-          $pkgName = "OpenPreamp-$ver-windows-x86_64"
-          New-Item -ItemType Directory -Force -Path "dist/$pkgName/plugins" | Out-Null
-          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/VST3" "dist/$pkgName/plugins/"
-          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/CLAP" "dist/$pkgName/plugins/"
-          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/LV2" "dist/$pkgName/plugins/"
-          Copy-Item -Recurse "build/OpenPreamp_artefacts/Release/Standalone" "dist/$pkgName/"
-          Copy-Item "output/pdf/OpenPreamp-User-Manual.pdf","LICENSE","CHANGELOG.md","RELEASE_NOTES.md" "dist/$pkgName/"
-          Copy-Item -Recurse "Licenses" "dist/$pkgName/"
-          Compress-Archive -Path "dist/$pkgName" -DestinationPath "dist/$pkgName.zip"
-          $hash = (Get-FileHash -Algorithm SHA256 "dist/$pkgName.zip").Hash.ToLower()
-          "$hash  $pkgName.zip" | Out-File -Encoding ascii "dist/$pkgName.zip.sha256"
+          New-Item -ItemType Directory -Force resources/Licenses, resources/Manual | Out-Null
+          Copy-Item LICENSE, BINARY_LICENSE.txt, THIRD_PARTY_NOTICES.txt resources/Licenses/
+          Copy-Item third_party/GoodLookinUI/LICENSE resources/Licenses/GoodLookinUI-LICENSE.txt
+          Copy-Item -Recurse Licenses/third-party resources/Licenses/
+          Copy-Item README.md, RELEASE_NOTES.md resources/
+          Copy-Item output/pdf/OpenPreamp-User-Manual.pdf, Docs/UserManual.md resources/Manual/
+          & tools/make_bundle_zip.ps1 -Plugin OpenPreamp -Version $ver -Artefacts build/OpenPreamp_artefacts/Release -Out dist -ResourcesDir resources
+          $zip = "OpenPreamp-$ver-windows-x64-bundles.zip"
+          $hash = (Get-FileHash -Algorithm SHA256 "dist/$zip").Hash.ToLowerInvariant()
+          "$hash  $zip" | Set-Content -Encoding ascii "dist/$zip.sha256"
       - name: Release tag
         id: tag
         shell: bash
@@ -87,8 +86,9 @@ jobs:
         with:
           tag_name: ${{ steps.tag.outputs.name }}
           files: |
-            dist/*-windows-x86_64.zip
-            dist/*-windows-x86_64.zip.sha256
+            dist/*-windows-x64-bundles.zip
+            dist/*-windows-x64-bundles.zip.sha256
+            dist/*-windows-x64-bundles.zip.installs.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

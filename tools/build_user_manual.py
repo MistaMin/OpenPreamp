@@ -37,7 +37,7 @@ def diagram(name, rows):
     temp=ROOT/'build-release/manual-qa';temp.mkdir(parents=True,exist_ok=True)
     renderPDF.drawToFile(d,str(temp/(name+'.pdf')))
     if shutil.which('pdftoppm'):
-        subprocess.run(['pdftoppm','-r','144','-singlefile','-png',str(temp/(name+'.pdf')),str(DOC/name)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+        subprocess.run(['pdftoppm','-r','144','-singlefile','-png',str(temp/(name+'.pdf')),str(DOC/name)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 
 def assets():
     source=PILImage.open(SCREENSHOTS/'openpreamp-100-preview.png')
