@@ -1,11 +1,11 @@
-# OpenPreamp 1.1.2
+# OpenPreamp 1.3.0
 
-The 1.1.2 release upgrades static preamp anti-aliasing to HybridEQ's Residual ADAA architecture, eliminating high-frequency attenuation while preserving robust anti-aliasing protection.
+The 1.3.0 release adds audio-clocked VU, RMS and PPM detectors with K-12/K-14/K-20 scales and optional A/B/C/D/K RMS weighting, and ports the verified ArcVu VU ballistics. The audio path, parameter IDs and saved sessions are unchanged.
 
-- **HybridEQ Residual ADAA Architecture**: Replaced uncompensated two-sample averaging with a split linear/residual topology (`dsp::adaa::Residual`). Linear small-signal audio passes through a unity-gain phase-matched all-pass filter, maintaining transparent top-end energy from 20 Hz to Nyquist (< 0.005 dB difference at 20 kHz).
-- **Non-Linear Residual Anti-Aliasing**: Anti-derivative anti-aliasing is applied exclusively to the non-linear distortion residual with smooth compression cross-fading under deep saturation.
-- **Closed-Form & Hermite Antiderivatives**: Implemented exact mathematical antiderivatives (`legF`, `railLimitF`, `coreSaturateF`, `asymLimitF`) across Brit, N-Type, FSF, and A-Type models.
-- **Alias Suppression**: Retains 4.5 dB to 7.7 dB alias foldback reduction at 1x oversampling without compromising audio brightness or clarity.
-- **Universal macOS Package**: Includes Developer ID signed and Apple-notarized VST3, AU, CLAP, LV2, and PACE-signed AAX plugins in a system-wide PKG and DMG for macOS 11+. The official AAX binary is proprietary freeware.
+- **Detector modes**: MODE selects VU, RMS, K-12, K-14, K-20, DIN, Nordic, BBC, EBU or sample Peak for both meters. Measurements run at the session sample rate; closing the editor or changing its refresh rate does not change detector timing.
+- **IEC 268-17 VU ballistics**: a second-order movement (zeta 0.82, omega_n 14 rad/s) reaches 99% in about 300 ms with 1 to 1.5% overswing. 0 VU stays at a steady 1 kHz sine with a -18 dBFS peak.
+- **RMS +3 and weighting**: RMS +3 shifts the RMS scale by 3.0103 dB without dropping the detector history. WEIGHT offers None, A, B, C, D or K for RMS and K scales.
+- **Legacy compatibility**: old sessions restore MODE to Legacy, which keeps the original Peak/RMS behavior. New meter controls are appended to the parameter list and save with the host state.
+- **macOS bundle archive**: Developer ID signed and Apple-notarized VST3, AU, CLAP, LV2 and PACE-signed AAX in a plugin-manager bundle archive for macOS 11+. The official AAX binary is proprietary freeware.
 
-See [user manual](Docs/UserManual.md) and [version history](CHANGELOG.md).
+See [user manual](Docs/UserManual.md), [metering reference](Docs/METERING.md) and [version history](CHANGELOG.md).

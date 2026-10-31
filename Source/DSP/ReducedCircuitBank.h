@@ -6,6 +6,9 @@ namespace dsp {
 class ReducedCircuitBank {
 public:
     void prepare(double sessionRate) {
+        // Coefficients depend only on the session rate; hosts call prepareToPlay on every activation.
+        if(sessionRate==preparedRate)return;
+        preparedRate=sessionRate;
         for(int rateIndex=0;rateIndex<3;++rateIndex)for(int model=0;model<4;++model) {
             const auto& data=reduced_data::models[size_t(model)];const auto& p=data.parameters;
             ReducedCircuitSpec spec;
@@ -24,5 +27,6 @@ public:
     }
 private:
     std::array<std::array<ReducedCircuitCoefficients,4>,3> coefficients;
+    double preparedRate=0.0;
 };
 }

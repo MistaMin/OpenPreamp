@@ -6,8 +6,9 @@ for both independent Left/Right meters, or Mid/Side meters in M/S mode.
 Measurements run at the session sample rate, before/after the existing audio path;
 closing the editor or changing its refresh rate does not change detector timing.
 
-VU uses a two-stage average-rectified detector, calibrated so a steady 1 kHz sine
-with a peak of -18 dBFS reads 0 VU. Its rise reaches 99% after approximately 300 ms.
+VU uses a second-order movement (ζ 0.82, ωn 14 rad/s) on the full-wave-rectified
+signal scaled to RMS, calibrated so a steady 1 kHz sine with a peak of -18 dBFS reads
+0 VU. It reaches 99% in about 300 ms and overshoots by 1 to 1.5% (IEC 268-17).
 The needle uses an amplitude scale; this is separate from sample-peak detection.
 
 RMS uses 300 ms exponential mean-square averaging. Its one-decimal numeric readout

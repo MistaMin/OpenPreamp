@@ -1,4 +1,4 @@
-# OpenPreamp 1.1.2
+# OpenPreamp 1.3.0
 
 ## User manual
 
@@ -6,15 +6,17 @@
 
 A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp combines component-network circuit simulation with a lighter antialiased model. It contains no parametric EQ, spectrum analyzer, separate harmonics engine, automatic loudness matching, or limiter.
 
-![OpenPreamp main interface](OpenPreamp-1.1.2-preview.png)
+![OpenPreamp main interface](OpenPreamp-1.3.0-preview.png)
 
 **Public Mac formats:** VST3, Audio Unit, CLAP, LV2 and AAX. Universal Apple Silicon / Intel build, macOS 11 or later. The AAX plug-in is PACE-signed for Pro Tools. The Avid SDK source is not included in the download.
+
+Version 1.3.0 adds audio-clocked VU, RMS and PPM detectors with K-12/K-14/K-20 scales and optional A/B/C/D/K RMS weighting. The VU ballistics are a second-order movement (IEC 268-17: 99% in 0.3 s, 1 to 1.5% overswing) ported from ArcVu. The audio path, parameter IDs and saved sessions are unchanged.
 
 ---
 
 ## 1. Installation and your first session
 
-Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.2-Installer.pkg and follow Installer. Administrator authorization is required. The package installs VST3, Audio Unit, CLAP, LV2 and AAX for every user, and creates the format folders if needed.
+Close your DAW. The recommended installer is OpenGrid Plugin Manager, which downloads the signed archive and places each format correctly. To install manually, open the release archive and copy the modules from its Library tree into the corresponding folders on your system.
 
 | Format | Bundle | System installation folder |
 |---|---|---|
@@ -23,13 +25,10 @@ Close your DAW. Open the release disk image, double-click OpenPreamp-1.1.2-Insta
 | CLAP | OpenPreamp.clap | /Library/Audio/Plug-Ins/CLAP/ |
 | LV2 | OpenPreamp.lv2 | /Library/Audio/Plug-Ins/LV2/ |
 | AAX | OpenPreamp.aaxplugin | /Library/Application Support/Avid/Audio/Plug-Ins/ |
-| Standalone | OpenPreamp.app | /Applications/ |
 
-After installation, a dialog lists matching older or current OpenPreamp copies in the logged-in user's ~/Library/Audio/Plug-Ins folders. These can take precedence over the system installation. Move to Trash is the default. Choose Move to Trash only if you want to remove the listed user copies; they can be restored from Trash. Newer copies, renamed comparison plugins, redirected folders and other accounts are left alone.
+The archive also carries the manual, release notes and licenses. If an older OpenPreamp copy exists in the logged-in user's ~/Library/Audio/Plug-Ins folders, it can take precedence over the system installation; remove or replace it. Restart your DAW, rescan plugins, and choose OpenPreamp on a mono or stereo track. Each host supports its own subset of formats.
 
-Unattended installs retain user copies. To review them later, open Check User Copies.command in /Library/Application Support/OpenGrid/OpenPreamp. The manual and licenses are installed there too. Restart your DAW, rescan plugins, and choose OpenPreamp on a mono or stereo track. Each host supports its own subset of formats.
-
-Start with INPUT and OUTPUT at 0 dB and PAD at Unity. N-Type is the initial model. MODELED starts on, ENGINE is HQ, and OS starts at 2x. CUTS starts on at 20 Hz high-pass and 20 kHz low-pass. MS MODE, L/R LINK and MONO MAKER start off. Meters initially show Output in Peak mode.
+Start with INPUT and OUTPUT at 0 dB and PAD at Unity. N-Type is the initial model. MODELED starts on, ENGINE is HQ, and OS starts at 2x. CUTS starts on at 20 Hz high-pass and 20 kHz low-pass. MS MODE, L/R LINK and MONO MAKER start off. Meters initially show Output in VU mode.
 
 Turn INPUT up to drive the preamp harder. Turn OUTPUT down to compare the changed sound at a similar listening level. Enable GAIN COMPENSATION to pair those edits inversely; it starts off. Double-click an input or output knob to return it to 0 dB.
 
@@ -39,25 +38,29 @@ The window opens at 1000 x 740 and resizes proportionally from 400 x 296 to 1500
 
 ## 2. Metering: what each reading means
 
-![Meter source, mode, peak and clip controls](OpenPreamp-1.1.2-meters.png)
+![Meter source, detector mode, weighting and clip controls](OpenPreamp-1.3.0-meters.png)
 
 Each meter belongs to one processing stream. In ordinary stereo the streams are Left and Right. With MS MODE on, they are Mid and Side. Readings remain independent, even when gain controls are linked.
 
 **SOURCE / Input or Output:** click the displayed Input or Output key to toggle both meters together. Input is tapped before the mono maker, cuts and input gain. In M/S it is tapped after encoding. Output is tapped after the preamp, downsampling, latency padding and channel output gain; in M/S this is before decoding to L/R.
 
-**Peak / RMS:** select either visible key to switch both meters together. Peak drives the needles from the maximum sample amplitude accumulated between UI updates; the numeric display shows peak hold. RMS drives the needles from the square root of mean-square amplitude; the numeric display shows the current RMS level in dBFS. Both needle modes retain the display's mechanical smoothing. Peak mode is not a dedicated standards-calibrated PPM meter.
+**MODE:** both mode keys share one setting: VU, RMS, K-12, K-14, K-20, DIN, Nordic, BBC, EBU or sample Peak. VU uses a second-order movement (zeta 0.82, omega_n 14 rad/s) on the full-wave-rectified signal scaled to RMS, calibrated so a steady 1 kHz sine with a -18 dBFS peak reads 0 VU; it reaches 99% in about 300 ms and overshoots by 1 to 1.5% (IEC 268-17). RMS uses 300 ms exponential mean-square averaging; the plain default is raw, so a full-scale sine reads -3.0103 dBFS. K scales always use sine-normalized RMS, with zero at -12, -14 or -20 dBFS. PPM modes use full-wave quasi-peak envelopes: DIN and Nordic integrate about 5 ms, BBC and EBU about 10 ms; fallback rates differ per scale. These are RMS meters, not gated LUFS or integrated loudness meters, and the PPM models are software models, not an exhaustive IEC conformance claim.
 
-**Calibration:** 0 VU corresponds to -18 dBFS amplitude. RMS is shown without an added AES-17 +3 dB correction. A sine wave's RMS reading is therefore about 3 dB below its peak reading. These are sample-peak readings, not reconstructed intersample true peaks.
+**RMS +3:** adds 3.0103 dB to the RMS reading so a full-scale sine reads 0 dBFS. Changing it preserves the detector history and shifts the scale without a meter drop or refill. K scales are always sine-normalized and ignore this key.
 
-**Small IN / OUT bars:** always show sample peaks for the incoming and outgoing processing stream. They do not switch to RMS. The numeric Peak display holds a maximum for about 1.5 seconds, then falls at 12 dB per second. The small bars fall at 24 dB per second.
+**WEIGHT:** selects None (flat), A, B, C, D or K for RMS and K scales. The other modes ignore weighting. A/B/C/D use bilinear-transformed analog prototypes normalized at 1 kHz; K uses the BS.1770 shelf and high-pass cascade adapted to the session sample rate. Bilinear frequency warping increases near Nyquist; this is not a certified IEC sound-level meter.
 
-**CLIP lamp:** latches when a measured sample reaches approximately full scale. Click the lamp to reset it. It remains peak-based in RMS mode and is an indicator, not a limiter. Changing Input/Output resets the meter's hold, clip lamp and needle; changing Peak/RMS resets the needle position.
+**Legacy mode:** old sessions restore MODE to Legacy, which follows the original Peak/RMS setting with its own keys. The original Peak/RMS parameter keeps its two choices and normalized automation values; new meter controls are appended to the parameter list and save with the host state.
+
+**Small IN / OUT bars:** always show unweighted sample peaks for the incoming and outgoing processing stream. They do not switch to RMS or follow WEIGHT. The numeric Peak display holds a maximum for about 1.5 seconds, then falls at 12 dB per second. The small bars fall at 24 dB per second.
+
+**CLIP lamp:** latches when a measured sample reaches approximately full scale. Click the lamp to reset it. It remains peak-based in every mode and is an indicator, not a limiter. Changing Input/Output resets the meter's hold, clip lamp and needle; changing MODE resets the needle position. No metering option changes the audio samples.
 
 ---
 
 ## 3. Gain, linking and compensation
 
-![Independent channel input and output knobs](OpenPreamp-1.1.2-channels.png)
+![Independent channel input and output knobs](OpenPreamp-1.3.0-channels.png)
 
 | Control | Range or choices | Operation |
 |---|---|---|
@@ -77,11 +80,11 @@ Separate nonlinear circuit and ADAA histories are maintained for each channel. L
 
 ## 3. Gain compensation and wheel editing
 
-![Centered stereo and gain compensation controls](OpenPreamp-1.1.2-top-controls.png)
+![Centered stereo and gain compensation controls](OpenPreamp-1.3.0-top-controls.png)
 
 **GAIN COMPENSATION:** links INPUT and OUTPUT inversely in dB. Enabling it leaves current values unchanged; moving either control moves its partner in the opposite direction. The pair stops when either reaches its limit. It is off initially and works independently for Left/Right or Mid/Side; L/R LINK still shares the left pair between stereo channels.
 
-![Input at +6 dB with output at -6 dB](OpenPreamp-1.1.2-compensation.png)
+![Input at +6 dB with output at -6 dB](OpenPreamp-1.3.0-compensation.png)
 
 Compensation pairs drag, wheel, keyboard and double-click edits. It preserves the sum of the digital trims, not measured loudness through a nonlinear preamp. PAD remains independent. Both parameters are written to the host and can be recorded as automation. Direct host automation of one parameter changes only that parameter, without generating recursive edits.
 
@@ -91,7 +94,7 @@ Compensation pairs drag, wheel, keyboard and double-click edits. It preserves th
 
 ## 4. Preamp model, engine, oversampling and bypass
 
-![Preamp model and quality controls](OpenPreamp-1.1.2-preamp.png)
+![Preamp model and quality controls](OpenPreamp-1.3.0-preamp.png)
 
 **MODEL:** lists Off first, then Brit, N-Type, FSF and A-Type. N-Type remains selected for a new instance. Saved model identities retain their meaning.
 
@@ -111,7 +114,7 @@ Compensation pairs drag, wheel, keyboard and double-click edits. It preserves th
 
 ## 5. Input cuts and mono maker
 
-![Shared input cuts and Side-only mono maker](OpenPreamp-1.1.2-cuts.png)
+![Shared input cuts and Side-only mono maker](OpenPreamp-1.3.0-cuts.png)
 
 **HIGH PASS:** adjustable from 20 Hz to 20 kHz. Removes frequencies below its cutoff with a two-pole Butterworth IIR response: approximately -3 dB at cutoff and 12 dB per octave in the stopband. Its initial frequency is 20 Hz.
 
@@ -129,7 +132,7 @@ Reducing low-frequency Side narrows bass rather than hard-switching everything b
 
 ## 6. Mid/Side processing and signal flow
 
-![MS MODE enabled with Link greyed out](OpenPreamp-1.1.2-ms-switch.png)
+![MS MODE enabled with Link greyed out](OpenPreamp-1.3.0-ms-switch.png)
 
 **MS MODE off:** ordinary L/R processing, the default. **MS MODE on:** INPUT, OUTPUT and meters become Mid and Side; L/R LINK is disabled. The host always receives L/R at the output.
 
@@ -220,7 +223,7 @@ All paths retain fixed latency derived from the rounded-up 4x filter delay. Mode
 
 The host decides the bus format. A mono recording on a stereo track can still reach the plugin as two channels. Mono tracks retain session-rate cuts and gain; Circuit/HQ rate behavior is the same as stereo, using one active stream.
 
-Parameters are saved by the host and can be automated. This includes model, PAD, gains, gain compensation, bypass, MODELED, ENGINE, OS, legacy 4x, meter source/mode, M/S, Link, cuts and mono maker. The meter choices change display behavior only. There is no separate preset browser inside the plugin.
+Parameters are saved by the host and can be automated. This includes model, PAD, gains, gain compensation, bypass, MODELED, ENGINE, OS, legacy 4x, meter source, meter mode (MODE), RMS +3, RMS weighting (WEIGHT), M/S, Link, cuts and mono maker. The meter choices change display behavior only. There is no separate preset browser inside the plugin.
 
 Older pre-0.3 states copy their former stereo gain into the new right gain and leave the newly introduced cuts off. Later states missing Link or mono maker restore those features off. The 1.0 public build has no DEV editor or filesystem autosave; design CSVs are baked into the binary.
 

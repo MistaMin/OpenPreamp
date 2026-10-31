@@ -65,11 +65,14 @@ public:
 // Audio-clocked detectors. No allocation, locks, or GUI timing in push(). Each
 // input/output tap owns its filter histories; channels never share detector state.
 class Metering {
-    struct Channel { WeightingFilter filter; double power=0,rectified=0,vu=0,ppm=0,peak=0; };
+    // VU movement: second-order, IEC 268-17 (ArcVu model 0). Position is the
+    // full-wave-rectified level scaled to RMS; velocity is its rate of change.
+    struct Channel { WeightingFilter filter; double power=0,vu=0,vuVelocity=0,ppm=0,peak=0; };
+    static constexpr double vuZeta=0.82,vuWn=14.,sineToRms=3.14159265358979323846/(2*1.41421356237309504880);
     std::array<Channel,2> channels;
     std::array<std::atomic<float>,2> published{{-99,-99}};
-    double rate=48000,rmsC=0,vuC=0,attackC=0,releaseC=0,peakC=0;
-    int mode=-1,weight=-1; bool aes=false;
+    double rate=48000,rmsC=0,attackC=0,releaseC=0,peakC=0;
+    int mode=-1,weight=-1,vuSubsteps=1; bool aes=false; double vuStep=1./48000.;
 public:
     void prepare(double fs) { rate=std::max(8000.,fs);mode=-1;configure(VU,Z,false); }
     void configure(int newMode,int newWeight,bool newAES) {
@@ -79,7 +82,8 @@ public:
         // modes where that option is inactive).
         if(mode==newMode && weight==newWeight) { aes=newAES; return; }
         mode=newMode;weight=newWeight;aes=newAES;
-        rmsC=std::exp(-1/(rate*.3));vuC=std::exp(-1/(rate*(.3/6.63835)));
+        rmsC=std::exp(-1/(rate*.3));
+        vuSubsteps=std::max(1,int(std::ceil(192000./rate)));vuStep=1./(rate*vuSubsteps);
         const double integration=mode==DIN?.005:mode==Nordic?.005:.010;
         attackC=std::exp(-(2.2*std::log(5.))/(rate*integration));
         const double fallSeconds=mode==DIN?1.5:mode==Nordic?1.7:mode==BBC?3.:2.8;
@@ -96,10 +100,17 @@ public:
                 const double a=std::abs(x);
                 if(mode==Peak)s.peak=std::max(a,s.peak*peakC);
                 else if(isRMS(mode)) {const double y=s.filter.tick(x);s.power=rmsC*s.power+(1-rmsC)*y*y;}
-                else if(mode==VU) {s.rectified=vuC*s.rectified+(1-vuC)*a;s.vu=vuC*s.vu+(1-vuC)*s.rectified;}
+                else if(mode==VU) {
+                    // Substeps keep the integration at least 192 kHz, where the overswing is verified.
+                    for(int k=0;k<vuSubsteps;++k) {
+                        const double accel=vuWn*vuWn*(a*sineToRms-s.vu)-2*vuZeta*vuWn*s.vuVelocity;
+                        s.vuVelocity+=accel*vuStep;
+                        s.vu=std::max(1e-9,s.vu+s.vuVelocity*vuStep);
+                    }
+                }
                 else s.ppm=a>s.ppm ? attackC*s.ppm+(1-attackC)*a:s.ppm*releaseC;
             }
-            double amplitude=mode==Peak?s.peak:isRMS(mode)?std::sqrt(std::max(0.,s.power))*(aes || mode!=RMS?std::sqrt(2.):1.):mode==VU?s.vu*1.5707963267948966:s.ppm;
+            double amplitude=mode==Peak?s.peak:isRMS(mode)?std::sqrt(std::max(0.,s.power))*(aes || mode!=RMS?std::sqrt(2.):1.):mode==VU?s.vu*std::sqrt(2.):s.ppm;
             published[size_t(ch)].store(db(amplitude),std::memory_order_relaxed);
         }
     }

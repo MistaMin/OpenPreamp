@@ -55,12 +55,20 @@ public:
         configuredType = static_cast<PreampType>(-1); // force (re)configure
         configuredOn = false;
         driveRamp.clear();
-        // Build and solve the netlists once, off the audio thread's critical
-        // path (allocates). Later sample-rate changes only re-init state.
-        nCircOk = nCirc[0].prepare(kCircuitRate) && nCirc[1].prepare(kCircuitRate);
-        bCircOk = bCirc[0].prepare(kCircuitRate) && bCirc[1].prepare(kCircuitRate);
-        fCircOk = fCirc[0].prepare(kCircuitRate) && fCirc[1].prepareLike(fCirc[0], kCircuitRate);
-        aCircOk = aCirc[0].prepare(kCircuitRate) && aCirc[1].prepare(kCircuitRate);
+        // Build and solve the netlists once (allocates). They run at a fixed
+        // kCircuitRate, so later activations only reset their state.
+        if (!circuitsBuilt) {
+            nCircOk = nCirc[0].prepare(kCircuitRate) && nCirc[1].prepare(kCircuitRate);
+            bCircOk = bCirc[0].prepare(kCircuitRate) && bCirc[1].prepare(kCircuitRate);
+            fCircOk = fCirc[0].prepare(kCircuitRate) && fCirc[1].prepareLike(fCirc[0], kCircuitRate);
+            aCircOk = aCirc[0].prepare(kCircuitRate) && aCirc[1].prepare(kCircuitRate);
+            circuitsBuilt = true;
+        } else {
+            if (nCircOk) for (auto& circuit : nCirc) circuit.reset();
+            if (bCircOk) for (auto& circuit : bCirc) circuit.reset();
+            if (fCircOk) for (auto& circuit : fCirc) circuit.reset();
+            if (aCircOk) for (auto& circuit : aCirc) circuit.reset();
+        }
         adaa::railTable();      // build the limiter's antiderivative table here, not on the audio thread
         resetADAA();
     }
@@ -642,6 +650,7 @@ private:
     int nDecim = 1;
     bool decimationEnabled = true;
     bool nCircOk = false, bCircOk = false, fCircOk = false, aCircOk = false;
+    bool circuitsBuilt = false;
 
     // Brit coupling-network state (double: the poles are below 1 Hz).
     std::array<double, kMaxChannels> brit1{};

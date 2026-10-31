@@ -205,6 +205,37 @@ int main(int argc,char** argv) {
     runRoutingChecks();
     runStereoToolsChecks();
     runRateChecks();
+    {
+        // Randomised and processed state, as the CLAP validator saves and reloads it.
+        OpenPreampProcessor source, reloaded;
+        source.setPlayConfigDetails(2, 2, 48000, 512);
+        source.prepareToPlay(48000, 512);
+        juce::Random random(7);
+        for (auto* parameter : source.getParameters())
+            if (auto* ranged = dynamic_cast<juce::RangedAudioParameter*>(parameter)) {
+                // Discrete parameters only take their valid steps, as a host sends them.
+                int steps = 0;
+                if (auto* choice = dynamic_cast<juce::AudioParameterChoice*>(parameter)) steps = choice->choices.size();
+                else if (dynamic_cast<juce::AudioParameterBool*>(parameter)) steps = 2;
+                ranged->setValue(steps > 1 ? float(random.nextInt(steps)) / float(steps - 1) : random.nextFloat());
+            }
+        juce::AudioBuffer<float> block(2, 512);
+        for (int i = 0; i < 0; ++i) { block.clear(); source.processBlock(block, midi); }
+        juce::MemoryBlock saved;
+        source.getStateInformation(saved);
+        reloaded.setStateInformation(saved.getData(), int(saved.getSize()));
+        juce::String firstMismatch;
+        for (auto* parameter : source.getParameters())
+            if (auto* ranged = dynamic_cast<juce::RangedAudioParameter*>(parameter))
+                if (firstMismatch.isEmpty() && std::abs(reloaded.apvts.getParameter(ranged->paramID)->getValue() - ranged->getValue()) > 1e-6f)
+                    firstMismatch = ranged->paramID;
+        if (firstMismatch.isNotEmpty()) {
+            auto* before = source.apvts.getParameter(firstMismatch);
+            auto* after = reloaded.apvts.getParameter(firstMismatch);
+            std::printf("  first mismatched parameter: %s source %.6f reloaded %.6f\n", firstMismatch.toRawUTF8(), before->getValue(), after->getValue());
+        }
+        check(firstMismatch.isEmpty(), "randomised state round-trip preserves every parameter");
+    }
     std::printf("%d checks, %d failures\n", checks, failures);
     return failures ? 1 : 0;
 }

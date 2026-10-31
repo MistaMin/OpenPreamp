@@ -1,11 +1,12 @@
-# Unreleased: metering
+# OpenPreamp version history
+
+## 1.3.0
 
 - Add audio-clocked VU, RMS and PPM detectors, AES-17 RMS calibration, K-12/14/20 scales, and optional A/B/C/D/K RMS weighting.
+- VU ballistics use a second-order movement that meets IEC 268-17 (99% in 0.3 s, 1 to 1.5% overswing), ported from ArcVu. Calibration is unchanged.
 - Keep unweighted sample-peak bars and clip lamps independent of the selected detector.
 - Preserve old Peak/RMS automation with a Legacy meter type; append new saved meter controls.
 - Add calibration, timing, weighting, state and GUI regression checks. See Docs/METERING.md for model assumptions.
-
-# OpenPreamp version history
 
 ## 1.1.2 - 2026-10-17
 

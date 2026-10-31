@@ -2,6 +2,14 @@
 #include "PluginEditor.h"
 #include <algorithm>
 
+// Three decimals keep frequency text and value round trips stable; full float precision drifts.
+static juce::AudioParameterFloatAttributes frequencyTextAttributes()
+{
+    return juce::AudioParameterFloatAttributes()
+        .withStringFromValueFunction([](float value, int) { return juce::String(value, 3); })
+        .withValueFromStringFunction([](const juce::String& text) { return text.getFloatValue(); });
+}
+
 juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createParameterLayout()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
@@ -45,9 +53,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
     auto cutRange = juce::NormalisableRange<float>(20.0f, 20000.0f);
     cutRange.setSkewForCentre(1000.0f);
     params.push_back(std::make_unique<juce::AudioParameterFloat>(
-        juce::ParameterID{"highPass", 1}, "High Pass", cutRange, 20.0f));
+        juce::ParameterID{"highPass", 1}, "High Pass", cutRange, 20.0f, frequencyTextAttributes()));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(
-        juce::ParameterID{"lowPass", 1}, "Low Pass", cutRange, 20000.0f));
+        juce::ParameterID{"lowPass", 1}, "Low Pass", cutRange, 20000.0f, frequencyTextAttributes()));
     params.push_back(std::make_unique<juce::AudioParameterBool>(
         juce::ParameterID{"cutsEnabled", 1}, "Input Cuts", true));
 
@@ -58,7 +66,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenPreampProcessor::createP
     auto monoRange = juce::NormalisableRange<float>(20.0f, 500.0f);
     monoRange.setSkewForCentre(100.0f);
     params.push_back(std::make_unique<juce::AudioParameterFloat>(
-        juce::ParameterID{"monoMakerFrequency", 1}, "Mono Maker Frequency", monoRange, 20.0f));
+        juce::ParameterID{"monoMakerFrequency", 1}, "Mono Maker Frequency", monoRange, 20.0f, frequencyTextAttributes()));
     params.push_back(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID{"meterMode", 1}, "Meter Mode", juce::StringArray{"Peak", "RMS"}, 0));
     params.push_back(std::make_unique<juce::AudioParameterChoice>(
@@ -118,7 +126,8 @@ void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     latencyPadding.setMaximumDelayInSamples(fixedLatency + 1);
     latencyPadding.prepare({sampleRate, juce::uint32(samplesPerBlock), juce::uint32(getTotalNumOutputChannels())});
     setLatencySamples(fixedLatency);
-    reducedBank=std::make_unique<dsp::ReducedCircuitBank>();
+    // Keep the bank across activations: it rebuilds only when the sample rate changes.
+    if(!reducedBank)reducedBank=std::make_unique<dsp::ReducedCircuitBank>();
     reducedBank->prepare(sampleRate);
     reducedType=-1;reducedFactor=0;reducedActive=false;
     cuts.prepare(sampleRate);
@@ -279,6 +288,12 @@ juce::AudioProcessorEditor* OpenPreampProcessor::createEditor()
 void OpenPreampProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
     auto state = apvts.copyState();
+    // Hosts may set values without notifying listeners (CLAP param flush), which leaves the
+    // copied tree stale. The live parameter value is the source of truth.
+    for (auto* parameter : getParameters())
+        if (auto* ranged = dynamic_cast<juce::RangedAudioParameter*>(parameter))
+            if (auto child = state.getChildWithProperty("id", ranged->paramID); child.isValid())
+                child.setProperty("value", ranged->convertFrom0to1(ranged->getValue()), nullptr);
     state.setProperty("rateChosen",rateChosen.load(std::memory_order_relaxed),nullptr);
     state.setProperty("legacyRateDefaults",legacyRateDefaults.load(std::memory_order_relaxed),nullptr);
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
@@ -318,6 +333,8 @@ void OpenPreampProcessor::setStateInformation(const void* data, int sizeInBytes)
         apvts.replaceState(state);
         // Older saved states retain their dynamic legacy/explicit rate policy.
         rateChosen.store(bool(state.getProperty("rateChosen",true)),std::memory_order_relaxed);
+        // Loading a state changes parameter values, so tell the host to re-read them (as a preset load does).
+        updateHostDisplay(juce::AudioProcessor::ChangeDetails().withProgramChanged(true));
     }
 }
 
