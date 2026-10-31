@@ -1,4 +1,4 @@
-# OpenPreamp metering (unreleased)
+# OpenPreamp metering
 
 MODE selects VU, RMS, K-12, K-14, K-20, DIN, Nordic, BBC, EBU, or sample Peak.
 Both mode selectors share the same setting. SOURCE selects the input or output tap
