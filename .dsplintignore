@@ -1,0 +1,9 @@
+# Trademark disclaimer text authored and released by the owner (naming is the owner's decision).
+BINARY_LICENSE.txt
+THIRD_PARTY_NOTICES.txt
+Licenses/OpenPreamp-BINARY_LICENSE.txt
+Licenses/OpenPreamp-THIRD_PARTY_NOTICES.txt
+# Shipped product manual tracked so CI and releases can attach it (owner's release decision).
+output/pdf/OpenPreamp-User-Manual.pdf
+# Steinberg's VST trademark/usage document; its distribution with VST3 binaries is required by the VST licence.
+Licenses/third-party/VST3-Usage-Guidelines.pdf
