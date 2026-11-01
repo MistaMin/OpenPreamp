@@ -116,8 +116,11 @@ bool OpenPreampProcessor::isBusesLayoutSupported(const BusesLayout& layout) cons
         && layout.getMainInputChannelSet() == output;
 }
 
-void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+void OpenPreampProcessor::applyPendingPrepare()
 {
+    const double sampleRate = pendingSampleRate;
+    const int samplesPerBlock = pendingBlockSize;
+
     chooseInitialRate();
     sampleRateAtomic.store(sampleRate, std::memory_order_relaxed);
     multirate.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
@@ -148,6 +151,16 @@ void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     updateParameters();
     for (auto& gain : inputGains) gain.setCurrentAndTargetValue(gain.getTargetValue());
     for (auto& gain : outputGains) gain.setCurrentAndTargetValue(gain.getTargetValue());
+}
+
+void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+{
+    pendingSampleRate = sampleRate;
+    pendingBlockSize = samplesPerBlock;
+    if (prepared.exchange(true))
+        preparePending.store(true, std::memory_order_release); // defer: the callback may be running
+    else
+        applyPendingPrepare(); // first activation: no callback is running yet
 }
 
 void OpenPreampProcessor::reset()
@@ -214,6 +227,8 @@ void OpenPreampProcessor::updateParameters()
 void OpenPreampProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     juce::ScopedNoDenormals noDenormals;
+    if (preparePending.exchange(false, std::memory_order_acquire))
+        applyPendingPrepare();
     updateParameters();
 
     auto totalNumInputChannels = getTotalNumInputChannels();
