@@ -121,14 +121,17 @@ void OpenPreampProcessor::applyPendingPrepare()
     const double sampleRate = pendingSampleRate;
     const int samplesPerBlock = pendingBlockSize;
 
-    chooseInitialRate();
     sampleRateAtomic.store(sampleRate, std::memory_order_relaxed);
     multirate.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
     multirate.setMode(dsp::OversampleMode::FourX);
     fixedLatency = int(std::ceil(multirate.getLatencySamples()));
     latencyPadding.setMaximumDelayInSamples(fixedLatency + 1);
     latencyPadding.prepare({sampleRate, juce::uint32(samplesPerBlock), juce::uint32(getTotalNumOutputChannels())});
-    setLatencySamples(fixedLatency);
+    // Announced on the host thread during the first activation. When this runs deferred on the
+    // audio thread the latency is unchanged (fixed 4x oversampling), so the change gate keeps
+    // the audio thread free of host calls for the strict CLAP validator.
+    if (fixedLatency != announcedLatency.exchange(fixedLatency))
+        setLatencySamples(fixedLatency);
     // Keep the bank across activations: it rebuilds only when the sample rate changes.
     if(!reducedBank)reducedBank=std::make_unique<dsp::ReducedCircuitBank>();
     reducedBank->prepare(sampleRate);
@@ -155,6 +158,7 @@ void OpenPreampProcessor::applyPendingPrepare()
 
 void OpenPreampProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+    chooseInitialRate(); // host-thread only: writes a host-visible parameter once
     pendingSampleRate = sampleRate;
     pendingBlockSize = samplesPerBlock;
     if (prepared.exchange(true))

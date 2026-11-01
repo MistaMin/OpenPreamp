@@ -88,6 +88,7 @@ private:
     std::atomic<bool> adaaActiveAtomic{false},legacyRateDefaults{false};
     LevelTracker inLevel, outLevel;
     std::atomic<double> sampleRateAtomic{44100.0};
+    std::atomic<int> announcedLatency{-1};
     std::atomic<bool> prepared{false};
     std::atomic<bool> preparePending{false};
     double pendingSampleRate = 44100.0;
