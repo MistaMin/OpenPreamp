@@ -1,0 +1,26 @@
+PASS     loads VST3: OpenPreamp (OpenGrid), 28 parameters
+PASS     finite output peak -6.5 dBFS
+PASS     not silent rms -15.6 dBFS
+PASS     deterministic render repeat differs by -240.0 dB
+PASS     editor opens 1015x688, 0.0% animates by itself
+  VU Source                        audio=excused  visual=ok
+  Meter Mode                       audio=excused  visual=ok
+  Input / Output Gain Compensation audio=DEAD     visual=ok
+  Meter Type                       audio=excused  visual=ok
+  RMS +3                           audio=excused  visual=ok
+  RMS Weighting                    audio=excused  visual=ok
+FAIL     every parameter changes the sound Input / Output Gain Compensation
+PASS     every parameter is shown in the GUI 
+Traceback (most recent call last):
+  File "C:\Users\marco\Developer\plugin-qa-skills\skills\plugin-daw-test\scripts\reaper_qa.py", line 729, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\marco\Developer\plugin-qa-skills\skills\plugin-daw-test\scripts\reaper_qa.py", line 725, in main
+    return suite(args)
+           ^^^^^^^^^^^
+  File "C:\Users\marco\Developer\plugin-qa-skills\skills\plugin-daw-test\scripts\reaper_qa.py", line 522, in suite
+    after_chunk = b.call("state")["chunk"]
+                  ^^^^^^^^^^^^^^^
+  File "C:\Users\marco\Developer\plugin-qa-skills\skills\plugin-daw-test\scripts\reaper_qa.py", line 94, in call
+    raise TimeoutError("REAPER did not answer '%s' within %ds (modal dialog open? crashed?)" % (cmd, timeout))
+TimeoutError: REAPER did not answer 'state' within 120s (modal dialog open? crashed?)

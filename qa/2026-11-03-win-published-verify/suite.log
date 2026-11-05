@@ -1,0 +1,41 @@
+PASS     loads VST3: OpenPreamp (OpenGrid), 28 parameters
+PASS     finite output peak -6.5 dBFS
+PASS     not silent rms -15.6 dBFS
+PASS     deterministic render repeat differs by -240.0 dB
+PASS     editor opens 1015x688, 0.0% animates by itself
+  Preamp Type                      audio=ok       visual=ok
+  Preamp Pad                       audio=ok       visual=ok
+  Preamp Gain                      audio=ok       visual=ok
+  Preamp Bypass                    audio=ok       visual=ok
+  Modeled Preamp                   audio=ok       visual=ok
+  Output Gain                      audio=ok       visual=ok
+  Legacy 4x Oversampling           audio=DEAD     visual=ok
+  VU Source                        audio=DEAD     visual=ok
+  Right / Side Input Gain          audio=ok       visual=ok
+  Right / Side Output Gain         audio=ok       visual=ok
+  Mid / Side                       audio=ok       visual=ok
+  High Pass                        audio=ok       visual=ok
+  Low Pass                         audio=ok       visual=ok
+  Input Cuts                       audio=ok       visual=ok
+  Link L/R Gains                   audio=DEAD     visual=ok
+  Mono Maker                       audio=ok       visual=ok
+  Mono Maker Frequency             audio=DEAD     visual=ok
+  Meter Mode                       audio=DEAD     visual=ok
+  Circuit Engine                   audio=ok       visual=ok
+  Preamp Oversampling              audio=ok       visual=ok
+  Input / Output Gain Compensation audio=DEAD     visual=ok
+  Meter Type                       audio=DEAD     visual=ok
+  RMS +3                           audio=DEAD     visual=ok
+  RMS Weighting                    audio=DEAD     visual=ok
+  Bypass                           audio=ok       visual=ok
+  Bypass                           audio=ok       visual=ok
+  Wet                              audio=ok       visual=ok
+  Delta                            audio=ok       visual=ok
+  Mono Maker Frequency             audio=CONDITIONAL (acts in random state 1)
+  Link L/R Gains                   audio=CONDITIONAL (acts in random state 2)
+  Legacy 4x Oversampling           audio=CONDITIONAL (acts in random state 5)
+FAIL     every parameter changes the sound VU Source, Meter Mode, Input / Output Gain Compensation, Meter Type, RMS +3, RMS Weighting
+PASS     every parameter is shown in the GUI 
+PASS     state survives save and reopen 
+PASS     editor reopens 5 close/open cycles
+report: C:\Users\marco\Developer\OpenPreamp\qa\2026-11-03-win-published-verify\report.md

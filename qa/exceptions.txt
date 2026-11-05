@@ -1,0 +1,17 @@
+# Exceptions for the REAPER suite and GUI coverage (see plugin-qa / plugin-daw-test skills).
+
+# VU Source, Meter Mode, Meter Type, RMS +3 and RMS Weighting drive only the meter section
+# (ballistics source, VU/RMS/PPM mode, K-scale/EBU type, +3 calibration shift, A/B/C/D/K
+# weighting per RELEASE_NOTES 1.3.0). They never touch the audio path by design, so the
+# audio sweep reads DEAD; they are verified by the visual sweep instead.
+audio:VU Source
+audio:Meter Mode
+audio:Meter Type
+audio:RMS +3
+audio:RMS Weighting
+
+# Input / Output Gain Compensation is a UI-coupling mode for the INPUT/OUTPUT knobs
+# (PluginEditor.cpp:89 tooltip: "Move INPUT and OUTPUT inversely in dB... not automatic
+# loudness matching"). It has no direct DSP effect of its own, so the audio sweep reads
+# DEAD even with Preamp Gain held at max. Verified against source 2026-11-03.
+audio: Input / Output Gain Compensation
