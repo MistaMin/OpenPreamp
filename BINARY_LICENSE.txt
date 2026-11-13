@@ -1,10 +1,10 @@
-HybridEQ Binary Freeware License
-Copyright (c) 2026 Marcos Deida
+OpenPreamp Binary Freeware License
+Copyright (c) 2026 Marcos Quirino Deida
 
 Scope
-This license applies to the official compiled HybridEQ plug-ins, standalone
-application, and installers distributed by Marcos Deida / OpenGrid.
-HybridEQ source code is separately available under the MIT License.
+This license applies to the official compiled OpenPreamp plug-ins, standalone
+application, and installers distributed by Marcos Quirino Deida.
+OpenPreamp source code is separately available under the MIT License.
 
 Permission to use
 You may download, install, and use the official binaries free of charge,
@@ -19,7 +19,7 @@ The official binaries are built using the publisher's JUCE commercial
 license. End users do not need a JUCE developer license to install or use
 these binaries. The publisher's JUCE license is not transferred to anyone
 building or distributing their own versions from source.
-HybridEQ's MIT-licensed source and the MIT-licensed GoodLookinUI components
+OpenPreamp's MIT-licensed source and the MIT-licensed GoodLookinUI components
 retain their respective MIT permissions. See THIRD_PARTY_NOTICES.txt, the
 included MIT license texts and the third-party license texts in the
 Licenses/third-party folder (installed with the binaries). These freeware terms do not restrict rights
@@ -35,8 +35,8 @@ ARISING FROM THE BINARIES OR THEIR USE.
 
 Trademarks
 Neve, 1073, Focusrite, Solid State Logic (SSL), API and 512 are trademarks of
-their respective owners. HybridEQ is an independent project: those companies
-are not affiliated with, and have not endorsed or sponsored, Marcos Deida, the
+their respective owners. OpenPreamp is an independent project: those companies
+are not affiliated with, and have not endorsed or sponsored, Marcos Quirino Deida, the
 OpenGrid Project or this plug-in. The names appear only to describe the
 classic designs that inspired each model; every model here is an independent
 circuit simulation, and no code or text from those companies is included.

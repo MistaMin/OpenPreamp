@@ -1,12 +1,12 @@
 HybridEQ licensing and component notices
 
 HybridEQ source code
-Copyright (c) 2026 Marcos Deida. MIT License; see LICENSE.
+Copyright (c) 2026 Marcos Quirino Deida. MIT License; see LICENSE.
 The official complete binaries, including the macOS AAX plug-in, are proprietary freeware; see BINARY_LICENSE.txt.
 The MIT permissions for the corresponding source remain available.
 
 GoodLookinUI
-Copyright (c) 2026 Marcos Deida. MIT License.
+Copyright (c) 2026 Marcos Quirino Deida. MIT License.
 See third_party/GoodLookinUI/LICENSE in the source repository, or
 GoodLookinUI-LICENSE.txt alongside this notice in binary distributions.
 The core and JUCE adapter are independent toolkit code, not a JUCE fork.
@@ -48,7 +48,7 @@ does not grant rights to the AAX SDK. The macOS package includes the signed AAX 
 Trademarks
 Neve, 1073, Focusrite, Solid State Logic (SSL), API and 512 are trademarks of
 their respective owners. HybridEQ is an independent project: those companies
-are not affiliated with, and have not endorsed or sponsored, Marcos Deida, the
+are not affiliated with, and have not endorsed or sponsored, Marcos Quirino Deida, the
 OpenGrid Project or this plug-in. The names appear only to describe the
 classic designs that inspired each model; every model here is an independent
 circuit simulation, and no code or text from those companies is included.
