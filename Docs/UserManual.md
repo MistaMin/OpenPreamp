@@ -2,7 +2,7 @@
 
 ## User manual
 
-**OpenGrid / Marcos Deida**
+**OpenGrid / Marcos Quirino Deida**
 
 A preamp, two independent meters, and a stereo or Mid/Side workflow. OpenPreamp combines component-network circuit simulation with a lighter antialiased model. It contains no parametric EQ, spectrum analyzer, separate harmonics engine, automatic loudness matching, or limiter.
 

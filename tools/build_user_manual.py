@@ -87,11 +87,11 @@ def furniture(c,doc):
     c.setFillColor(NAVY);c.rect(0,h-34,w,34,fill=1,stroke=0)
     c.setFillColor(colors.white);c.setFont('Helvetica-Bold',10);c.drawString(43,h-22,f'OpenPreamp {VERSION}  /  USER MANUAL')
     c.setStrokeColor(colors.HexColor('#d5dbe4'));c.line(43,35,w-43,35)
-    c.setFillColor(GREY);c.setFont('Helvetica',8);c.drawString(43,23,'OpenGrid  /  Marcos Deida');c.drawRightString(w-43,23,str(doc.page));c.restoreState()
+    c.setFillColor(GREY);c.setFont('Helvetica',8);c.drawString(43,23,'OpenGrid  /  Marcos Quirino Deida');c.drawRightString(w-43,23,str(doc.page));c.restoreState()
 
 def build():
     assets();OUT.parent.mkdir(parents=True,exist_ok=True)
-    doc=SimpleDocTemplate(str(OUT),pagesize=(595.28,841.89),rightMargin=43,leftMargin=43,topMargin=53,bottomMargin=48,title=f'OpenPreamp {VERSION} User Manual',author='Marcos Deida / OpenGrid')
+    doc=SimpleDocTemplate(str(OUT),pagesize=(595.28,841.89),rightMargin=43,leftMargin=43,topMargin=53,bottomMargin=48,title=f'OpenPreamp {VERSION} User Manual',author='Marcos Quirino Deida / OpenGrid')
     story=[];lines=(DOC/'UserManual.md').read_text().splitlines();i=0
     while i<len(lines):
         line=lines[i].strip()

@@ -4,7 +4,7 @@
 
 ![OpenPreamp 1.1.2 GUI](Docs/OpenPreamp-1.1.2-preview.png)
 
-OpenPreamp is a preamp and metering tool from **OpenGrid / Marcos Deida**,
+OpenPreamp is a preamp and metering tool from **OpenGrid / Marcos Quirino Deida**,
 extracted from HybridEQ. Four preamp models, two independent processing streams,
 and a compact resizable interface - without a parametric EQ or separate
 harmonics engine.

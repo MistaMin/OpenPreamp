@@ -5,7 +5,7 @@
 [Setup]
 AppName=OpenPreamp
 AppVersion={#MyAppVersion}
-AppPublisher="OpenGrid / Marcos Deida"
+AppPublisher="OpenGrid / Marcos Quirino Deida"
 AppPublisherURL="https://github.com/MistaMin/OpenPreamp"
 DefaultDirName={commonpf64}\OpenPreamp
 DefaultGroupName=OpenPreamp

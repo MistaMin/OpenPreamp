@@ -26,7 +26,7 @@ def stage(build,out):
     shutil.copytree(ROOT/'Licenses/third-party',licenses/'third-party')
     shutil.copy2(ROOT/'output/pdf/OpenPreamp-User-Manual.pdf',out/'OpenPreamp-User-Manual.pdf')
     for name in ['CHANGELOG.md','RELEASE_NOTES.md']:shutil.copy2(ROOT/name,out/name)
-    (out/'INSTALL.txt').write_text(f'''OpenPreamp {VERSION} - OpenGrid / Marcos Deida
+    (out/'INSTALL.txt').write_text(f'''OpenPreamp {VERSION} - OpenGrid / Marcos Quirino Deida
 Mac universal: Apple Silicon and Intel. macOS 11 or later.
 
 These are intermediate plugin-staging files, not the public installer image.
